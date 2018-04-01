@@ -1,0 +1,126 @@
+\chapter{Introduction}
+\label{cha:introduction}
+
+The world's population is growing each year. 
+Making healthcare more efficient and robust is of great importance in order handle the challenges that arises with a growing population.
+One way of increasing the efficiency as well as the quality of healthcare is to create automated systems that can aid doctors in their process.
+As the population is growing it's of utmost importance to ensure that the quality of diagnosis remains high, and to minimize the risk of missing some critical piece of information.
+Taking advantage of the available medical information is key to creating aforementioned systems.
+
+Information pertaining to a patient's diagnosis is often in the form of written clinical reports.
+One example where this information could be utilized is when a doctor is writing such reports.
+If a system could show cases with similar features as the current one, the doctor could compare the findings and check if they have obtained an abnormal result.
+Being able to perform such a comparison will result in extra quality assurance in the diagnostic flow.
+It could also provide doctors with extra confidence in that their diagnosis is correct.
+
+The problem systems like this would face is to identify the type of a medical report in order to make further suggestions.
+One approach that is commonly used for such problems is machine learning.
+In machine learning, you use a set of inputs and map it to some output values. %TODO: Refer to bishop
+This is done by using data to build a, usually statistical, model.
+
+The task of predicting a type, or class, for a given text document is called text classification.
+Text classification is usually solved using supervised learning. %TODO: Find reference - maybe 'mining text data'?
+In supervised text classification, you have a set of inputs, in this case text data, that already has a category assigned to it.
+This data is then used to fit the model so that it later make predictions for inputs that it has not yet been exposed to.
+A model that have been shown to be successful in text classification is Support Vector Machines (SVM). %TODO: Refer to papers
+
+In order to assign fit a machine learning model to predict categories for clinical reports, we need a set of already labeled data.
+That is, we need to assign categories to the existing set of clinical reports.
+It is often the case that text data is widely available, but it is harder to come by data that is already labeled.
+Obtaining high quality data is important to use in machine learning systems, both in healthcare and other areas.
+Since the models require a sufficient amount of reports to be labeled, the task of labeling them can be cumbersome.
+Especially in the case of clinical data, since doctors and other clinicians time is valuable and expensive.
+By improving the process and the quality of data to be labeled, they can spend more time doing their job.
+
+The field within machine learning that is focused on the task of labeling data is called active learning.
+It is a form of semi-supervised learning.
+The algorithm queries an oracle (in this case a doctor) for labels for the data points that it think will help the model improve the best.
+This is used when there is plenty of readily available data, but assigning labels is expensive.
+Since the data points to be labeled are actively selected, the models can require fewer examples than if they were selected at random.
+The points can be selected by considering the certainty of the models, and request to label the documents that the model is less certain about.
+Another approach, which has not been given as much attention, is using the underlying structure of the data to select points.
+The goal with this approach is that you can capture the distribution of the categories.
+
+%TODO: Add references for the different types
+If you assign one of two classes to each document, you have a binary classification problem.
+Problems where you assign one of several classes is called a multi-class classification problem.
+Multi-labeled classification is when you assign one or more label to each document.
+It type of classification that will be treated in this report is multi-labeled.
+Assigning several classes to a document is more time consuming than in the cases where you only need to find one option.
+In those cases you can stop when you have found the appropriate label.
+However, when a document can be assigned several classes you need to consider the entire report.
+This makes the use of active learning methods to enhance the labeling of documents even more useful in the multi-labeled case.
+
+\section{Motivation}
+\label{sec:motivation}
+
+This thesis is carried out at Sectra Medical Imaging IT Solutions AB, as a part of their research group.
+They are currently pursuing a research project with Region Skåne in southern Sweden.
+The intention behind the project is to use machine learning techniques to, among other things, be able to suggest categories to doctors while they are writing medical reports.
+Another case is to use the categories of documents to present doctors with medical reports that are handling similar cases from the past.
+With this information the doctors could get an extra quality assurance check in their diagnostic flow.
+
+In order to build these system, you need a substantial amount of labeled clinical reports.
+Therefore, the purpose of this thesis is to increase the quality and efficiency of labeling these reports.
+This will be done by using unsupervised learning techniques such as topic models and clustering to first remove documents that aren't supposed to be labeled.
+That includes documents that describe patients never showing up for a scan, deceased patients and patients being moved to a different hospital, among others.
+For the labeling, a system is be built to use active learning in conjunction with the aforementioned unsupervised techniques to increase the quality of the labeled documents.
+In the work that they have done so far, the doctor that primarily worked with the labeling of reports stated that the distribution over the labeled categories are very skewed.
+The vast majority of labeled documents were assigned the same few categories.
+This in turn leads the models to require a lot of labeled samples to work well.
+By using active learning techniques we can reduce the number of labeled samples needed to obtain an accurate model.
+
+\section{Aim}
+\label{sec:aim}
+
+The purpose with this thesis project is to evaluate different solutions to increate the quality of labeled reports, and thereby reducing the amount of them needed for a system.
+Resulting from this will be a complete, standalone system, for labeling reports.
+The reports are interactively queried so a user can label the reports that are deemed most useful by the system.
+
+
+\section{Research questions}
+\label{sec:research-questions}
+
+The specific research questions that this thesis will treat is presented here.
+They will be the main focus of study.
+
+\begin{enumerate}
+
+\item \textit{Is it possible filter out invalid clinical reports by using unsupervised techniques such as topic models and clustering?}
+      \newline
+      In the dataset from Sectra, there are reports describing patients not showing up for or changing the time of their appointments, deceased patients or patients that have been ordered to another hospital.
+      These reports does not contain any information of value from a medical point of view and should not be considered in the report labeling process.
+
+      Unsupervised machine learning models such as topic modeling and clustering does by definition not require any labeled documents to train on.
+      If it is possible to, without any such data, group these invalid reports together and remove them from the process before a doctor is presented with them that would be an additional hurdle removed from the process.
+
+\item \label{intro:re-q2} 
+      \textit{What are the alternatives to sample documents at random in a document labeling system?}
+      \newline
+      How we are choosing the documents to be sampled is important.
+      If the dataset that is being sampled is skewed, i.e. some categories are a more frequent than others, our labeled set will likely follow that distribution.
+      This will result in the system requiring a lot of labeled documents to gain a high accuracy with reports of less common categories.
+
+      If the decision boundaries of our models can be used to pick documents that would be more informative, the number of labeled documents could be reduced and still gain the same accuracy.
+      Another approach to selecting the documents to sample is to take advantage of the underlying structure of the data through clustering.
+
+\item \textit{Which of the alternatives in question \ref{intro:re-q2} gives us the highest quality set of labeled reports?}
+      \newline
+      The algorithms to be evaluated will be from the two approaches: based on the model certainty or the underlying structure of the data (or both).
+      When choosing the algorithm to use, there are several different factors that will affect the final results and therefore needs to be taken into consideration.
+      How well the models perform on the data is a rather obvious one -- evaluating the models based on accuracy, precision, recall and f1-score.
+      But they also need to be able to query documents in a reasonable time, if it is expensive to label reports it is likely to be expensive to wait for the reports to be queried.
+      Choosing reports in batches and if the algorithm needs a big initial set of labeled reports are other factors that will be evaluated.
+\end{enumerate}
+
+\section{Delimitations}
+\label{sec:delimitations}
+
+% TODO: Write delimitations
+\textit{To be written - data and evaluation by only one doctor}
+
+\section{Structure of the Report}
+\label{sec:structure}
+
+% TODO: Write structure of the report
+\textit{To be written}
