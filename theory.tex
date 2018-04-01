@@ -5,7 +5,11 @@
 
 \section{Text Processing using Unsupervised Techniques}
 
-There are several ways to process  
+Techniques in machine learning that does not require you have a categorized or labelled set of data is called unsupervised.
+They use the structure of the data to obtain the information to use when processing it.
+When it comes to text data, there are a few common methods and techniques that are unsupervised, and can be used for different purposes.
+Examples of such techniques are \textit{topic modeling} and \textit{clustering}.
+Another interesting technique is word2vec, that is used to produce word embeddings.
 
 \subsection{Topic Modeling}
 
@@ -14,8 +18,9 @@ The topics build upon the probability that a certain word would occur in a text 
 For example, if the topic represents United States politics, words such as ``government'', ``Trump'', ``Reagan'', ``Senate'', or ``Medicaid'' are more likely to appear than ``sailboat'' or ``sweater''.
 Any given document can then contain a topic with some probability.
 This can be viewed as fuzzy clustering, and that the document has a degree of membership in a topic or cluster~\cite{crain2012dimensionality}.
-The most common topic model in use is Latent Dirichlet Allocation~\cite{crain2012dimensionality}.
-It
+The most common topic model in use is Latent Dirichlet Allocation (LDA)~\cite{crain2012dimensionality}.
+Another topic model that preceded LDA is Probabilistic latent semantic analysis (PLSA)~\cite{hofmann1999probabilistic}.
+However, PLSA has been shown to be more prone to overfitting than LDA~\cite{crain2012dimensionality}.
 
 In the rest of the report, the following notation will be used:
 
@@ -29,7 +34,7 @@ In the rest of the report, the following notation will be used:
 
 \subsubsection{Latent Dirichlet Allocation}
 
-Latent Dirichlet allocation (LDA) is a statistical model~\cite{blei2003latent}, where abstract topics in the model are defined as distributions over words.
+Latent Dirichlet allocation (LDA) is a statistical model, where abstract topics in the model are defined as distributions over words~\cite{blei2003latent}.
 LDA is based on a generative process, a model of which can be seen in Figure~\ref{fig:lda_gen_process}.
 The circles in this figure represent random variables.
 Dependencies between these random variables are shown with arrows, and if a variable is observed it is shaded in the figure.
@@ -109,15 +114,15 @@ So, if the same word has been used to express different thoughts, and the word h
 The task of learning the LDA model is a Bayesian Inference problem.
 We have several variables that we cannot observe: the word distribution for the topics ($\phi_i$), the topic assignments for the tokens ($z$), and the topic distribution for the documents ($\theta_d$).
 The only observed variables are the words in the document.
-We have to approximate the posterior distribution using some sampling method, since it cannot be inferred automatically~\cite{LDA}.
+We have to approximate the posterior distribution using some sampling method, since it cannot be inferred automatically~\cite{blei2003latent}.
 
 There exist a few algorithms that can be used to learn topics for the LDA model. 
-Two of these that has shown to be able to extract useful topics from text are \textit{collapsed Gibbs sampling}~\cite{collapsed-gibs} and \textit{variational Bayes}~\cite{LDA}.  
+Two of these that has shown to be able to extract useful topics from text are \textit{collapsed Gibbs sampling}~\cite{griffiths2004finding} and \textit{variational Bayes}~\cite{blei2003latent}.  
 In collapsed Gibbs sampling, $\theta$ and $\phi$ are marginalized out.
 It works by repeatedly sampling the topic assignment $z_{dn}$ for each token, conditioned on the assignments for the other tokens.
 Variational Bayes works by using simpler single-variable models to approximate the LDA\@. 
 As a consequence, it disregards any dependencies between the variables.
-This is the approach used in the original LDA paper~\cite{LDA}.
+This is the approach used in the original LDA paper~\cite{blei2003latent}.
 
 \subsubsection{Collapsed Gibbs}
 
@@ -150,33 +155,23 @@ A simple approach to k-means clustering can be seen as:
     \item Repeat step \ref{enum:k-means-step-2} and \ref{enum:k-means-step-3} until convergence.
 \end{enumerate}
 
+A visualization of this can be seen in Figure~\ref{fig:kmeans-iterations}.
 One advantage that K-means has over K-medoid is that it requires a small number of iterations, especially compared to K-medoid~\cite{aggarwal2012survey, schutze1997projections}.
 However, K-means is rather sensitive to the selection of initial seeds.
 One approach is to just select them randomly, or selecting them based on the result of another lightweight clustering method.
 A frequently used method is k-means++, that has been shown to improve both the speed and accuracy of k-means clustering~\cite{arthur2007k}.
 
-\begin{figure}
-    \begin{subfig}[b]{0.3\textwidth}
-    \includegraphics[width=4cm]{figures/kmeans-init.eps}
-    \caption{Initial seeds}
-    \end{subfig}
-    \begin{subfig}[b]{0.3\textwidth}
-    \includegraphics[width=4cm]{figures/kmeans-iter1.eps}
-    \caption{Iteration 1}
-    \end{subfig}
-    \begin{subfig}[b]{0.3\textwidth}
-    \includegraphics[width=4cm]{figures/kmeans-init2.eps}
-    \caption{Centroids after iteration 1}
-    \end{subfig}
-    \begin{subfig}[b]{0.3\textwidth}
-    \includegraphics[width=4cm]{figures/kmeans-iter2.eps}
-    \caption{Iteration 2}
-    \end{subfig}
-    \begin{subfig}[b]{0.3\textwidth}
-    includegraphics[width=4cm]{figures/kmeans-init3.eps}
-    {}Centroids after iteration 2
-    \end{subfig}
-    \caption{Title for both}
+\begin{figure}[h!]
+    \centering
+    \thirdsubfig{kmeans-init}{Initial seeds}
+    \thirdsubfig{kmeans-iter1}{Iteration 1}
+    \newline
+    \thirdsubfig{kmeans-init2}{Centroids after iteration 1}
+    \thirdsubfig{kmeans-iter2}{Iteration 2}
+    \thirdsubfig{kmeans-init3}{Centroids after iteration 2}
+    \caption{(a) to (e) shows iterations of K-means until convergence.
+        In (e) it can be seen that the new centroids capture the same documents as the previous iteration, and we have converged.}
+    \label{fig:kmeans-iterations}
 \end{figure}
 
 \subsubsection{Hierarchical Clustering}
@@ -232,7 +227,7 @@ A smaller $C$-value allows more points to be misclassified, in order to achieve 
 \subsection{Multi-Label Classification}
 
 Multi-label classification is the type of text classification where one instance can be associated with multiple labels.
-It is a generalized version of the multiclass classification problem, where you have more than 2 labels, but each document is only assigned one.
+It is a generalized version of the multi-class classification problem, where you have more than 2 labels, but each document is only assigned one.
 
 A common way of solving multi-label classification problems is the binary Relevance method~\cite{read2011classifier}
 It is a way of transforming the multi-label classification problem into several different binary ones.
