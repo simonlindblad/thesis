@@ -14,6 +14,19 @@ When it comes to text data, there are a few common methods and techniques that a
 Examples of such techniques are \textit{topic modeling} and \textit{clustering}.
 Another interesting technique is word2vec, that is used to produce word embeddings.
 
+When working with text, it needs to be represented in a way that allows the models to work with it effectively.
+\textit{Bag-of-words} (BoW) is one of the more common representations when performing text analysis. 
+Using BoW the text is represented as a multi-set. 
+That is, a document is represented by the number of occurrences of the different words. 
+The representation of a document therefore becomes very high-dimensional, there is one dimension for each word in the vocabulary. 
+Like the name implies, the positions of the words are not taken into account, they are viewed as if they were taken from a bag. 
+Another drawback from this approach is that a word in a written language can be used to express several different thoughts, and one thought can be expressed using several different words. 
+However, it is easy to work with, and is used when performing topic modeling among other things.
+
+One way to incorporate positional information into the representation is the use of n-grams.
+Instead of storing information pertaining to one term, information is stored with regards to n consecutive terms.
+Considering the text ``Pattern Recognition and Machine Learning'' using a bigram (n-gram with n=2), would result in the tokens: ``Pattern Recognition'', ``Recognition and'', ``and Machine'', and ``Machine Learning''.
+
 \subsection{Topic Modeling}
 
 A topic model is a statistical model for finding topics within text~\cite{crain2012dimensionality}.
@@ -129,7 +142,7 @@ This is the approach used in the original LDA paper~\cite{blei2003latent}.
 
 \subsubsection{Collapsed Gibbs}
 
-% TODO: Write section on collapsed gibbs
+% TODO: Write section on collapsed Gibbs
 \textit{To be written}
 
 \subsection{Text Clustering}
@@ -182,13 +195,17 @@ A frequently used method is k-means++, that has been shown to improve both the s
 % TODO: Write if needed
 \textit{To be written if used in the end}
 
+\subsection{Word Embeddings with Word2Vec}
+
+\textit{To be written}
+
 \section{Text Classification}
 
-Text classification is a widely studied are within Computer Science.
-It is an important problem in supervised machine learning, and it is task of assigning one or more classes to a given text document~\cite{aggarwal2012surveyclass}.
+Text classification is a widely studied field within Computer Science.
+It is an important problem in supervised machine learning, and it is the task of assigning one or more classes to a given text document~\cite{aggarwal2012surveyclass}.
 The problem is mainly approached with supervised machine learning.
-That is, have a data set that consists of a collection of text documents, where each document has one or more classes assigned to it. % TODO: QUOTE BISHOP
-This data set is then used to fit a classification model. 
+That is, with a dataset that consists of a collection of text documents, where each document has one or more classes assigned to it. % TODO: QUOTE BISHOP
+With the help of these labels, a classification model is fitted to the data.
 The goal of this is for the model to be able to correctly assign a class to a a previously unseen text document.
 Some of these classification models can also produce a probability of a document being of a certain class.
 Other models are based on the concept of a margin that separates the classes, and the distance between a data point and a margin can be used to indicate how certain the model is of the assigned label~\cite{tong2001support}.
@@ -230,17 +247,28 @@ A smaller $C$-value allows more points to be misclassified, in order to achieve 
 \subsection{Multi-Label Classification}
 
 Multi-label classification is the type of text classification where one instance can be associated with multiple labels.
-It is a generalized version of the multi-class classification problem, where you have more than 2 labels, but each document is only assigned one.
+It is a generalized version of the multi-class classification problem, where you have more than 2 labels, but each document is only assigned one~\cite{tsoumakas2006multi}.
 
-A common way of solving multi-label classification problems is the binary Relevance method~\cite{read2011classifier}
+A common way of solving multi-label classification problems is the binary Relevance method~\cite{read2011classifier}.
 It is a way of transforming the multi-label classification problem into several different binary ones.
 With Binary Relevance you fit one classification model per label in your data.
 Each of these classifiers are then predicting whether or not the document is associated with the corresponding label or not.
 
 \section{Active Learning}
 
+Conventional machine learning systems use a set of available data to find a hypothesis that can explain the patterns.
+The purpose of active learning is to allow a system to \textit{select} the data that it wants labeled, and therefore the data it wants to be trained on~\cite{settles2012active}.
+An active learning system samples a document to be labeled, and then queries a human annotator to get the label for that document.
+In several different domains, data is readily available and easy to come by.
+But even if the data is abundant, labels for the data is often harder and more expensive to come by~\cite{settles2012active}.
+%TODO: Find another source for this too.
+
+\subsection{Vector Space}
+
 \subsection{Binary Minimization}
 
 \subsection{MMC - Maximum Loss Reduction with Maximum Confidence}
 
 \subsection{Adaptive Active Learning}
+
+\section{Related Work}
