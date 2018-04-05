@@ -8,7 +8,7 @@ The last section contains an overview of the field of active learning, as well a
 
 \section{Text Processing using Unsupervised Techniques}
 
-Techniques in machine learning that does not require you have a categorized or labelled set of data is called unsupervised.
+Techniques in machine learning that does not require you have a categorized or labeled set of data is called unsupervised.
 They use the structure of the data to obtain the information to use when processing it.
 When it comes to text data, there are a few common methods and techniques that are unsupervised, and can be used for different purposes.
 Examples of such techniques are \textit{topic modeling} and \textit{clustering}.
@@ -244,12 +244,12 @@ The equation with the slack variables becomes:
 
 A smaller $C$-value allows more points to be misclassified, in order to achieve better generalization.
 
-\subsection{Multi-Label Classification}
+\subsection{Multi-Label Classification}\label{subsec:multi-label-classification}
 
 Multi-label classification is the type of text classification where one instance can be associated with multiple labels.
 It is a generalized version of the multi-class classification problem, where you have more than 2 labels, but each document is only assigned one~\cite{tsoumakas2006multi}.
 
-A common way of solving multi-label classification problems is the binary Relevance method~\cite{read2011classifier}.
+A common way of solving multi-label classification problems is the Binary Relevance method~\cite{read2011classifier, boutell2004learning}.
 It is a way of transforming the multi-label classification problem into several different binary ones.
 With Binary Relevance you fit one classification model per label in your data.
 Each of these classifiers are then predicting whether or not the document is associated with the corresponding label or not.
@@ -258,17 +258,102 @@ Each of these classifiers are then predicting whether or not the document is ass
 
 Conventional machine learning systems use a set of available data to find a hypothesis that can explain the patterns.
 The purpose of active learning is to allow a system to \textit{select} the data that it wants labeled, and therefore the data it wants to be trained on~\cite{settles2012active}.
-An active learning system samples a document to be labeled, and then queries a human annotator to get the label for that document.
-In several different domains, data is readily available and easy to come by.
-But even if the data is abundant, labels for the data is often harder and more expensive to come by~\cite{settles2012active}.
-%TODO: Find another source for this too.
+An active learning system samples a document to be labeled, and then queries an oracle (often a human annotator) to get the label for that document.
+By being able to decide what data to to label and use, the goal is that the system can achieve better results, and that the data will be of higher quality.
+A model of the active learning system can be seen in Figure~\ref{fig:active-learning-model}.
+The main 
 
-\subsection{Vector Space}
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.7]{figures/active-learning-model.eps}
+    \caption{An overview of an active learning system}
+    \label{fig:active-learning-model}
+\end{figure}
+
+In several different domains, data is readily available and easy to come by.
+But even if the data is abundant, labels for the data is often harder and more expensive to come by~\cite{settles2012active}, especially when it comes to multi-label problems.
+
+The next section will describe different ways to access the documents in active learning systems, followed by some theory of how the samples relate to the hypothesis space.
+After that some concrete methods for selecting the samples to queried are described and compared.
+
+\subsection{Pool-Based Sampling}
+
+The main focus is how to select the samples to be labeled.
+There are different sampling methods in use, and which one is more appropriate depends on how the data can be accessed.
+Pool-based sampling is motivated by the assumption that there exists a large ready pool of data, where only a small portion is labeled~\cite{lewis1994sequential, settles2012active}.
+The samples to be labeled is then selecting by evaluating the entire pool of unlabeled data, and select the most appropriate one based on a defined utility measure.
+If the entire pool is large, a subset could be used instead.
+For applied active learning, pool-based sampling seems to be the most popular choice, but there are some alternatives that have been used in theoretical settings such as stream-based selective sampling.
+The difference between stream-based selective sampling and pool-based sampling is the individuality of the decisions in stream-based selective sampling, where you draw one sample at a time from an input source and make the decision whether or not to query a label for it.
+For text applications, where a set of data is often readily available, pool-based sampling is often the more appropriate option since you can consider the entire dataset.
+Pool-based is therefor the sampling technique that will be considered in this paper.
+
+\subsection{Initial Sampling Selection}
+
+\textit{To be written}
+
+\subsection{Searching the Hypothesis Space}
+
+In machine learning hypothesis is a specific configuration of a model, the purpose of which is to predict outputs on new instances of data by generalizing the training data.
+One hypothesis can, for example, be an SVM model with specific values for the parameters.
+The set of all possible hypothesis that we are working with the \textit{hypothesis space}.
+Following the SVM example, the hypothesis space would be the set of SVM's with the different values that are possible for the parameters.
+The hypothesis space is defined as:
+% TODO: Big brackets
+\begin{equation}
+    \begin{aligned}
+        \mathcal{H} = \Bigg \{ f | f(x) = \frac{w * \phi(x)}{|w|} \Bigg \}\\
+        \text{where~$w \in \mathcal{W}$ and $\mathcal{W}$ is our parameter space}
+    \end{aligned}
+\end{equation}
+
+The version space the subset of the hypothesis space
+The subset of the hypothesis space that in the feature space separates the data is called the version space, which is defined as:
+
+\begin{equation}
+    \mathcal{V} = \Bigg \{ f \in \mathcal{H} | y_i f(x_i) > 0 \forall i \in \{i \dots n\} \Bigg \}
+\end{equation}
+
+So the version space therefore represents the different hypothesis that make correct predictions on the training data.
+Under the assumption that one of the hypothesis can fully separate the data, the version space shrinks when more labeled data is acquired.
+So for new labeled instances the hypotheses in the version space will give better predictions for the training data.
+Based on this, an active learning algorithm should aim to reduce the size of the version space with each new sample, optimally make it half the size in each iteration.
+
+There exists a useful relationship between the feature space $\mathcal{F}$ and the hypothesis space $\mathcal{H}$ called the \textit{version space duality}~\cite{tong2001support, vapnik1998statistical}.
+It states that hyperplanes in the hypothesis corresponds to points in the feature space, and the other way around.
+So by selecting points to be labeled, constraints can be enforced on the hypothesis that form the version space.
+
+One approach to this is called that has shown to be successful is \textit{Uncertainty Sampling}~\cite{settles2012active}.
+The idea behind SVM is to find a hyperplane that separates two classes in a binary classification with the maximum margin.
+Out of the different hyperplanes in the hypothesis space, the version space contains those that can successfully separate the data.
+We want to select the points in the feature space that will reduce the amount of the valid hypotheses the most.
+Since SVMs tries to find the support vectors that maximizes the decision boundary in the feature space, separating the two classes.
+Considering this in $\mathcal{H}$, it will be analogous to the hypothesis in the center of the hypothesis space encompassed constraints set by the labeled points.
+What Uncertainty Sampling is predicting the values for the unlabeled points, and then choose the one that it is most uncertain about, the one closest to the decision boundary, to be labeled.
+Based on the version space duality, it is a good approximation for dividing the version space in two.
 
 \subsection{Binary Minimization}
 
-\subsection{MMC - Maximum Loss Reduction with Maximum Confidence}
+Binary Minimization is a generalization of uncertainty sampling, to make it work with multi-label data.
+The approach taken is to decompose the multi-label problem to several binary one-vs-rest tasks, like discussed in~\ref{subsec:multi-label-classification}.
+The unlabeled point that is chosen for labeling is then the one with the smallest SVM margin across all the binary classification tasks.
+By doing this, it does not incorporate the multiple labels into the decision process, but treats all classes individually and equally. 
+
+\subsection{Maximum Loss Reduction with Maximum Confidence}
 
 \subsection{Adaptive Active Learning}
 
 \section{Related Work}
+
+Active learning has been researched in text classification with different approaches.
+They can be seen as two categories: searching through the hypothesis space by using the uncertainty of a model, or by exploiting the structure of the data through clustering~\cite{dasgupta2008hierarchical}.
+
+One of the common baselines for active learning is uncertainty sampling~\cite{lewis1994sequential}.
+That simply queries the label for the data point the model is most uncertain about.
+In~\cite{dasgupta2008hierarchical} hierarchical clustering is used in an active learning system.
+The labels are queried from clusters where there is a lot of uncertainty when it comes to the majority label.
+By pruning the tree of clusters while querying for labels the goal is to obtain a pruning where each node mostly contains one label.
+
+In \cite{nguyen2004active} they also take advantage of a clustering to select the samples to be labeled in a two-class environment.
+They take advantage of that the data points closest to the centroids are the most important ones, and that most data points in one cluster have the same label.
+What this approach has in common with a lot of the current research is that it is treating single-label or binary classification problems.

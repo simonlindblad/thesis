@@ -139,6 +139,21 @@ K-medoid requires a larger number of iterations, and doesn't work as well for sp
 * Initial sample selection to get a rough idea of the decision boundary.
     * Introduces sampling bias
 
+#### Pool-based vs Stream based
+
+#### The Version Space
+
+* In machine learning hypothesis is a specific configuration of a model, the purpose of which is to predict outputs on new instances of data by generalizing the training data.
+    * For example: An SVM with some defined values for the different parameters.
+* Hypothesis space: All possible hypothesis that we are currently taking into account
+    * Denote with H and the formula 
+    * For example, the set of all possible values for the different parameters for SVM
+* Version space: Subset of hypothesis space that is consistent with the data
+    * Correct predictions for the labeled data. (L -- make sure to introduce in pool-based)
+    * If we assume that one of these hypothesis can explain the data perfectly: Obtaining more labeled samples will shrink the version space.
+* Knowing this, the task of the active learning algorithm then becomes to choose the data instances that will reduce the size of the version space as quickly as possible
+* 
+
 #### Binary Minimization
 
 #### MMC
