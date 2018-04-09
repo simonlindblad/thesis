@@ -310,7 +310,7 @@ The hypothesis space is defined as:
 The version space the subset of the hypothesis space
 The subset of the hypothesis space that in the feature space separates the data is called the version space, which is defined as:
 
-\begin{equation}
+\begin{equation}\label{eq:version-space}
     \mathcal{V} = \Bigg \{ f \in \mathcal{H} | y_i f(x_i) > 0 \forall i \in \{i \dots n\} \Bigg \}
 \end{equation}
 
@@ -332,18 +332,107 @@ Considering this in $\mathcal{H}$, it will be analogous to the hypothesis in the
 What Uncertainty Sampling is predicting the values for the unlabeled points, and then choose the one that it is most uncertain about, the one closest to the decision boundary, to be labeled.
 Based on the version space duality, it is a good approximation for dividing the version space in two.
 
-\subsection{Binary Minimization}
+\subsection{Binary Version Space Minimization}\label{subsec:binmin}
 
 Binary Minimization is a generalization of uncertainty sampling, to make it work with multi-label data.
 The approach taken is to decompose the multi-label problem to several binary one-vs-rest tasks, like discussed in~\ref{subsec:multi-label-classification}.
 The unlabeled point that is chosen for labeling is then the one with the smallest SVM margin across all the binary classification tasks.
 By doing this, it does not incorporate the multiple labels into the decision process, but treats all classes individually and equally. 
 
-\subsection{Maximum Loss Reduction with Maximum Confidence}
+\subsection{Maximum Loss Reduction with Maximum Confidence}\label{subsec:mmc}
 
-\subsection{Adaptive Active Learning}
+Maximum Los Reduction with Maximum Confidence(MMC) was developed by Yang et al~\cite{yang2009effective}.
+The goal of the technique is to find the samples that will reduce the expected model loss the most, and select this sample for labeling.
+These are the basic notations that will be used when explaining the MMC approach:
+\begin{itemize}
+    \item The labeled dataset: $D_L$.
+    \item The unlabeled dataset: $D_U$.
+    \item Possible query set: $D_S$.
+    \item Optimal query set: $D^*_S$.
+    \item The classification function that is trained on dataset $D_L$: $f_{D_L}$.
+    \item A data point: $x$, and its label: $y$.
+    \item The loss of on data point $x$: $L(f_{D_l}(x))$.
+    \item The expected loss of the model: $\widehat{\sigma_{D_L}}$.
+\end{itemize}
+
+The expected model loss that MMC is trying to reduce can be defined as follows~\cite{yang2009effective}:
+\begin{equation}
+    \widehat{\sigma_{D_L}} = \int_x \bigg ( \sum_{x \in Y} L(f_{D_L})P(y|x) \bigg ) P(x)dx
+\end{equation}
+
+It is hard to estimate $P(x)$, so it is instead measured over all the samples in $D_U$.
+This results in another estimate:
+\begin{equation}
+    \widehat{\sigma_{D_L}} = \frac{1}{|D_U|} \sum_{x \in D_U} \sum_{y \in Y} L(f_{D_L})P(y|x)
+\end{equation}
+
+After a set of data points $D_S$ has been labeled, the new dataset $D'_L=D_L + D_S$ is obtained.
+Under the assumption that any $x \in D_U - D_S$ has an equal effect on a model trained on the datasets $D_L$ and $D'_L$, we get the following equation for the reduction of the expected loss~\cite{yang2009effective}:
+
+\begin{equation}
+    D^*_S = \arg\max_{D_S}(\widehat{\sigma_{D_L}} - \widehat{\sigma_{D'_L}}) = \arg\max_{D_S} \big ( \sum_{x \in D_S} \sum_{y \in Y} (L(f_{D_L}) - L(f_{D'_L})) P(y|x) \big )
+\end{equation}
+
+In their paper, Yang et al\@. considers the process of finding the greatest reduction in two steps: finding a good estimate for the conditional probability $p(y|x)$, and finding a way to assess the loss reduction of a multi-label classifier.
+
+It is unfeasible for a query strategy to provide a an estimation for all possible label combinations.
+If there are $n$ different labels, there will be $2^n$ different label combinations.
+In order to estimate the conditional probability $p(y|x)$, MMC uses an approach that first estimates the number of labels for a given data point, and then uses that estimate to select the most probable labels.
+Consider the case where a data point has $m$ labels.
+Since we can obtain the probability from our classification model for each label, we can sort them in descending order.
+The first $m$ labels are then likely to have a high probability, while the rest a rather low probability.
+
+Yang et al\@.~\cite{yang2009effective} describes the process of estimating the number of labels as follows:
+\begin{enumerate}
+    \item Use the classification model to obtain the probabilities for each label for all the data samples.
+    \item For each data sample, sort and normalize the probabilities for all the labels.
+    \item Using the labeled dataset, train a logistic regression classifier with the sorted and normalized probabilities as features, and the number of labels as target.
+    \item With the trained logistic regression model, predict the number of labels for the samples in the unlabeled pool.
+\end{enumerate}
+
+After obtaining the predicted number of labels $m$ for a sample $x$, the estimate for $p(y|x)$, denoted $\hat{y}$, is then obtained by selecting $m$ the most probable labels based on the original classification models output.
+
+The only task that's left is now to estimate the loss for the multi-label classifier.
+By using the model where there are $k$ different binary classifiers for a problem with $k$ labels, the model loss can be calculated by adding the loss for the different binary classifiers like:
+
+\begin{equation}
+    L(f) = \sum_{i = 1}^k L(f^i)
+\end{equation}
+
+where the loss of a single binary classifier is denoted as $L(f^i)$.
+With this definition, it only remains to define the measure of loss on a single binary classifier.
+The measurement that is used by MMC is to estimate the model loss by the size of the version space of the SVM~\cite{tong2001support, yang2009effective}.
+The version space's size can be computed with Equation~\ref{eq:version-space}.
+However, computing this for each possible label set is expensive.
+By using the heuristic from~\cite{tong2001active}, an approximation of the version space with the added label can be obtained from the current SVM classifiers' margin.
+The relation between the model loss before and after adding a the data point $(x, y^i)$, where $y^i \in {-1, 1}$, can be expressed as follows~\cite{yang2009effective, tong2001active}:
+
+\begin{equation}
+    \frac{L(f^i_{D_L+(x, y^i)})}{L(f^i_{D_L})} \approx \frac{V^i_{D_L + (x, y^i)}}{V^i_{D_L}} \approx \frac{1 + y^i f^i_{D_L}(x)}{2}
+\end{equation}
+
+The loss reduction is measured by:
+%TODO
+
+\begin{equation}
+\end{equation}
+
+\subsection{Adaptive Active Learning}\label{subsec:adaptive-active-learning}
+
+\textit{To be written}
+
+\section{Evaluation Metrics}
 
 \section{Related Work}
+
+Using topic modeling for various clinical applications has been done before.
+Topic modeling have been a popular approach for this purpose since clinical data often is in the form of free text.
+The resulting topics can be interpreted by humans, which allow doctors to get more insight into the system.
+Sarioglu et al\@.~\cite{sarioglu2013topic} to represent clinical reports with topic vectors in order to classify them.
+Chan et al\@.~\cite{chan2013empirical} used topic models to analyze patient records and clinical reports from cancer patients.
+In their paper, they found relationships between the content of the notes on the patients, with the data that was available on the patients' genetic mutations.
+The interpretability of topics generated from an LDA model was studied on clinical reports by Arnold et al~\cite{arnold2016evaluating}.
+They evaluated how interpretable topics were based on how many topics the model used.
 
 Active learning has been researched in text classification with different approaches.
 They can be seen as two categories: searching through the hypothesis space by using the uncertainty of a model, or by exploiting the structure of the data through clustering~\cite{dasgupta2008hierarchical}.
@@ -356,4 +445,18 @@ By pruning the tree of clusters while querying for labels the goal is to obtain 
 
 In \cite{nguyen2004active} they also take advantage of a clustering to select the samples to be labeled in a two-class environment.
 They take advantage of that the data points closest to the centroids are the most important ones, and that most data points in one cluster have the same label.
-What this approach has in common with a lot of the current research is that it is treating single-label or binary classification problems.
+What this approach has in common with a lot of the current research is that it is treating single-label or binary classification problems, which cannot be directly applied to a multi-label scenario.
+
+Research in~\cite{brinker2006active} is dealing with the multi-label problem.
+That is the paper that developed the \textit{binary version space minimization} strategy that is described in section~\ref{subsec:binmin}.
+The MMC strategy that is described in section~\ref{subsec:mmc}, and the adaptive active learning strategy in section~\ref{subsec:adaptive-active-learning} are also techniques for managing the multi-label problem.
+For image classification, there has been some methods develop, for example ~\cite{li2004multilabel, qi2008two}.
+In~\cite{li2004multilabel} the goal is to, after making predictions, selecting the sample with the biggest mean loss.
+However experiments have shown that this is not as suitable for text classification~\cite{yang2009effective}.
+In~\cite{qi2008two}, the approach is to use pairs of labels and samples to present to the annotator, and the aim is to minimize the Bayesian classification error.
+Due to the fact that labeling for text classification is more time consuming than image classification, since you have to read an entire text, this approach is not suitable for text classification~\cite{yang2009effective}.
+
+Active learning has been used to deal with the problem of imbalanced datasets before.
+In a binary classification setting, Ertekin et al\@.~\cite{ertekin2007learning} used uncertainty sampling with SVMs to get a more balanced dataset.
+In~\cite{attenberg2013class}, Attenberg et al\@. uses density based active learning to improve the class balance.
+However, it does not attempt to apply this in a multi-label setting.
