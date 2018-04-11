@@ -15,14 +15,14 @@ It could also provide doctors with extra confidence in that their diagnosis is c
 
 The problem systems like this would face is to identify the type of a medical report in order to make further suggestions.
 One approach that is commonly used for such problems is machine learning.
-In machine learning, you use a set of inputs and map it to some output values. %TODO: Refer to bishop
+In machine learning, you use a set of inputs and map it to some output values~\cite{bishop2006pattern}.
 This is done by using data to build a, usually statistical, model.
 
 The task of predicting a type, or class, for a given text document is called text classification.
-Text classification is usually solved using supervised learning. %TODO: Find reference - maybe 'mining text data'?
+Text classification is usually solved using supervised learning~\cite{aggarwal2012surveyclass}. 
 In supervised text classification, you have a set of inputs, in this case text data, that already has a category assigned to it.
 This data is then used to fit the model so that it later make predictions for inputs that it has not yet been exposed to.
-A model that have been shown to be successful in text classification is Support Vector Machines (SVM). %TODO: Refer to papers
+A model that have been shown to be successful in text classification is Support Vector Machines (SVM)~\cite{joachims1998text, aggarwal2012surveyclass, tong2001support}.
 
 In order to assign fit a machine learning model to predict categories for clinical reports, we need a set of already labeled data.
 That is, we need to assign categories to the existing set of clinical reports.
@@ -41,8 +41,7 @@ The points can be selected by considering the certainty of the models, and reque
 Another approach, which has not been given as much attention, is using the underlying structure of the data to select points.
 The goal with this approach is that you can capture the distribution of the categories.
 
-%TODO: Add references for the different types
-If you assign one of two classes to each document, you have a binary classification problem.
+If you assign one of two classes to each document, you have a binary classification problem~\cite{bishop2006pattern}.
 Problems where you assign one of several classes is called a multi-class classification problem.
 Multi-labeled classification is when you assign one or more label to each document.
 It type of classification that will be treated in this report is multi-labeled.
@@ -110,16 +109,20 @@ They will be the main focus of study.
       How well the models perform on the data is a rather obvious one -- evaluating the models based on accuracy, precision, recall and f1-score.
       But they also need to be able to query documents in a reasonable time, if it is expensive to label reports it is likely to be expensive to wait for the reports to be queried.
       Choosing reports in batches and if the algorithm needs a big initial set of labeled reports are other factors that will be evaluated.
+
+      Another indication on the quality of the labeled reports is the balance between the classes.
+      Even though the original data may be very imbalanced, selecting samples that contains a better balance between the different samples could improve the models performance.
 \end{enumerate}
 
 \section{Delimitations}
 \label{sec:delimitations}
 
-% TODO: Write delimitations
-\textit{To be written - data and evaluation by only one doctor}
+Even though the sampling strategies are evaluated objectively on the Reuters dataset, the applicability of the techniques on clinical data is only evaluated by one physician, on the one dataset provided by Sectra.
 
 \section{Structure of the Report}
 \label{sec:structure}
 
-% TODO: Write structure of the report
-\textit{To be written}
+The next chapter covers the background theory that is relevant for the thesis.
+After the theory, the methodology used is described, which is followed by a chapter covering the results.
+The method and results are then discussed in Chapter~\ref{cha:discussion}.
+Finally, Chapter~\ref{cha:conclusion} presents the conclusions.
