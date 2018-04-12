@@ -1,0 +1,15 @@
+{
+    'ExamId': 24550003, 
+    'ReportText': 'OBS DETTA ÄR EN ÄNDRING AV TIDIGARE SIGNERAT UTLÅTANDE\n\n[NUM-SEQ]:58 Datortomografi av hjärna och halsrygg\n\nDet finns uttalade artefakter som i princip omöjliggör bedömningen av bakre skallgropen.\nDet finns små mängder subaraknoidalt beläget blod dorsalt i fissura Sylvii på vänster sida. \nFörändringen som beskrevs i ursprigliga utlåtandet bedöms utgöras av en liten kortikal subkortikal blödning parasagittalt frontalt på vänster sida.\n\n[NUM-SEQ] Eufrozina Selariu\n\n[NUM-SEQ]:58 Datortomografi av hjärna och halsrygg\n\nIngen tidigare undersökning finns för jämförelse.\n\nHögt upp parasagittalt frontalt vänster finns en knappt 1x0,5 cm stor högattenuerande förändring ytligt i hjärnparenkymet. Denna motsvarar i första hand en förkalkning, men blödning är inte möjligt att helt utesluta. I övrigt finns inga blödningsmisstänkta förändringar intrakraniellt med reservation för att bedömningen av bakre skallgropen försvåras av tandlagningsartefakter. Ingen fraktur i neurokraniet. Det finns hematom i extrakraniella mjukdelar frontotemporalt vänster.\n\nIngen fraktur eller felställning i halsryggen. Ingen prevertebral svullnad.\n\n[NUM-SEQ] Håkan Lindvall',
+    'Anamnesis': 'Önskad tid:                    Etylerad man som cyklat omkull. Burit hjälm. Avsvimmad och amnesi för händelsen.  Grovneurologiskt u a. Bula frontalt till vänster i huvudet. Ont anteriort vänster thorax, andningsljud liksidiga u a.', 
+    'Question': 'Blödning? Skelettskada?', 
+    'PatientAlert': ' ', 
+    'ExamComment': None, 
+    'Canceled': False, 
+    'ExamName': 'DT hjärna och halsrygg', 
+    'ExamCode': '81100', 
+    'PatientSex': 'MALE', 
+    'PatientAge': 71, 
+    'Urgent': -1, 
+    'Pharma': None
+}
