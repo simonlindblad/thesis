@@ -40,6 +40,21 @@ The set of reports provided by Sectra contained 1068904 different entries, where
 The entries were spread out over several files, stored in the JSON format.
 However, those labels were subject to change, so they were mainly used to see if there were any correlation between the labels and clusters during the exploration phase.
 A sample report can be seen in Figure~\ref{fig:sample-report}.
+The fields include:
+\begin{enumerate}
+    \item \textbf{ExamId}: The ID of the exam
+    \item \textbf{ReportText}: The report written by the physician after the examination
+    \item \textbf{Anamnesis}: The patient's account of their medical history
+    \item \textbf{PatientAlert}: FILL IN
+    \item \textbf{ExamComment}: FILL IN
+    \item \textbf{Cancelled}: FILL IN
+    \item \textbf{ExamName}: FILL IN
+    \item \textbf{ExamCode}: FILL IN
+    \item \textbf{PatientSex}: FILL IN
+    \item \textbf{PatientAge}: FILL IN
+    \item \textbf{Urgent}: FILL IN
+    \item \textbf{Pharma}: FILL IN
+\end{enumerate}
 %TODO: Include full report
 \begin{figure}
 \begin{verbatim}
@@ -64,6 +79,7 @@ A sample report can be seen in Figure~\ref{fig:sample-report}.
 \end{figure}
 
 The work was mainly concerned with the ReportText field, since it contains the response to the result of the examination.
+But the for the complete Active Learning system the Anamnesis was used as well.
 The labels that were initially assigned to these reports were:
 ``Blödning'', ``Infektion'', ``Metabol'', ``Tumör'', ``Cysta'', ``Missbildning'', ``Syndrom'', ``Demens'', ``Hydrocefalus'', ``Infarkt'', ``Kärlsjukdom'', ``Trauma'', ``Systemsjukdom'', ``Inklämmning'' and ``Normal''.
 
@@ -126,7 +142,7 @@ In order to visualize the data in a 2D plot, t-distributed stochastic neighbor e
 It is a dimensionality reduction technique, that is able to transform high dimensional data into two dimensions, trying to retain as much variance as possible.
 
 The first step was to fit an LDA model to the data.
-For the purpose of exploring the data, the number of topics were chosen to be a 100, with the hope of it not resulting in too granular topics that would be hard to manually analyze.
+For the purpose of exploring the data, the number of topics were chosen to be a 100, with the hope of it not resulting in too granular topics that would be hard to manually analyze. %TODO: How many topics did other reports include?
 In order to being able to visualize the data in a meaningful way, a subset of X reports were used to begin with.
 The data points were plotted in a 2D plot after reducing the dimensions using t-SNE.
 Since each data point is associated with several different topics, there exists several way of coloring each data point in order to gain an understanding of them.
