@@ -27,7 +27,7 @@ One way to incorporate positional information into the representation is the use
 Instead of storing information pertaining to one term, information is stored with regards to n consecutive terms.
 Considering the text ``Pattern Recognition and Machine Learning'' using a bigram (n-gram with n=2), would result in the tokens: ``Pattern Recognition'', ``Recognition and'', ``and Machine'', and ``Machine Learning''.
 
-\subsection{Topic Modeling}
+\subsection{Topic Modeling}\label{sec:topic-modeling}
 
 A topic model is a statistical model for finding topics within text~\cite{crain2012dimensionality}.
 The topics build upon the probability that a certain word would occur in a text about a given topic, on the basis of terms occurring together.
@@ -154,12 +154,12 @@ With one dimension per term in the dictionary, it is not uncommon with dimension
 For this reason, some of the more naive clustering algorithms does not work as well for text data~\cite{aggarwal2012survey}.
 
 In distance-based clustering, a similarity function is used to measure the closeness between two text documents.
-For the purpose of measuring the similarity between text objects, the cosine similarity function is most commonly used~\cite{aggarwal2012survey}.
+For the purpose of measuring the similarity between text objects, the cosine similarity function is commonly used~\cite{aggarwal2012survey}, as well as Euclidean distance.
 Two different approaches to distance-based clustering are distance-based partitioning, and agglomerative hierarchical clustering.
 %For distance-based clustering k-means and k-medoid are two the frequently used algorithms.
 %When it comes to text data, k-means is preferred since k-medoid does not work as well for sparse data, and requires more iterations to converge~\cite{aggarwal2012survey}.
 
-\subsubsection{K-means Clustering}
+\subsubsection{K-means Clustering}~\label{sec:k-means}
 
 When using the k-means clustering algorithm, the clusters are based upon an initial set of k representatives.
 A simple approach to k-means clustering can be seen as:
@@ -189,6 +189,11 @@ A frequently used method is k-means++, that has been shown to improve both the s
         In (e) it can be seen that the new centroids capture the same documents as the previous iteration, and we have converged.}
     \label{fig:kmeans-iterations}
 \end{figure}
+
+K-means is commonly used with Euclidean distance, which is defined on two $n$ dimensional points $p1$ and $p2$ as:
+\begin{equation}
+    d(p1, p2) = \sqrt{(p1_1 - p2_1)^2 + (p1_2 - p2_2)^2 + \hdots + (p1_n - p2_n)^2}
+\end{equation}
 
 \subsection{Word Embeddings with Word2Vec}
 
@@ -255,6 +260,13 @@ Conventional machine learning systems use a set of available data to find a hypo
 The purpose of active learning is to allow a system to \textit{select} the data that it wants labeled, and therefore the data it wants to be trained on~\cite{settles2012active}.
 An active learning system samples a document to be labeled from a pool of unlabeled data, and then queries an oracle (often a human annotator) to get the label for that document.
 By being able to decide what data to to label and use, the goal is that the system can achieve better results, and that the data will be of higher quality.
+To get a better understanding of how the process works, these are the steps commonly iterated over until enough samples have been labeled:
+\begin{enumerate}
+    \item Evaluate the samples in the unlabeled pool based on a particular measure that the querying strategy defines.
+    \item The selected samples are presented to an oracle that is queried for the labels. This oracle is commonly a human annotating the instances. \label{enum:label}
+    \item The newly labeled samples are added to the labeled pool.
+    \item A machine learning model is trained on the labeled pool, this model is often used by the querying strategy in order to select samples to be label in step~\ref{enum:label}
+\end{enumerate}
 A model of the active learning system can be seen in Figure~\ref{fig:active-learning-model}.
 \begin{figure}[!ht]
     \centering
@@ -276,7 +288,7 @@ There are different sampling methods in use, and which one is more appropriate d
 Pool-based sampling is motivated by the assumption that there exists a large ready pool of data, where only a small portion is labeled~\cite{lewis1994sequential, settles2012active}.
 The samples to be labeled is then selecting by evaluating the entire pool of unlabeled data, and select the most appropriate one based on a defined utility measure.
 If the entire pool is large, a subset could be used instead.
-For applied active learning, pool-based sampling seems to be the most popular choice, but there are some alternatives that have been used in theoretical settings such as stream-based selective sampling.
+For applied active learning, pool-based sampling seems to be the most popular choice~\cite{li2013active}, but there are some alternatives that have been used in theoretical settings such as stream-based selective sampling.
 The difference between stream-based selective sampling and pool-based sampling is the individuality of the decisions in stream-based selective sampling, where you draw one sample at a time from an input source and make the decision whether or not to query a label for it.
 For text applications, where a set of data is often readily available, pool-based sampling is often the more appropriate option since you can consider the entire dataset.
 Pool-based is therefor the sampling technique that will be considered in this paper.
@@ -323,7 +335,7 @@ Based on the version space duality, it is a good approximation for dividing the 
 
 \subsection{Binary Version Space Minimization}\label{subsec:binmin}
 
-Binary Minimization is a generalization of uncertainty sampling, to make it work with multi-label data.
+\textit{Binary Version Space Minimization} is a generalization of uncertainty sampling, to make it work with multi-label data.
 The approach taken is to decompose the multi-label problem to several binary one-vs-rest tasks, like discussed in~\ref{subsec:multi-label-classification}.
 The unlabeled point that is chosen for labeling is then the one with the smallest SVM margin across all the binary classification tasks.
 By doing this, it does not incorporate the multiple labels into the decision process, but treats all classes individually and equally. 
@@ -488,7 +500,7 @@ So, the sample is then selected by:
 
 \section{Evaluation Metrics}
 
-For classification of information retrieval systems the typical evaluation metrics to use are \textit{precision}, \textit{recall} and \textit{recall}~\cite{jiang2012information}.
+For classification or information retrieval systems the typical evaluation metrics to use are \textit{precision}, \textit{recall} and \textit{recall}~\cite{jiang2012information}.
 We define the following metrics in terms of \textit{true positives}, \textit{false positives}, \textit{true negatives} and \textit{false negatives}.
 How they are defined can be seen in table~\ref{tab:conf-matr}.
 Data points that are correctly classified are then either \textit{true positives} or \textit{true negatives}.
@@ -529,7 +541,27 @@ Another metric that is used for evaluation is \textit{accuracy}, which is define
     Accuracy = \frac{tp+tn}{tp+tn+fp+fn}
 \end{equation}
 
-These metrics mainly work
+These metrics are designed to work when there are two labels.
+Given several labels, there are different average methods used to get a score for the system.
+Two of these are \textit{micro} and \textit{macro} averaging.
+
+The number of true positives, false positives, true negatives and false negatives for an instance $\lambda$ are here denoted as $tp_\lambda$, $fp_\lambda$, $tn_\lambda$ and $fn_\lambda$.
+A binary evaluation measure on these is denoted as $B(tp_\lambda, fp_\lambda, tn_\lambda, fn_\lambda)$.
+Micro-average work by summing the individual true positives, false positives, true negatives and false negatives~\cite{tsoumakas2009mining}.
+Then you use the sums to obtain the final score.
+Using the notation established above, the micro average is defined as~\cite{tsoumakas2009mining}:
+\begin{equation}
+    B_{micro} = B(\sum_{\lambda = 1}^ktp_\lambda, \sum_{\lambda = 1}^kfp_\lambda, \sum_{\lambda = 1}^ktn_\lambda, \sum_{\lambda = 1}^kfn_\lambda)
+\end{equation}
+
+Macro-average on the other hand works by first calculating the binary measure, and then taking the average of all of them~\cite{tsoumakas2009mining}.
+It is defined as:
+\begin{equation}
+    B_{macro} = \frac{1}{k}\sum_{\lambda = 1}^kB(tp_\lambda, fp_\lambda, tn_\lambda, fn_\lambda)
+\end{equation}
+
+It is worth noting that for some measures, such as Accuracy, the result of the two averaging approaches is the same.
+However, it differs for \textit{recall} and \textit{precision}, and therefor also the \textit{F1-score}~\cite{tsoumakas2009mining}.
 \section{Related Work}
 
 Using topic modeling for various clinical applications has been done before.
@@ -556,7 +588,12 @@ What this approach has in common with a lot of the current research is that it i
 
 Research in~\cite{brinker2006active} is dealing with the multi-label problem.
 That is the paper that developed the \textit{binary version space minimization} strategy that is described in section~\ref{subsec:binmin}.
-The MMC strategy that is described in section~\ref{subsec:mmc}, and the adaptive active learning strategy in section~\ref{subsec:adaptive-active-learning} are also techniques for managing the multi-label problem.
+It simply takes the instance with the smallest margin among the binary classifiers, using
+It selects the data point that has the smallest margin among the binary classifiers, using the binary relevance scheme.
+The MMC strategy~\cite{yang2009effective} that is described in section~\ref{subsec:mmc}, and the adaptive active learning strategy~\cite{li2013active} in section~\ref{subsec:adaptive-active-learning} are also techniques for managing the multi-label problem.
+MMC tries to find the greatest reduction for the estimated loss.
+While adaptive active learning combines an uncertainty measure with a measure of how the label cardinality differs.
+Singh et al\@.~\cite{singh2009active} is another multi-label active learning approach that simply takes the minimum average of the margin among the classifiers for a data point.
 For image classification, there has been some methods develop, for example ~\cite{li2004multilabel, qi2008two}.
 In~\cite{li2004multilabel} the goal is to, after making predictions, selecting the sample with the biggest mean loss.
 However experiments have shown that this is not as suitable for text classification~\cite{yang2009effective}.
@@ -565,5 +602,4 @@ Due to the fact that labeling for text classification is more time consuming tha
 
 Active learning has been used to deal with the problem of imbalanced datasets before.
 In a binary classification setting, Ertekin et al\@.~\cite{ertekin2007learning} used uncertainty sampling with SVMs to get a more balanced dataset.
-In~\cite{attenberg2013class}, Attenberg et al\@. uses density based active learning to improve the class balance.
-However, it does not attempt to apply this in a multi-label setting.
+In~\cite{attenberg2013class}, Attenberg et al\@. uses density based active learning to improve the class balance.However, it does not attempt to apply this in a multi-label setting.
