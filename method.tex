@@ -47,7 +47,7 @@ The fields include:
     \item \textbf{Anamnesis}: The patient's account of their medical history
     \item \textbf{PatientAlert}: FILL IN
     \item \textbf{ExamComment}: FILL IN
-    \item \textbf{Cancelled}: FILL IN
+    \item \textbf{Cancelled}: Whether or not the examination was Cancelled.
     \item \textbf{ExamName}: FILL IN
     \item \textbf{ExamCode}: FILL IN
     \item \textbf{PatientSex}: FILL IN
@@ -137,7 +137,8 @@ Bigrams are pairs of tokens (i.e. processed words), so the frequency of how ofte
 \section{Exploratory Study}\label{sec:exploratory-study}
 For the exploratory study we used the representation described in Section~\ref{sec:pre-processing}, but without the bigrams.
 The main goal of this phase was to get to know and to better understand the dataset.
-A big part of this was to visualize the dataset in different ways.
+A part of this goal was to go through the fields for the different reports to see how they worked and what values could be expected.
+Another big part of this was to visualize the dataset in different ways.
 In order to visualize the data in a 2D plot, t-distributed stochastic neighbor embedding (t-SNE) was used.
 It is a dimensionality reduction technique, that is able to transform high dimensional data into two dimensions, trying to retain as much variance as possible.
 
@@ -161,6 +162,11 @@ Samples of the generated topics can be seen in [FIGURE].
 Another way to visualize the topics for inspection is using the techniques described by Sievert et al\@.~\cite{sievert2014ldavis}.
 They propose a \textit{relevance} measure where the probability for a certain term within a topic is weighted against how common that topic is in the entire corpus.
 The interactive interface provided by \textit{pyLDAvis} can be seen in Figure~\ref{fig:ldavis-sample}.
+
+A word2vec model was used on the entire dataset to evaluate see the relationship between terms and find possible synonyms.
+In order to find synonyms, all words in the dataset that had a similarity over 95\% were manually inspected.
+This model was in addition to this used to identify names and other identifiers in the reports, as they would come up as similar entities from the model.
+Accomplishing this was done by exploring the data through an interactive plot, after using t-SNE to reduce the number of dimensions.
 
 \begin{figure}
     \centering
@@ -274,19 +280,10 @@ This was done mainly by doing a literature study and exploring the relation betw
 At first, the labeled data was transformed using the LDA and k-means models.
 After that, they were plotting in the same 2D space as before.
 The color of the labeled data was set based on the first label, after an instance's labels had been sorted.
-The resulting plot can be seen in Figure~\ref{fig:categories-lda-50}.
-
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.35, angle=270]{figures/categories-lda-50.png}
-    \caption{The labeled data points plotted in 2D, and colored based on the first label in alphabetical order.}
-    \label{fig:categories-lda-50}
-\end{figure}
 
 Just as before this was an interactive plot, hovering over the data points revealed the report as well as the topics and the cluster assigned to the data point.
-As can be seen from the figure, there exist a relationship between the topics/clusters and the labeled assigned to the data point.
-However, the relationship is not clear enough so that a cluster or topic could simply be mapped to a certain label.
-Based on multi-label nature of the data, active learning approaches were researched, with the goal of identifying methods that would be applicable in a multi-label setting.
+The goal of this was to see if there existed a relationship between the topics/clusters and the labeled assigned to the data point.
+Based on multi-label nature of the data and the results of this plot, active learning approaches were researched, with the goal of identifying methods that would be applicable in a multi-label setting.
 The research touched upon both methods that exploit the structure of the data, and methods that are purely uncertainty based.
 
 \subsection{How Well Does the Alternatives Work?}
