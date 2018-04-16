@@ -253,7 +253,7 @@ In order to get a more balanced dataset, $X_2$ of the valid reports were dismiss
 80 000 reports were used in the experiment, and they were selected at random.
 The reason for only using a subset is that the number of reports available would be too big to use in the final active-learning system. %TODO: Refer
 The models were fitted on 72 000, or 90\%, of these reports, and the additional 10\% were used as a held-out set to evaluate the models.
-To determine which topic model and clustering technique that should be used in the evaluation, their perplexity was compared and the models with the best perplexity was chosen.
+To determine which topic model and clustering technique that should be used in the filtering of invalid reports, their perplexity was compared and the models with the best perplexity was chosen.
 Perplexity is used in the original LDA paper by Blei et al\@.~\cite{blei2003latent} to compare different number of topics.
 
 In order to make the models able to separate the invalid reports from the valid reports, they had to be manually analyzed, since they were not fitted for this specific purpose (they are both unsupervised techniques).
@@ -262,14 +262,11 @@ To get an evaluation that was not as biased, the labeled reports were split into
 
 First, the LDA model was analyzed.
 This was done by inspecting the topics in the same way that was done in the exploratory study, Section~\ref{sec:exploratory-study}.
-The distribution of the most likely topics for the invalid reports can be seen in [FIGURE].
-As can be seen, topic 17 and topic 34 were the most likely.
-They were combined by ..... (SPECIFICS FOR THE CHOSEN MODEL).
+Based on the distribution of the most likely topics for the invalid reports in the traning set, topics with a high indication of a report being invalid was selected for further analysis.
+A combination these topics together with the length of the report text, as well as the number of topics assigned with a high probability to a report were used to determine whether or not a report was invalid or not.
 
 Filtering out these reports with K-means results in a simpler method.
 K-means does not give any probability for its clusters, so filtering by the clusters must be done as a binary decision.
-The distribution over the invalid reports by cluster can be seen in [FIGURE].
-The selected cluster was 25 based on the overwhelming majority.
 
 \subsection{Alternatives to Label Reports at Random}
 
@@ -288,20 +285,28 @@ The resulting plot can be seen in Figure~\ref{fig:categories-lda-50}.
 
 Just as before this was an interactive plot, hovering over the data points revealed the report as well as the topics and the cluster assigned to the data point.
 As can be seen from the figure, there exist a relationship between the topics/clusters and the labeled assigned to the data point.
-However, the relationship is not so clear that a cluster or topic could simply be mapped to a certain label.
+However, the relationship is not clear enough so that a cluster or topic could simply be mapped to a certain label.
 Based on multi-label nature of the data, active learning approaches were researched, with the goal of identifying methods that would be applicable in a multi-label setting.
-
-%TODO: Move to results
-%Since there was a pattern some active learning approaches using different forms of clustering, such as Dasgupta et al\@'s approach using hierarchical clustering~\cite{dasgupta2008hierarchical}.
-%However, it is made for the single-label case with no obvious way of extending the technique into multi-label.
-%The same applies to the density based technique suggested by Attenberg et al\@.~\cite{attenberg2013class}.
+The research touched upon both methods that exploit the structure of the data, and methods that are purely uncertainty based.
 
 \subsection{How Well Does the Alternatives Work?}
 
 After establishing the techniques that had some indication on providing a better labeling process than sampling documents at random, they were evaluated.
-In order to provide a thorough evaluation of how well they techniques perform a set of already labeled reports were needed in order to simulate a labeling process.
+In order to provide a thorough evaluation of how well they techniques perform a set of already labeled reports were needed.
 For this reason, the Reuters-21578 dataset was used.
 The properties of the dataset, as well as a comparison between it and the clinical data provided by Sectra can be found in Section~\ref{sec:datasets}.
+With this set of of labeled reports, a simulation could be used to compare the different strategies with different metrics.
+The metrics used were:
+\begin{enumerate}
+    \item Accuracy
+    \item Micro recall
+    \item Macro recall
+    \item Micro precision
+    \item Macro precision
+    \item Micro F1-Score
+    \item Macro F1-Score
+\end{enumerate}
+
 
 With this dataset, the same pre-processing steps that were applied to the clinical dataset were applied to the Reuters data too.
 Some modifications of this includes the stopwords, instead of a curated list of words, the unmodified list of english stopwords provided by \textit{nltk} was used.
