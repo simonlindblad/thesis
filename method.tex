@@ -268,7 +268,7 @@ A combination these topics together with the length of the report text, as well 
 Filtering out these reports with K-means results in a simpler method.
 K-means does not give any probability for its clusters, so filtering by the clusters must be done as a binary decision.
 
-\subsection{Alternatives to Label Reports at Random}
+\subsection{Alternatives to Label Reports at Random}\label{sec:exp1-method}
 
 This was done mainly by doing a literature study and exploring the relation between the initial set of labeled data with the structure of the data through clustering and topic analysis.
 At first, the labeled data was transformed using the LDA and k-means models.
@@ -295,6 +295,7 @@ After establishing the techniques that had some indication on providing a better
 In order to provide a thorough evaluation of how well they techniques perform a set of already labeled reports were needed.
 For this reason, the Reuters-21578 dataset was used.
 The properties of the dataset, as well as a comparison between it and the clinical data provided by Sectra can be found in Section~\ref{sec:datasets}.
+The dataset is common in active learning research and has been used by Brinker et al\@.~\cite{brinker2006active} and Yang et al\@.~\cite{yang2009effective}, among others.
 With this set of of labeled reports, a simulation could be used to compare the different strategies with different metrics.
 The metrics used were:
 \begin{enumerate}
@@ -307,6 +308,9 @@ The metrics used were:
     \item Macro F1-Score
 \end{enumerate}
 
+These are described in Section~\ref{sec:evaluation-metrics} and are frequently used to compare different active learning methods, for example by Yang et al\@.~\cite{yang2009effective}, Dasgupta et al\@.~\cite{dasgupta2008hierarchical} and Li et al\@.~\cite{li2013active}, among others.
+In addition to these metrics, the time it took to query samples with each model was also compared, and the how the distribution looked at the different stages.
+This is because the doctors wanted a more uniform distribution over labels on the labeled samples, i.e. a smaller ratio between the most common label and the least common one.
 
 With this dataset, the same pre-processing steps that were applied to the clinical dataset were applied to the Reuters data too.
 Some modifications of this includes the stopwords, instead of a curated list of words, the unmodified list of english stopwords provided by \textit{nltk} was used.
@@ -322,7 +326,11 @@ The strategies compared were:
 
 When it comes to the initial samples that needs to be labeled in order for the strategies to base their selection on something.
 This sample were evaluated both by selecting it at random, and selecting then by sampling from the clusters.
-The different configurations tried is displayed in Figure~\ref{fig:active-learning-configurations}
+Sampling from the clusters was done by iterating over the clusters and selecting an equal number of data points from the clusters, at random.
+The clustering configuration was the one chosen in Section~\ref{sec:exp1-method}.
+
+The different active learning configurations that were tried is displayed in Table~\ref{fig:active-learning-configurations}
+In total there were six configurations, based upon the three different methods.
 
 \begin{table}
     \begin{tabular}{|ccc|}
