@@ -80,7 +80,20 @@ Given that the names got similar coordinates in the plot, identifying the sectio
     \label{fig:word2vec-names}
 \end{figure}
 
-\section{EXPERIMENT 1}\label{sec:exp1-result}
+\section{Filter Out Invalid Clinical Reports Using Topic Models and Clustering}\label{sec:exp1-result}
+
+The LDA models were evaluated by calculating the perplexity on the held-out set as described in Section~\ref{sec:exp1-method}.
+Perplexity for the evaluated models can be seen in Figure~\ref{fig:lda-perplexity}.
+Based on this, the selected model was the LDA model with 75 topics.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.8]{figures/lda-perplexity.png}
+    \caption{The perplexity scores for the different LDA models}
+    \label{fig:lda-perplexity}
+\end{figure}
+
+The next step was identifying the topics that were assigned to the invalid reports.
 
 The distribution of the most likely topics for the invalid reports can be seen in [FIGURE].
 As can be seen, topic 17 and topic 34 were the most likely.
