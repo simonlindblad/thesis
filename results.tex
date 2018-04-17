@@ -33,7 +33,7 @@ After further manual analysis it was clear that the vast amount of invalid repor
 The evaluation of more concrete relationships were done within the context of that experiment, and is presented in Section~\ref{sec:exp1-result}.
 
 The word2vec model produced results that allowed for synonyms to be detected.
-By doing this, 420 pairs were detected.
+By doing this, 420 pairs were discovered.
 The vast majority of these were names, medical terms that (some of which the author was unable to evaluate, and therefore excluded) as well as words that are used in similar contexts, which includes opposites like ``left'' and ``right''.
 Disregarding these, the synonyms and misspellings that were decided for use in the final system can be seen in Table~\ref{tab:synonyms}.
 The original value was replaced with the new one in the final system.
@@ -86,7 +86,7 @@ The LDA models were evaluated by calculating the perplexity on the held-out set 
 Perplexity for the evaluated models can be seen in Figure~\ref{fig:lda-perplexity}.
 Based on this, the selected model was the LDA model with 75 topics.
 
-\begin{figure}[!ht]
+\begin{figure}
     \centering
     \includegraphics[scale=0.8]{figures/lda-perplexity.png}
     \caption{The perplexity scores for the different LDA models}
@@ -95,8 +95,47 @@ Based on this, the selected model was the LDA model with 75 topics.
 
 The next step was identifying the topics that were assigned to the invalid reports.
 
-The distribution of the most likely topics for the invalid reports can be seen in [FIGURE].
-As can be seen, topic 17 and topic 34 were the most likely.
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.8]{figures/distribution_invalid_reports_likely.png}
+    \caption{The distribution of invalid reports that got the topics assigned to them with a probability larger than 10\%}
+    \label{fig:invalid-reports-topic-dist-likely}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.8]{figures/distribution_invalid_reports_highest_likelihood.png}
+    \caption{The distribution of invalid reports that got the topics assigned to them with the highest probability}
+    \label{fig:invalid-reports-topic-dist-likeliest}
+\end{figure}
+
+Each topic that is assigned to a report with a probability above 10\% is considered to be a prominent topic.
+The distribution of the most likely topics for the invalid reports can be seen in Figure~\ref{fig:invalid-reports-topic-dist-likely} and Figure~\ref{fig:invalid-reports-topic-dist-likeliest}.
+Figure~\ref{fig:invalid-reports-topic-dist-likely} shows the distribution for the different topics where prominent topics for the invalid reports are counted.
+Figure~\ref{fig:invalid-reports-topic-dist-likeliest} shows the distribution for the different topics where the topic with the highest probability for each invalid report is counted.
+A couple of topics, namely 2 and 28 stands out as the ones with by far the most invalid reports.
+But topics 4, 65 and 31 also show significant counts.
+In Figure~\ref{fig:invalid-reports-topic-dist-likely} figure a few more topics, such as 19, shows a higher count.
+
+The results of the analysis of the number of prominent topics assigned to each report can be seen in Figure~\ref{fig:no_topics_invalid} and Figure~\ref{fig:no_topics_all}.
+Among the invalid reports, the most common number of prominent topic is 2, while it is 6 topics for the entire set of reports.
+For the entire set of reports, being assigned 2 topics is the 6th most common number.
+This result indicates that there is a relationship between the number of prominent topics assigned to each report, and wether that report is invalid or not.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.8]{figures/no_topics_per_invalid_report}
+    \caption{The distribution of the number of prominent topics assigned to the invalid reports}
+    \label{fig:no_topics_invalid}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.8]{figures/no_topics_per_report}
+    \caption{The distribution of the number of prominent topics assigned to the reports}
+    \label{fig:no_topics_all}
+\end{figure}
+
 They were combined by ..... (SPECIFICS FOR THE CHOSEN MODEL).
 
 The distribution over the invalid reports by cluster can be seen in [FIGURE].

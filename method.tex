@@ -326,20 +326,43 @@ This sample were evaluated both by selecting it at random, and selecting then by
 Sampling from the clusters was done by iterating over the clusters and selecting an equal number of data points from the clusters, at random.
 The clustering configuration was the one chosen in Section~\ref{sec:exp1-method}.
 
+Since the different models may depend on the initial samples in different ways, different initial sizes were evaluated.
+This is also done by Yang et al\@.~\cite{yang2009effective}.
+In their paper they tried quite large initial sample sizes.
+Here, the sizes evaluated are: 10, 50, 100, 200.
+The reason for this is that an large initial sample size would make it hard for the human annotator to see a difference in the class balance early on.
 The different active learning configurations that were tried is displayed in Table~\ref{fig:active-learning-configurations}
-In total there were six configurations, based upon the three different methods.
+In total there were 18 configurations, based upon the three different methods.
 
 \begin{table}
-    \begin{tabular}{|ccc|}
+    \begin{tabular}{|cccc|}
         \hline
-        \textbf{ID} & \textbf{Active Learning Strategy} & \textbf{Initial Sampling} \\
+        \textbf{ID} & \textbf{Active Learning Strategy} & \textbf{Initial Sampling} & \textbf{Initial Sample Size}\\
         \hline
-        1 & Binary Version Space Minimization & Random \\
-        2 & Binary Version Space Minimization & Sampled from clusters \\
-        3 & Maximum Loss Reduction with Maximum Confidence & Random \\
-        4 & Maximum Loss Reduction with Maximum Confidence & Sampled from clusters \\
-        5 & Adaptive Active Learning & Random \\
-        6 & Adaptive Active Learning & Sampled from clusters \\
+        1 & Binary Version Space Minimization & Random & 10\\
+        2 & Binary Version Space Minimization & Random & 50\\
+        3 & Binary Version Space Minimization & Random & 100\\
+        4 & Binary Version Space Minimization & Random & 200\\
+        5 & Binary Version Space Minimization & Sampled from clusters & 10\\
+        6 & Binary Version Space Minimization & Sampled from clusters & 50\\
+        7 & Binary Version Space Minimization & Sampled from clusters & 100\\
+        8 & Binary Version Space Minimization & Sampled from clusters & 200\\
+        9 & Maximum Loss Reduction with Maximum Confidence & Random & 10\\
+        10 & Maximum Loss Reduction with Maximum Confidence & Random & 50\\
+        11 & Maximum Loss Reduction with Maximum Confidence & Random & 100\\
+        12 & Maximum Loss Reduction with Maximum Confidence & Random & 200\\
+        13 & Maximum Loss Reduction with Maximum Confidence & Sampled from clusters & 10\\
+        14 & Maximum Loss Reduction with Maximum Confidence & Sampled from clusters & 50\\
+        15 & Maximum Loss Reduction with Maximum Confidence & Sampled from clusters & 100\\
+        16 & Maximum Loss Reduction with Maximum Confidence & Sampled from clusters & 200\\
+        17 & Adaptive Active Learning & Random & 10\\
+        18 & Adaptive Active Learning & Random & 50\\
+        19 & Adaptive Active Learning & Random & 100\\
+        20 & Adaptive Active Learning & Random & 200\\
+        21 & Adaptive Active Learning & Sampled from clusters & 10\\
+        22 & Adaptive Active Learning & Sampled from clusters & 50\\
+        23 & Adaptive Active Learning & Sampled from clusters & 100\\
+        24 & Adaptive Active Learning & Sampled from clusters & 200\\
         \hline
     \end{tabular}
     \caption{The different configurations of active learning strategies evaluated}
