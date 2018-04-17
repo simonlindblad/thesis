@@ -82,6 +82,8 @@ Given that the names got similar coordinates in the plot, identifying the sectio
 
 \section{Filter Out Invalid Clinical Reports Using Topic Models and Clustering}\label{sec:exp1-result}
 
+\textit{Still to be done: Add actual concrete results}
+
 The LDA models were evaluated by calculating the perplexity on the held-out set as described in Section~\ref{sec:exp1-method}.
 Perplexity for the evaluated models can be seen in Figure~\ref{fig:lda-perplexity}.
 Based on this, the selected model was the LDA model with 75 topics.
@@ -147,9 +149,13 @@ Labels were determined to be invalid or not by the following criterion:
 
 \section{Alternatives to Labeling at Random}
 
+\textit{Still to be done: Compare the different initial sample sizes (currently same plot)}
+
 The first technique used in this experiment was to explore and try to find a relationship between the initial set of labeled data and the inherit structure of it, obtained and visualized with the use of the LDA model.
 However, the relationship is not clear enough so that a cluster or topic could simply be mapped to a certain label.
 The resulting plot can be seen in Figure~\ref{fig:categories-lda-50}.
+From this plot it is clear that there is a grouping of labels.
+However, there exists plenty of overlap between different classes.
 
 \begin{figure}
     \centering
@@ -158,7 +164,127 @@ The resulting plot can be seen in Figure~\ref{fig:categories-lda-50}.
     \label{fig:categories-lda-50}
 \end{figure}
 
-Based on the knowledge that there existed a pattern, the initial goal was to find some methods that could exploit this.
-Some active learning approaches using different forms of clustering, such as Dasgupta et al\@'s approach using hierarchical clustering~\cite{dasgupta2008hierarchical} could be good contenders.
+Based on the knowledge that there exists a pattern, the initial goal was to find some methods that could exploit this.
+Some active learning approaches using different forms of clustering, such as Dasgupta et al\@'s approach using hierarchical clustering~\cite{dasgupta2008hierarchical} would be good contenders.
 However, the method described by Dasgupta et al\@. is made for the single-label case with no obvious way of extending the technique into multi-label.
 The same applies to the density based technique suggested by Attenberg et al\@.~\cite{attenberg2013class}.
+
+Most of the active learning research seems to be focused on binary, or maybe multi-class classification.
+Therefor, the methods described in Section~\ref{sec:active-learning} where the ones decided on.
+Methods that are fully reliant on a models certainty, such as Binary Version Space Minimization~\cite{brinker2006active} are tested.
+In addition to this, methods incorporating some information about the data in the form of label cardinality is included as well.
+These techniques are MMC and Adaptive Active Learning~\cite{yang2009effective, li2013active}.
+An attempt to take advantage of the structure of the data is done by selecting the initial samples from different clusters, as described in Section~\ref{sec:exp2-method}.
+
+The first metric for evaluation was Accuracy.
+A plot of this can be seen in Figure~\ref{fig:al-accuracy-25} to Figure~\ref{fig:al-accuracy-200}.
+It contains the accuracy evaluations for the different number of initial sample sizes.
+It can easily be seen that the adaptive learner performs significantly better for the first 400 added samples.
+However, after that MMC and Binary Version Space Minimization catches up to it, and surpasses it in terms of accuracy after around 800 labels.
+Both of them sustaining an significant improvement over labeling at random after round 200 labels.
+It takes sampling at random approximately 1600 labels to get to an accuracy of 78\%.
+Adaptive Active Learning acquires this accuracy after around 300 labels, and BinaryMinimization and MMC after 450.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{figures/al-25-accuracy.png}
+    \caption{Accuracy of the models with initial sample size 25}
+    \label{fig:al-accuracy-25}
+\end{figure}
+
+When it comes to micro F1-Score, the results between the different methods are similar.
+Adaptive Active Learning performs better than the rest in the beginning, but the other active learning strategies obtain similar results after around 500 labels.
+One difference from the accuracy evaluation is that Binary Version Space Minimization does not quite surpass the adaptive learner in the same way.
+The gap to random sampling is smaller as well.
+The results can be seen in Figure~\ref{fig:al-micro-f1-25} to Figure~\ref{fig:al-micro-f1-25}.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{figures/al-25-micro-f1.png}
+    \caption{Accuracy of the models with initial sample size 25}
+    \label{fig:al-micro-f1-25}
+\end{figure}
+
+The same applies to micro recall.
+The one difference is that the Adaptive Active Learner strategy is performing better than the rest for more iterations.
+It takes approximately 1000 added labels for the BinaryMinimization to obtain similar micro recall.
+This can be seen in Figure~\ref{fig:al-micro-fig:al-micro-recall-25}.
+The random sampling performs considerably worse than the rest.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{figures/al-25-micro-recall.png}
+    \caption{Micro recall of the models with initial sample size 25}
+    \label{fig:al-micro-recall-25}
+\end{figure}
+
+The micro precision of the models are very similar between all strategies.
+Algorithms using clustering obtains a higher precision between 200-400 added labels, but not by that much.
+From 200 added labels and onwards, Adaptive Active Learner is worse than Binary Version Space Minimization.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{figures/al-100-micro-precision.png}
+    \caption{Micro precision of the models with initial sample size 25}
+    \label{fig:al-micro-precision-25}
+\end{figure}
+
+Another important aspect of the evaluation is the time it takes.
+This can be seen in Figure~\ref{fig:al-time}.
+Time is constant for the random sampling, very close to 0.
+For the Binary Minimization, the time increases a bit every iteration, but stays under 200 seconds for the first samples.
+MMC gets similar results, but takes a bit longer.
+The Adaptive Active Learner takes far longer time than the other methods.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{figures/al-time.png}
+    \caption{Time to query a new set of samples by the different strategies}
+    \label{fig:al-micro-precision-25}
+\end{figure}
+
+
+\section{Evaluating the Label Balance}
+
+The last part to evaluate is how the different Active Learning techniques effected the balance of the labels.
+For the Reuters dataset, how the overall distribution of the labels is can be seen in Figure~\ref{fig:class-distribution-reuters}.
+After random sampling, the distribution can be seen in Figure~\ref{fig:class-distribution-reuters-random}.
+The distribution after sampling with the original Binary Version Space Minimization can be seen in Figure~\ref{fig:class-distribution-reuters-binmin}, and with the initial samples taken from clusters in Figure~\ref{fig:class-distribution-reuters-binmin-clusters}.
+The ratio between the biggest and smallest class is here $X_1$ compared to $X_2$ for the random sampling.
+When the initial labeled set was selected from the clusters, the ratio was $X$.
+For MMC the distribution can be seen in Figure~\ref:fig:class-distribution-reuters-mmc}, and for Adaptive Active Learning in Figure~\ref{fig:calss-distribution-reuters-adaptive}.
+The imbalance ratio between the biggest and the smallest class here is $X_1$ and $X_2$, respectively.
+Figure~\ref:fig:class-distribution-reuters-mmc-clusters} and Figure~\ref:fig:class-distribution-reuters-adaptive-clusters} shows the distribution for the same methods, but with the initial samples taken from the clusters.
+
+\begin{figure}
+    \centering
+    \thirdsubfigimg{reuters-random-distribution-20}{The class distribution from random sampling after 200 labels}
+    \thirdsubfigimg{reuters-random-distribution}{The class distribution from random sampling after 2000 labels}
+    \caption{The distribution of labels after random sampling}
+    \label{fig:class-distribution-reuters-random}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \thirdsubfigimg{reuters-binmin-distribution-20}{The class distribution from Binary Version Space Minimization after 200 labels}
+    \thirdsubfigimg{reuters-binmin-distribution}{The class distribution from Binary Version Space Minimization after 2000 labels}
+    \caption{The distribution of labels after Binary Version Space Minimization}
+    \label{fig:class-distribution-reuters-binmin}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \thirdsubfigimg{reuters-clusterbinmin-distribution-20}{The class distribution from Binary Version Space Minimization with clustering after 200 labels}
+    \thirdsubfigimg{reuters-clusterbinmin-distribution}{The class distribution from Binary Version Space Minimization with clusterinp after 2000 labels}
+    \caption{The distribution of labels after Binary Version Space Minimization with clustering}
+    \label{fig:class-distribution-reuters-binmin-clusters}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \thirdsubfigimg{reuters-adaptive-distribution-20}{The class distribution from Adaptive Active Learning after 200 labels}
+    \thirdsubfigimg{reuters-adaptive-distribution}{The class distribution from Adaptive Active Learning after 2000 labels}
+    \caption{The distribution of labels after Adaptive Active Learning}
+    \label{fig:class-distribution-reuters-binmin-clusters}
+\end{figure}
