@@ -177,8 +177,9 @@ Accomplishing this was done by exploring the data through an interactive plot, a
 
 \section{Experiments to Answer the Research Questions}
 In this section the experiments used to answer the research questions are described.
-There is one experiment designed for each questions, and the second one is of a more literature study.
-The first experiment is trying to identify reports that are deemed to be invalid, the second one is a study to see what are the alternatives to labeling data points at random, and the third is to evaluate which one of the alternatives is the best.
+There is one experiment designed for each question.
+The first experiment is trying to identify reports that are deemed to be invalid, the second one is a study to see what are the alternatives to labeling data points at random, as well as a comparison of how well they perform according to certain metrics.
+Finally, the third one aims to compare how the distribution of labels in the labeled dataset compare between the different methods.
 
 \subsection{Filter Out Invalid Clinical Reports Using Topic Models and Clustering}
 
@@ -276,19 +277,20 @@ K-means does not give any probability for its clusters, so filtering by the clus
 
 \subsection{Alternatives to Label Reports at Random}\label{sec:exp1-method}
 
-This was done mainly by doing a literature study and exploring the relation between the initial set of labeled data with the structure of the data through clustering and topic analysis.
+This was done by first doing a literature study and exploring the relation between the initial set of labeled data with the structure of the data through clustering and topic analysis.
 At first, the labeled data was transformed using the LDA and k-means models.
 After that, they were plotting in the same 2D space as before.
 The color of the labeled data was set based on the first label, after an instance's labels had been sorted.
 
 Just as before this was an interactive plot, hovering over the data points revealed the report as well as the topics and the cluster assigned to the data point.
 The goal of this was to see if there existed a relationship between the topics/clusters and the labeled assigned to the data point.
+Even if the labels is not the same in the final system, knowledge of an existing relationship might still be exploited.
 Based on multi-label nature of the data and the results of this plot, active learning approaches were researched, with the goal of identifying methods that would be applicable in a multi-label setting.
 The research touched upon both methods that exploit the structure of the data, and methods that are purely uncertainty based.
 
-\subsection{How Well Does the Alternatives Work?}
-
 After establishing the techniques that had some indication on providing a better labeling process than sampling documents at random, they were evaluated.
+In the end, the algorithms described in Section~\ref{sec:active-learning} were the ones selected for evaluation.
+
 In order to provide a thorough evaluation of how well they techniques perform a set of already labeled reports were needed.
 For this reason, the Reuters-21578 dataset was used.
 The properties of the dataset, as well as a comparison between it and the clinical data provided by Sectra can be found in Section~\ref{sec:datasets}.
@@ -306,7 +308,8 @@ The metrics used were:
 \end{enumerate}
 
 These are described in Section~\ref{sec:evaluation-metrics} and are frequently used to compare different active learning methods, for example by Yang et al\@.~\cite{yang2009effective}, Dasgupta et al\@.~\cite{dasgupta2008hierarchical} and Li et al\@.~\cite{li2013active}, among others.
-In addition to these metrics, the time it took to query samples with each model was also compared, and the how the distribution looked at the different stages.
+
+In addition to these metrics, the time it took to query samples with each model was also compared.
 This is because the doctors wanted a more uniform distribution over labels on the labeled samples, i.e. a smaller ratio between the most common label and the least common one.
 
 With this dataset, the same pre-processing steps that were applied to the clinical dataset were applied to the Reuters data too.
@@ -325,11 +328,13 @@ When it comes to the initial samples that needs to be labeled in order for the s
 This sample were evaluated both by selecting it at random, and selecting then by sampling from the clusters.
 Sampling from the clusters was done by iterating over the clusters and selecting an equal number of data points from the clusters, at random.
 The clustering configuration was the one chosen in Section~\ref{sec:exp1-method}.
+The topic model selected in Section~\ref{sec:exp1-method} was used.
+In addition, the number of clusters selected was 25, in order to get an equal number of reports from each cluster.
 
 Since the different models may depend on the initial samples in different ways, different initial sizes were evaluated.
 This is also done by Yang et al\@.~\cite{yang2009effective}.
 In their paper they tried quite large initial sample sizes.
-Here, the sizes evaluated are: 10, 50, 100, 200.
+Here, the sizes evaluated are: 25, 50, 100, 200.
 The reason for this is that an large initial sample size would make it hard for the human annotator to see a difference in the class balance early on.
 The different active learning configurations that were tried is displayed in Table~\ref{fig:active-learning-configurations}
 In total there were 18 configurations, based upon the three different methods.
@@ -339,27 +344,27 @@ In total there were 18 configurations, based upon the three different methods.
         \hline
         \textbf{ID} & \textbf{Active Learning Strategy} & \textbf{Initial Sampling} & \textbf{Initial Sample Size}\\
         \hline
-        1 & Binary Version Space Minimization & Random & 10\\
+        1 & Binary Version Space Minimization & Random & 25\\
         2 & Binary Version Space Minimization & Random & 50\\
         3 & Binary Version Space Minimization & Random & 100\\
         4 & Binary Version Space Minimization & Random & 200\\
-        5 & Binary Version Space Minimization & Sampled from clusters & 10\\
+        5 & Binary Version Space Minimization & Sampled from clusters & 25\\
         6 & Binary Version Space Minimization & Sampled from clusters & 50\\
         7 & Binary Version Space Minimization & Sampled from clusters & 100\\
         8 & Binary Version Space Minimization & Sampled from clusters & 200\\
-        9 & Maximum Loss Reduction with Maximum Confidence & Random & 10\\
+        9 & Maximum Loss Reduction with Maximum Confidence & Random & 25\\
         10 & Maximum Loss Reduction with Maximum Confidence & Random & 50\\
         11 & Maximum Loss Reduction with Maximum Confidence & Random & 100\\
         12 & Maximum Loss Reduction with Maximum Confidence & Random & 200\\
-        13 & Maximum Loss Reduction with Maximum Confidence & Sampled from clusters & 10\\
+        13 & Maximum Loss Reduction with Maximum Confidence & Sampled from clusters & 25\\
         14 & Maximum Loss Reduction with Maximum Confidence & Sampled from clusters & 50\\
         15 & Maximum Loss Reduction with Maximum Confidence & Sampled from clusters & 100\\
         16 & Maximum Loss Reduction with Maximum Confidence & Sampled from clusters & 200\\
-        17 & Adaptive Active Learning & Random & 10\\
+        17 & Adaptive Active Learning & Random & 25\\
         18 & Adaptive Active Learning & Random & 50\\
         19 & Adaptive Active Learning & Random & 100\\
         20 & Adaptive Active Learning & Random & 200\\
-        21 & Adaptive Active Learning & Sampled from clusters & 10\\
+        21 & Adaptive Active Learning & Sampled from clusters & 25\\
         22 & Adaptive Active Learning & Sampled from clusters & 50\\
         23 & Adaptive Active Learning & Sampled from clusters & 100\\
         24 & Adaptive Active Learning & Sampled from clusters & 200\\
@@ -368,3 +373,13 @@ In total there were 18 configurations, based upon the three different methods.
     \caption{The different configurations of active learning strategies evaluated}
     \label{fig:active-learning-configurations}
 \end{table}
+
+\section{Evaluating the Label Balance}
+The goal with the last experiment is to evaluate how the labels in the produced labeled dataset is distributed.
+A set where the labels are more evenly, or uniform, distributed would be preferable.
+From a perspective of the person labeling, it could feel more productive not assigning the same labels most of the time.
+The more prosperous outcome from a balanced dataset would be that the models using the data in later stages could also benefit from this, and obtain better results.
+
+The configurations used here are the same as in Table~\ref{fig:active-learning-configurations}.
+Every iteration, the distribution of labels assigned are stored.
+An evaluation of how the distribution progresses can then be done by comparing the class imbalance between the different strategies at different stages.

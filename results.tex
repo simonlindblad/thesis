@@ -136,14 +136,18 @@ This result indicates that there is a relationship between the number of promine
     \label{fig:no_topics_all}
 \end{figure}
 
-They were combined by ..... (SPECIFICS FOR THE CHOSEN MODEL).
+Labels were determined to be invalid or not by the following criterion:
+\begin{itemize}
+    \item Having either topic 2 or 28 among its most probable topic.
+    \item Being shorter than 400 characters.
+    \item Not having more than 5 prominent topics assigned to it.
+\end{itemize}
 
-The distribution over the invalid reports by cluster can be seen in [FIGURE].
-The selected cluster was 25 based on the overwhelming majority.
+\textit{The result of this was...}
 
-\section{EXPERIMIENT 2}
+\section{Alternatives to Labeling at Random}
 
-WIRTE THIS
+The first technique used in this experiment was to explore and try to find a relationship between the initial set of labeled data and the inherit structure of it, obtained and visualized with the use of the LDA model.
 However, the relationship is not clear enough so that a cluster or topic could simply be mapped to a certain label.
 The resulting plot can be seen in Figure~\ref{fig:categories-lda-50}.
 
