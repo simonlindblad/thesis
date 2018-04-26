@@ -1,15 +1,19 @@
 \chapter{Theory}
 \label{cha:theory}
 
-In this section the theory behind the techniques used during the thesis work will be presented.
-The first part will go through techniques used to process the data and perform an exploratory analysis.
+In this section the theory behind the techniques used in this thesis work will be presented.
+The first part will go through the techniques used to process the data and to perform an exploratory analysis.
 After that text classifications, primarily with SVM, will be covered.
-The last section contains an overview of the field of active learning, as well as a comparison of some different active learning techniques for multi-labeled data.
+Text classification, primarily using Support Vector Machines, will be covered in the section after that.
+Following this, there will be a section containing an overview of the field of active learning, as well as a comparison of some different active learning techniques for multi-labeled data.
+This chapter will then end by going through the different evaluation metrics that will be use to assess the methods used, as well as a section describing work that is related to this thesis.
 
 \section{Text Processing using Unsupervised Techniques}
 
-Techniques in machine learning that does not require you have a categorized or labeled set of data is called unsupervised.
+Techniques in machine learning that does not require you have a categorized or labeled set of data is called unsupervised learning.
 They use the structure of the data to obtain the information to use when processing it.
+These techniques may have different goals.
+Some are used to estimate a distribution, others are used to reduce the number of dimensions in the data by trying to find dimensions that capture as much as possible of the variance, and some are used for the purpose of identifying groups of similar points within the data~\cite{bishop2006pattern}.
 When it comes to text data, there are a few common methods and techniques that are unsupervised, and can be used for different purposes.
 Examples of such techniques are \textit{topic modeling} and \textit{clustering}.
 Another interesting technique is word2vec, that is used to produce word embeddings.
@@ -18,23 +22,25 @@ When working with text, it needs to be represented in a way that allows the mode
 \textit{Bag-of-words} (BoW) is one of the more common representations when performing text analysis. 
 Using BoW the text is represented as a multi-set. 
 That is, a document is represented by the number of occurrences of the different words. 
-The representation of a document therefore becomes very high-dimensional, there is one dimension for each word in the vocabulary. 
+Representing text in this way therefore becomes high-dimensional, there is one dimension for each word in the vocabulary. 
 Like the name implies, the positions of the words are not taken into account, they are viewed as if they were taken from a bag. 
-Another drawback from this approach is that a word in a written language can be used to express several different thoughts, and one thought can be expressed using several different words. 
-However, it is easy to work with, and is used when performing topic modeling among other things.
+In written language a word can be used to express several different thoughts, and one thought can be expressed using several different words.
+This is something that cannot be captured with BoW.
+However, it is easy to work with, and is commonly usedd when performing topic modeling among other things.
 
 One way to incorporate positional information into the representation is the use of n-grams.
 Instead of storing information pertaining to one term, information is stored with regards to n consecutive terms.
-Considering the text ``Pattern Recognition and Machine Learning'' using a bigram (n-gram with n=2), would result in the tokens: ``Pattern Recognition'', ``Recognition and'', ``and Machine'', and ``Machine Learning''.
+Consider the text ``Pattern Recognition and Machine Learning''.
+Using an n-grarm with n=2, called a bigram, would result in the tokens: ``Pattern Recognition'', ``Recognition and'', ``and Machine'', and ``Machine Learning''.
 
 \subsection{Topic Modeling}\label{sec:topic-modeling}
 
 A topic model is a statistical model for finding topics within text~\cite{crain2012dimensionality}.
 The topics build upon the probability that a certain word would occur in a text about a given topic, on the basis of terms occurring together.
 For example, if the topic represents United States politics, words such as ``government'', ``Trump'', ``Reagan'', ``Senate'', or ``Medicaid'' are more likely to appear than ``sailboat'' or ``sweater''.
-Any given document can then contain a topic with some probability.
+Any given document can then contain a certain topic with some probability.
 This can be viewed as fuzzy clustering, and that the document has a degree of membership in a topic or cluster~\cite{crain2012dimensionality}.
-The most common topic model in use is Latent Dirichlet Allocation (LDA)~\cite{crain2012dimensionality}.
+The most common topic model in use today is Latent Dirichlet Allocation (LDA)~\cite{crain2012dimensionality}.
 Another topic model that preceded LDA is Probabilistic latent semantic analysis (PLSA)~\cite{hofmann1999probabilistic}.
 However, PLSA has been shown to be more prone to overfitting than LDA~\cite{crain2012dimensionality}.
 
@@ -149,17 +155,16 @@ This is the approach used in the original LDA paper~\cite{blei2003latent}.
 
 Cluster analysis is commonly defined as finding groups in a given dataset.
 The members of these groups are determined to be similar by a similarity measure~\cite{kaufman2009finding, aggarwal2012survey}.
-Since text data is sparse, but yet have a very high dimensionality.
+Text data is sparse, but yet have a very high dimensionality.
 With one dimension per term in the dictionary, it is not uncommon with dimensions in the order of $10^5$.
-For this reason, some of the more naive clustering algorithms does not work as well for text data~\cite{aggarwal2012survey}.
+For this reason, some of the more naive clustering algorithms does not work well for text data~\cite{aggarwal2012survey}.
 
 In distance-based clustering, a similarity function is used to measure the closeness between two text documents.
 For the purpose of measuring the similarity between text objects, the cosine similarity function is commonly used~\cite{aggarwal2012survey}, as well as Euclidean distance.
 Two different approaches to distance-based clustering are distance-based partitioning, and agglomerative hierarchical clustering.
-%For distance-based clustering k-means and k-medoid are two the frequently used algorithms.
-%When it comes to text data, k-means is preferred since k-medoid does not work as well for sparse data, and requires more iterations to converge~\cite{aggarwal2012survey}.
+For the distance-based approach, k-means and k-medoid are two frequently used algorithms.
 
-\subsubsection{K-means Clustering}~\label{sec:k-means}
+\subsubsection{K-means Clustering}\label{sec:k-means}
 
 When using the k-means clustering algorithm, the clusters are based upon an initial set of k representatives.
 A simple approach to k-means clustering can be seen as:
@@ -226,7 +231,7 @@ In the case of binary classification, a point is classified by the linear model:
 
 The sign of $y(x)$ determines the label assigned to x.
 
-SVMs work by trying to find the hyperplane that maximizes the margin.
+The goal of an SVM is to try to find the hyperplane that maximizes the margin.
 That is, the distance between any point and the decision boundary should be as large as possible.
 The hyperplane that gives us the maximum margin can be found by:
 
@@ -234,15 +239,15 @@ The hyperplane that gives us the maximum margin can be found by:
     \arg\min_{w,b}\frac{1}{2}||w||^2
 \end{equation}
 
-In order to allow for better generalization, and for data that isn't completely linearly separable, SVMs make use of slack variables $\xi_n$ to penalize points that are close to the decision boundary~\cite{bishop2006pattern}.
+In order to allow for better generalization, and for data that is not completely linearly separable, SVMs make use of slack variables, denoted $\xi_n$, to penalize points that are close to the decision boundary~\cite{bishop2006pattern}.
 A parameter $C>0$ controls how much effect the slack variables will have.
-The equation with the slack variables becomes:
+The equation with the slack variables become:
 
 \begin{equation}
     \arg\min_{w,b}\frac{1}{2}||w||^2 + C \sum_n\xi_n.
 \end{equation}
 
-A smaller $C$-value allows more points to be misclassified, in order to achieve better generalization.
+A smaller $C$-value allows more points to be misclassified, which is done in order to achieve better generalization.
 
 \subsection{Multi-Label Classification}\label{subsec:multi-label-classification}
 
@@ -256,14 +261,14 @@ Each of these classifiers are then predicting whether or not the document is ass
 
 \section{Active Learning}\label{sec:active-learning}
 
-Conventional machine learning systems use a set of available data to find a hypothesis that can explain the patterns.
-The purpose of active learning is to allow a system to \textit{select} the data that it wants labeled, and therefore the data it wants to be trained on~\cite{settles2012active}.
-An active learning system samples a document to be labeled from a pool of unlabeled data, and then queries an oracle (often a human annotator) to get the label for that document.
-By being able to decide what data to to label and use, the goal is that the system can achieve better results, and that the data will be of higher quality.
+Conventional machine learning systems use a set of available data to find a hypothesis that can explain the patterns within the data.
+The purpose of active learning is to allow a system to \textit{select} the data that it wants to be labeled, and therefore the data it wants the model to be trained on~\cite{settles2012active}.
+An active learning system samples a document to be labeled from a pool of unlabeled data, and then queries an oracle, which is often a human annotator, to get the label for that document.
+By being able to decide what data to label and use, the goal is that the system can achieve better results, and that the data will be of higher quality.
 To get a better understanding of how the process works, these are the steps commonly iterated over until enough samples have been labeled:
 \begin{enumerate}
-    \item Evaluate the samples in the unlabeled pool based on a particular measure that the querying strategy defines.
-    \item The selected samples are presented to an oracle that is queried for the labels. This oracle is commonly a human annotating the instances. \label{enum:label}
+    \item Evaluate the samples in the unlabeled pool based on a particular measure that is defined by the querying strategy.
+    \item The selected samples are presented to an oracle that is queried for the labels. This oracle is commonly in the form of a human annotating the instances. \label{enum:label}
     \item The newly labeled samples are added to the labeled pool.
     \item A machine learning model is trained on the labeled pool, this model is often used by the querying strategy in order to select samples to be label in step~\ref{enum:label}
 \end{enumerate}
@@ -275,7 +280,7 @@ A model of the active learning system can be seen in Figure~\ref{fig:active-lear
     \label{fig:active-learning-model}
 \end{figure}
 
-In several different domains, data is readily available and easy to come by.
+In several different domains, data is readily available and easy to obtain.
 But even if the data is abundant, labels for the data is often harder and more expensive to come by~\cite{settles2012active}, especially when it comes to multi-label problems.
 
 The next section will describe different ways to access the documents in active learning systems, followed by some theory of how the samples relate to the hypothesis space.
@@ -283,15 +288,16 @@ After that some concrete methods for selecting the samples to queried are descri
 
 \subsection{Pool-Based Sampling}
 
-The main focus is how to select the samples to be labeled.
+The main focus in active learning is how to select the samples to be labeled.
 There are different sampling methods in use, and which one is more appropriate depends on how the data can be accessed.
 Pool-based sampling is motivated by the assumption that there exists a large ready pool of data, where only a small portion is labeled~\cite{lewis1994sequential, settles2012active}.
-The samples to be labeled is then selecting by evaluating the entire pool of unlabeled data, and select the most appropriate one based on a defined utility measure.
+The samples to be labeled are selected by evaluating the entire pool of unlabeled data, and choose the most appropriate ones based on a defined utility measure.
 If the entire pool is large, a subset could be used instead.
 For applied active learning, pool-based sampling seems to be the most popular choice~\cite{li2013active}, but there are some alternatives that have been used in theoretical settings such as stream-based selective sampling.
-The difference between stream-based selective sampling and pool-based sampling is the individuality of the decisions in stream-based selective sampling, where you draw one sample at a time from an input source and make the decision whether or not to query a label for it.
+The difference between stream-based selective sampling and pool-based sampling is the individuality of the decisions in the former.
+Where you draw one sample at a time from an input source and make the decision whether or not to query a label for it.
 For text applications, where a set of data is often readily available, pool-based sampling is often the more appropriate option since you can consider the entire dataset.
-Pool-based is therefor the sampling technique that will be considered in this paper.
+Pool-based is therefore the sampling technique that is considered in this paper.
 
 \subsection{Searching the Hypothesis Space}
 
