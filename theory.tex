@@ -221,6 +221,8 @@ In this thesis, SVM are the main focus, since they have been studied extensively
 
 \subsection{Support Vector Machines}
 
+%TODO: Explain what ends up being support vectors
+
 SVMs work by implicitly map the training data to a feature space~\cite{bishop2006pattern}.
 The goal is that the data should be linearly separable in the feature space, even if it is not in the input space.
 In the case of binary classification, a point is classified by the linear model:
@@ -301,55 +303,53 @@ Pool-based is therefore the sampling technique that is considered in this paper.
 
 \subsection{Searching the Hypothesis Space}
 
-In machine learning hypothesis is a specific configuration of a model, the purpose of which is to predict outputs on new instances of data by generalizing the training data.
+In machine learning, a hypothesis is a specific configuration of a model, the purpose of which is to predict outputs on new instances of data by generalizing the training data.
 One hypothesis can, for example, be an SVM model with specific values for the parameters.
-The set of all possible hypothesis that we are working with the \textit{hypothesis space}.
-Following the SVM example, the hypothesis space would be the set of SVM's with the different values that are possible for the parameters.
+The set of all possible hypothesis that we are working with is called the \textit{hypothesis space}~\cite{russell2016artificial}.
+Following the SVM example, the hypothesis space would be the set of SVMs with the different values under consideration.
 The hypothesis space is defined as:
-% TODO: Big brackets
 \begin{equation}
     \begin{aligned}
         \mathcal{H} = \Bigg \{ f | f(x) = \frac{w * \phi(x)}{|w|} \Bigg \}\\
-        \text{where~$w \in \mathcal{W}$ and $\mathcal{W}$ is our parameter space}
     \end{aligned}
 \end{equation}
 
-The version space the subset of the hypothesis space
-The subset of the hypothesis space that in the feature space separates the data is called the version space, which is defined as:
+where $\mathcal{W}$ is our parameter space and $w \in \mathcal{W}$.
+The subset of the hypothesis space that in the feature space separates the data is called the version space, which is defined as~\cite{settles2012active,tong2001support}:
 
 \begin{equation}\label{eq:version-space}
     \mathcal{V} = \Bigg \{ f \in \mathcal{H} | y_i f(x_i) > 0 \forall i \in \{i \dots n\} \Bigg \}
 \end{equation}
 
-So the version space therefore represents the different hypothesis that make correct predictions on the training data.
+So the version space therefore represents the different hypotheses that make correct predictions on the training data.
 Under the assumption that one of the hypothesis can fully separate the data, the version space shrinks when more labeled data is acquired.
 So for new labeled instances the hypotheses in the version space will give better predictions for the training data.
 Based on this, an active learning algorithm should aim to reduce the size of the version space with each new sample, optimally make it half the size in each iteration.
 
 There exists a useful relationship between the feature space $\mathcal{F}$ and the hypothesis space $\mathcal{H}$ called the \textit{version space duality}~\cite{tong2001support, vapnik1998statistical}.
-It states that hyperplanes in the hypothesis corresponds to points in the feature space, and the other way around.
+It states that hyperplanes in the hypothesis space corresponds to points in the feature space, and the other way around.
 So by selecting points to be labeled, constraints can be enforced on the hypothesis that form the version space.
 
-One approach to this is called that has shown to be successful is \textit{Uncertainty Sampling}~\cite{settles2012active}.
-The idea behind SVM is to find a hyperplane that separates two classes in a binary classification with the maximum margin.
+One approach to this that has shown to be successful is \textit{Uncertainty Sampling}~\cite{settles2012active}.
+This is commonly done with SVM, since the idea behind SVM is to find a hyperplane that separates two classes in a binary classification with the maximum margin.
 Out of the different hyperplanes in the hypothesis space, the version space contains those that can successfully separate the data.
-We want to select the points in the feature space that will reduce the amount of the valid hypotheses the most.
-Since SVMs tries to find the support vectors that maximizes the decision boundary in the feature space, separating the two classes.
-Considering this in $\mathcal{H}$, it will be analogous to the hypothesis in the center of the hypothesis space encompassed constraints set by the labeled points.
-What Uncertainty Sampling is predicting the values for the unlabeled points, and then choose the one that it is most uncertain about, the one closest to the decision boundary, to be labeled.
-Based on the version space duality, it is a good approximation for dividing the version space in two.
+Uncertaintly sampling aims to select the points in the feature space that will reduce the amount of the valid hypotheses the most.
+An SVM model tries to find the support vectors that maximizes the decision boundary in the feature space, separating the two classes.
+Considering this in $\mathcal{H}$, it will be analogous to the hypothesis in the center of the hypothesis space, which is encompassed by the constraints set by the labeled data.
+What Uncertainty Sampling is doing is predicting the values for the unlabeled points, and then choose the one that it is most uncertain about, which will be the one closest to the decision boundary.
+Based on the version space duality, it is a good approximation for dividing the version space in two~\cite{settles2012active}.
 
 \subsection{Binary Version Space Minimization}\label{subsec:binmin}
 
-\textit{Binary Version Space Minimization} is a generalization of uncertainty sampling, to make it work with multi-label data.
-The approach taken is to decompose the multi-label problem to several binary one-vs-rest tasks, like discussed in~\ref{subsec:multi-label-classification}.
+\textit{Binary version space minimization} is a generalization of uncertainty sampling, that is designed to make it work with multi-label data.
+The approach taken is to decompose the multi-label problem to several binary tasks with the binary relevance method, as is discussed in Section~\ref{subsec:multi-label-classification}.
 The unlabeled point that is chosen for labeling is then the one with the smallest SVM margin across all the binary classification tasks.
 By doing this, it does not incorporate the multiple labels into the decision process, but treats all classes individually and equally. 
 
 \subsection{Maximum Loss Reduction with Maximum Confidence}\label{subsec:mmc}
 
-Maximum Los Reduction with Maximum Confidence(MMC) was developed by Yang et al~\cite{yang2009effective}.
-The goal of the technique is to find the samples that will reduce the expected model loss the most, and select this sample for labeling.
+Maximum loss reduction with maximum confidence (MMC) was developed by Yang et al~\cite{yang2009effective}.
+The goal of this technique is to find the samples that will reduce the expected model loss the most, and select this sample for labeling.
 These are the basic notations that will be used when explaining the MMC approach:
 \begin{itemize}
     \item The labeled dataset: $D_L$.
@@ -368,7 +368,7 @@ The expected model loss that MMC is trying to reduce can be defined as follows~\
 \end{equation}
 
 It is hard to estimate $P(x)$, so it is instead measured over all the samples in $D_U$.
-This results in another estimate:
+This results in the estimate:
 \begin{equation}
     \widehat{\sigma_{D_L}} = \frac{1}{|D_U|} \sum_{x \in D_U} \sum_{y \in Y} L(f_{D_L})P(y|x)
 \end{equation}
@@ -393,8 +393,8 @@ Yang et al\@.~\cite{yang2009effective} describes the process of estimating the n
 \begin{enumerate}
     \item Use the classification model to obtain the probabilities for each label for all the data samples.
     \item For each data sample, sort and normalize the probabilities for all the labels.
-    \item Using the labeled dataset, train a logistic regression classifier with the sorted and normalized probabilities as features, and the number of labels as target.
-    \item With the trained logistic regression model, predict the number of labels for the samples in the unlabeled pool.
+    \item Using the labeled dataset, fit a logistic regression classifier with the sorted and normalized probabilities as features, and the number of labels as target.
+    \item With the fitted logistic regression model, predict the number of labels for the samples in the unlabeled pool.
 \end{enumerate}
 
 After obtaining the predicted number of labels $m$ for a sample $x$, the estimate for $p(y|x)$, denoted $\hat{y}$, is then obtained by selecting $m$ the most probable labels based on the original classification models output.
@@ -412,7 +412,7 @@ The measurement that is used by MMC is to estimate the model loss by the size of
 The version space's size can be computed with Equation~\ref{eq:version-space}.
 However, computing this for each possible label set is expensive.
 By using the heuristic from~\cite{tong2001active}, an approximation of the version space with the added label can be obtained from the current SVM classifiers' margin.
-The reduction rate after adding a the data point $(x, y^i)$, where $y^i \in {-1, 1}$, can be expressed as follows~\cite{yang2009effective, tong2001active}:
+The reduction rate after adding the data point $(x, y^i)$, where $y^i \in {-1, 1}$, can be expressed as follows~\cite{yang2009effective, tong2001active}:
 
 \begin{equation}\label{eq:reduction-rate}
     \frac{L(f^i_{D_L+(x, y^i)})}{L(f^i_{D_L})} \approx \frac{V^i_{D_L + (x, y^i)}}{V^i_{D_L}} \approx \frac{1 + y^i f^i_{D_L}(x)}{2}
@@ -452,7 +452,7 @@ These two techniques are then combined in a weighted fashion into what they call
 \subsubsection{Max-Margin Uncertainty Sampling}
 
 The idea behind \textit{Max-Margin Uncertainty Sampling} comes from the observation that multi-label classification prediction is mainly about separating the positive labels from the negative labels~\cite{li2013active}.
-That is, separating the labels gets assigned to an instance and the ones that does not.
+That is, separating the labels are assigned to an instance and the ones that are not.
 In order to model the uncertainty of the prediction of the prediction on a datapoint, Li et al\@. suggest the usage of a global separation margin to separate the negative labels from the positive.
 
 The positive labels for a data point $x$ is defined as those where $sign(f'_{D_L}(x))$ is positive.
@@ -492,7 +492,7 @@ Since \textit{max-margin uncertainty sampling} and \textit{label cardinality inc
 
 where $\beta$ is a parameter controlling the weight put on the two measures.
 This parameter is chosen by in each iteration evaluating a discrete set of values, for example $\{0, 0.1, 0.2, \dots, 1\}$.
-Then selecting $\beta$ based on the most informative sample amongst the .
+Then selecting $\beta$ based on the most informative sample amongst them.
 Equation~\ref{eq:approx-generalization-error} shows the \textit{approximate generalization error}, which is used to select the sample.
 \begin{equation}
     \epsilon(x) = \sum_{x \in D_U} \max_{i \in f(x)^+}(1-f^i(x)) + \max_{i \in f(x)^-}(1+f^i(x))
@@ -506,7 +506,7 @@ So, the sample is then selected by:
 
 \section{Evaluation Metrics}\label{sec:evaluation-metrics}
 
-For classification or information retrieval systems the typical evaluation metrics to use are \textit{precision}, \textit{recall} and \textit{recall}~\cite{jiang2012information}.
+For classification or information retrieval systems, the typical evaluation metrics in use are \textit{precision}, \textit{recall} and \textit{recall}~\cite{jiang2012information}.
 We define the following metrics in terms of \textit{true positives}, \textit{false positives}, \textit{true negatives} and \textit{false negatives}.
 How they are defined can be seen in table~\ref{tab:conf-matr}.
 Data points that are correctly classified are then either \textit{true positives} or \textit{true negatives}.
@@ -541,7 +541,8 @@ F-score is the harmonic mean between recall and precision, and is defined as~\ci
     F = \frac{2*precision*recall}{precision+recall}
 \end{equation}
 
-Another metric that is used for evaluation is \textit{accuracy}, which is defined as follows:
+Another metric that is used for evaluation is \textit{accuracy}, which is the percentage of prediction sthat matches the actual labels.
+Accuracy is defined as follows:
 
 \begin{equation}
     Accuracy = \frac{tp+tn}{tp+tn+fp+fn}
@@ -574,7 +575,7 @@ However, it differs for \textit{recall} and \textit{precision}, and therefor als
 
 Using topic modeling for various clinical applications has been done before.
 Topic modeling have been a popular approach for this purpose since clinical data often is in the form of free text.
-The resulting topics can be interpreted by humans, which allow doctors to get more insight into the system.
+The resulting topics can also be interpreted by humans, which allow doctors to get more insight into the system.
 Sarioglu et al\@.~\cite{sarioglu2013topic} to represent clinical reports with topic vectors in order to classify them.
 Chan et al\@.~\cite{chan2013empirical} used topic models to analyze patient records and clinical reports from cancer patients.
 In their paper, they found relationships between the content of the notes on the patients, with the data that was available on the patients' genetic mutations.
@@ -591,13 +592,12 @@ The labels are queried from clusters where there is a lot of uncertainty when it
 By pruning the tree of clusters while querying for labels the goal is to obtain a pruning where each node mostly contains one label.
 
 In \cite{nguyen2004active} they also take advantage of a clustering to select the samples to be labeled in a two-class environment.
-They take advantage of that the data points closest to the centroids are the most important ones, and that most data points in one cluster have the same label.
+They use that the data points closest to the centroids are the most important ones, and that most data points in one cluster have the same label.
 What this approach has in common with a lot of the current research is that it is treating single-label or binary classification problems, which cannot be directly applied to a multi-label scenario.
 
 Research in~\cite{brinker2006active} is dealing with the multi-label problem.
 That is the paper that developed the \textit{binary version space minimization} strategy that is described in section~\ref{subsec:binmin}.
-It simply takes the instance with the smallest margin among the binary classifiers, using
-It selects the data point that has the smallest margin among the binary classifiers, using the binary relevance scheme.
+It simply takes the instance with the smallest margin among the binary classifiers, using the binary relevance scheme.
 The MMC strategy~\cite{yang2009effective} that is described in section~\ref{subsec:mmc}, and the adaptive active learning strategy~\cite{li2013active} in section~\ref{subsec:adaptive-active-learning} are also techniques for managing the multi-label problem.
 MMC tries to find the greatest reduction for the estimated loss.
 While adaptive active learning combines an uncertainty measure with a measure of how the label cardinality differs.
