@@ -221,26 +221,27 @@ In this thesis, SVM are the main focus, since they have been studied extensively
 
 \subsection{Support Vector Machines}
 
-%TODO: Explain what ends up being support vectors
-
 SVMs work by implicitly map the training data to a feature space~\cite{bishop2006pattern}.
 The goal is that the data should be linearly separable in the feature space, even if it is not in the input space.
 In the case of binary classification, a point is classified by the linear model:
 
-\begin{equation}
+\begin{equation}\label{eq:svm-y}
     y(x) = w^T \phi(x) + b
 \end{equation}
 
-The sign of $y(x)$ determines the label assigned to x.
+, where the sign of $y(x)$ determines which label will be assigned to x.
 
 The goal of an SVM is to try to find the hyperplane that maximizes the margin.
 That is, the distance between any point and the decision boundary should be as large as possible.
+A subset of the data points will be used to determine where the decision boundary is, these points are called the support vectors.
 The hyperplane that gives us the maximum margin can be found by:
 
 \begin{equation}
     \arg\min_{w,b}\frac{1}{2}||w||^2
 \end{equation}
 
+The parameter $b$ is not apart of this equation. 
+However it is implicitly set by the constraints determined by the data points relation to the decision boundary.
 In order to allow for better generalization, and for data that is not completely linearly separable, SVMs make use of slack variables, denoted $\xi_n$, to penalize points that are close to the decision boundary~\cite{bishop2006pattern}.
 A parameter $C>0$ controls how much effect the slack variables will have.
 The equation with the slack variables become:
@@ -345,6 +346,13 @@ Based on the version space duality, it is a good approximation for dividing the 
 The approach taken is to decompose the multi-label problem to several binary tasks with the binary relevance method, as is discussed in Section~\ref{subsec:multi-label-classification}.
 The unlabeled point that is chosen for labeling is then the one with the smallest SVM margin across all the binary classification tasks.
 By doing this, it does not incorporate the multiple labels into the decision process, but treats all classes individually and equally. 
+Selecting a new data $x_{new}$ to be labeled using binary version space minimization can formally be defined as:
+
+\begin{equation}
+    x_{new} = \arg\min_{x \in D_U} \big( \min_{i \in \{1 \dots n\}} y_i(x) \big)
+\end{equation}
+
+, where $n$ is the number of labels, $y_i(x)$ is the function from Equation~\ref{eq:svm-y} for the binary SVM classifier that is used to predict label $i$, and $D_U$ is the set of unlabeled data points.
 
 \subsection{Maximum Loss Reduction with Maximum Confidence}\label{subsec:mmc}
 
@@ -570,7 +578,14 @@ It is defined as:
 It is worth noting that for some measures, such as Accuracy, the result of the two averaging approaches is the same.
 However, it differs for \textit{recall} and \textit{precision}, and therefor also the \textit{F1-score}~\cite{tsoumakas2009mining}.
 
-\textit{TODO: Write about perplexity}
+Perplexity can be used in order to compare different probabilistic models. 
+It is a measurement that determines how good a models predictions are, where a lower score means that the model is better at predicting.
+By evaluating the perplexity on a test set, it will give an indication of how well the model will generalize~\cite{blei2003latent}.
+Perplexity for a set of $M$ documents, on a dataset $D$ is:
+\begin{equation}
+    perplexity(D) = \exp \big \{ -\frac{\sum_{i=1}^M \log p(x_i) }{M} \big \}
+\end{equation}
+
 \section{Related Work}
 
 Using topic modeling for various clinical applications has been done before.
