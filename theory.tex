@@ -140,16 +140,20 @@ We have to approximate the posterior distribution using some sampling method, si
 
 There exist a few algorithms that can be used to learn topics for the LDA model. 
 Two of these that has shown to be able to extract useful topics from text are \textit{collapsed Gibbs sampling}~\cite{griffiths2004finding} and \textit{variational Bayes}~\cite{blei2003latent}.  
-In collapsed Gibbs sampling, $\theta$ and $\phi$ are marginalized out.
-It works by repeatedly sampling the topic assignment $z_{dn}$ for each token, conditioned on the assignments for the other tokens.
-Variational Bayes works by using simpler single-variable models to approximate the LDA\@. 
+Variational Bayes works by using simple single-variable models to approximate the LDA\@. 
 As a consequence, it disregards any dependencies between the variables.
-This is the approach used in the original LDA paper~\cite{blei2003latent}.
 
-\subsubsection{Collapsed Gibbs}
+\subsubsection{Collapsed Gibbs Sampling}
 
-% TODO: Write section on collapsed Gibbs
-\textit{To be written}
+Gibbs sampling is a Markov chain Monte Carlo (MCMC) method that is often used to obtain a good estimate for the distribution of a probability model, when it is not feasible to sample the distribution directly~\cite{crain2012dimensionality}.
+With the help of a heuristic, or randomly, Gibbs sampling initializes the variables.
+During a large number of iterations the variables are then sampled.
+When variable is being sampled, it is conditioned on the others.
+In an MCMC fashion, a number of samples are rejected during an initial burn-in period.
+This is done in order to get to a state where the points are more representative of the distribution that is estimated.
+
+Griffith et al\@.~\cite{griffiths2004finding} came up with collapsed Gibbs sampling, where $\theta$ and $\phi$ are marginalized out.
+The only variable to then be repeatedly sampled is the topic assignment, $z_{dn}$, conditioned on the assignments of the other tokens.
 
 \subsection{Text Clustering}
 
@@ -200,9 +204,28 @@ K-means is commonly used with Euclidean distance, which is defined on two $n$ di
     d(p1, p2) = \sqrt{(p1_1 - p2_1)^2 + (p1_2 - p2_2)^2 + \hdots + (p1_n - p2_n)^2}
 \end{equation}
 
-\subsection{Word Embeddings with Word2Vec}
+\subsection{Word Embeddings}
 
-\textit{To be written}
+Word embeddings can be done with several different techniques, and it is the process of representing a word as a real-valued vector instead of just an atomic unit.
+Viewing a word as a vector allows for doing interesting things with them, such as evaluating how similar to words are.
+Something that is hard to do when treating them as atomic units.
+
+This can be accomplished by using a co-occurrence matrix to see how often certain words occur together, and then perform some dimensionality reduction on them~\cite{lebret2013word, levy2014neural}.
+Another approach that shown to be very successful in producing high quality word embeddings is \textit{word2vec}, which uses a neural network to accomplish this task~\cite{mikolov2013efficient}.
+In addition to being able to compute similarities between words, using simple algebraic some interesting relationships could be discovered.
+The example that Mikolav et al\@.~\cite{mikolov2013efficient} showed was that using the vector for ``King'', subtracting the vector for ``Man'' and adding the vector for ``Woman'' resulted in a vector that was close to that for ``Queen''.
+
+One approach to this is using a continuous bag-of-words model~\cite{mikolov2013efficient}.
+A neural network is used to predict the middle word using both words occurring before and after it.
+The four words occurring before and after the middle word is used as inputs, but their internal order is not used, which is why the name bag-of-words is used.
+
+The second approach that Mikolav et al\@. explored was a continuous skip-gram model~\cite{mikolov2013efficient}.
+Here a neural network with a continuous projection layer was used.
+With the current word as input, co-occurring words within a certain range are predicted.
+A bigger range is more computationally complex, but results in word vectors of higher quality.
+
+Word2vec does not require labels to be provided with the data, but uses the data itself to generate targets.
+For this reason it is sometimes called a semi-supervised technique.
 
 \section{Text Classification}
 
