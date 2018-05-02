@@ -1,44 +1,39 @@
 \chapter{Method}
 \label{cha:method}
 
-%In this chapter, the method is described in a way which shows how the
-%work was actually carried out. The description must be precise and
-%well thought through. Consider the scientific term
-%replicability. Replicability means that someone reading a scientific
-%report should be able to follow the method description and then carry
-%out the same study and check whether the results obtained are
-%similar. Achieving replicability is not always relevant, but precision
-%and clarity is.
-%
-%Sometimes the work is separated into different parts, e.g.  pre-study,
-%implementation and evaluation. In such cases it is recommended that
-%the method chapter is structured accordingly with suitable named
-%sub-headings.
-
-The task of making a better system for labeling clinical reports was approached with several text mining techniques, support vector machines and a few active learning querying strategies.
+The task of making a better system for labeling clinical reports was approached with different text mining techniques, support vector machines and three learning querying strategies.
 At first, the framework and tools used in the system are described, followed by a description of the provided dataset.
 Finally, the experiments used to answer the research questions are presented.
 
-\section{Frameworks and Tools}
+\section{Frameworks, Tools and Implementation}
 The entire system was written in Python.
 The motivation behind this choice was mainly that, when it comes to machine learning and text mining, most of the existing infrastructure at Sectra is using Python.
 This, in combination with the fact that there exists several tools for these purposes in Python, such as \textit{numpy} \footnote{Numpy, http://www.numpy.org/}, \textit{nltk} \footnote{Natural Language Toolkit, https://www.nltk.org/}, \textit{scikit-learn} \footnote{scikit-learn, http://scikit-learn.org/stable/} and \textit{gensim} \footnote{Gensim, https://radimrehurek.com/gensim/}.
-All the plotting was done using the \textit{seaborn} \footnote{Seaborn, https://seaborn.pydata.org/} and \textit{bokeh} \footnote{Bokeh, https://bokeh.pydata.org/en/latest/} libraries.
+Most of the plotting was done using the \textit{seaborn} \footnote{Seaborn, https://seaborn.pydata.org/} and \textit{bokeh} \footnote{Bokeh, https://bokeh.pydata.org/en/latest/} libraries.
 \textit{pyLDAvis} \footnote{pyLDAvis, https://github.com/bmabey/pyLDAvis} was used for some additional visualization purposes with regards to topic models.
 
-However, when it comes to the active learning, there does not seem to be a proven mainstream library that contains a set of readily available algorithms.
-In order to achieve better integration between the active learning system and the existing infrastructure at Sectra, as well as making adaptions such as the number of items queried at each iteration, an active learning framework was created.
+However, when it comes to active learning, there does not seem to be a proven mainstream library that contains a set of readily available algorithms.
+In order to achieve better integration between the active learning system and the existing infrastructure at Sectra, as well as making adaptions such as the number of items queried at each iteration, an active learning framework was written from scratch.
 The ground for this framework were the algorithms presented in Section~\ref{sec:active-learning}.
 
+This framework consisted of three modules, called \textit{model}, \textit{dataset}, and \textit{query strategy}.
+The model is a wrapper around different machine learning models.
+By providing an interface for a distance or certainty measure, any underlying model able to provide such an interface can be incorporated.
+For accessing the data pool a dataset wrapper was written, with an interface for accessing the labeled and unlabeled pools.
+Putting this in its own module opens up the possibility for using several different storage solutions, such as a database or files.
+The query strategy module contains the different active learning algorithms for selecting what sample to label next.
+
 \section{Datasets}\label{sec:datasets}
-In this thesis, two different datasets were used.
-The dataset provided by Sectra, as well as Reuters-21578.
-The latter was used to be able to simulate a multi-label labeling process, to evaluate how well the different strategies work before being integrated into Sectra's system.
+
+Two different datasets were used in this thesis.
+They were the dataset of clinical reports provided by Sectra, as well as Reuters-21578 \footnote{Reuters-21578, https://archive.ics.uci.edu/ml/datasets/reuters-21578+text+categorization+collection}.
+The latter was used in order to be able to simulate a multi-label labeling process.
+Before being integrated into Sectras system, the different strategies needed to be evaluated from an objective point of view, so that any tradeoffs were known beforehand.
 Since the vast majority of the dataset from Sectra was unlabeled, this could not effectively been done using only that.
 
 The set of reports provided by Sectra contained 1068904 different entries, where 493 were initially labeled.
-The entries were spread out over several files, stored in the JSON format.
-However, those labels were subject to change, so they were mainly used to see if there were any correlation between the labels and clusters during the exploration phase.
+The entries were spread out over several files and stored in the JSON format.
+However, those labels were subject to change, so they were mainly used to see if there was a correlation between the labels and clusters during the exploration phase.
 A sample report can be seen in Figure~\ref{fig:sample-report}.
 The fields include:
 \begin{enumerate}
@@ -103,7 +98,7 @@ The labels that were initially assigned to these reports were:
 ``Blödning'', ``Infektion'', ``Metabol'', ``Tumör'', ``Cysta'', ``Missbildning'', ``Syndrom'', ``Demens'', ``Hydrocefalus'', ``Infarkt'', ``Kärlsjukdom'', ``Trauma'', ``Systemsjukdom'', ``Inklämmning'' and ``Normal''.
 
 The distribution of labels among these initially labeled reports can be seen in Figure~\ref{fig:class-distribution}
-Note that this is only a count of the individual labels, and the multi-label nature of the labeling is not taken into account in the histogram.
+Note that this is only a count of the individual labels, and the multi-label nature of the labeling is not taken into account in the plot.
 
 \begin{figure}
     \includegraphics[scale=0.5]{figures/class-distribution.png}
@@ -113,7 +108,7 @@ Note that this is only a count of the individual labels, and the multi-label nat
 
 The Reuters-21578 newswire dataset is widely used when it comes to text classification research, and provides a good multi-label benchmark that can be used to compare how well certain techniques perform to other papers.
 All experiments used the \textit{ModApte} split of the dataset, which is commonly used and readily available. %TODO: Footnote with the dataset?
-It splits the dataset into a defined set of training and test documents, containing 7.769 and 3.019 entries respectively.
+It splits the dataset into a predefined set of training and test documents, containing 7.769 and 3.019 entries respectively.
 This split contains a subset of the categories, specifically 90 different ones.
 Since the clinical dataset from Sectra only contained 15 different categories, this would not mirror that very well, so instead the 15 most common categories of those were taken out.
 The distribution of the top 15 Reuters-21578 categories can be seen in Figure~\ref{fig:class-distribution-reuters}.
