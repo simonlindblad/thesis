@@ -22,9 +22,9 @@ Finally, the experiments used to answer the research questions are presented.
 \section{Frameworks and Tools}
 The entire system was written in Python.
 The motivation behind this choice was mainly that, when it comes to machine learning and text mining, most of the existing infrastructure at Sectra is using Python.
-This, in combination with the fact that there exists several tools for these purposes in Python, such as \textit{numpy}, \textit{nltk}, \textit{scikit-learn} and \textit{gensim}. %TODO: Find references or links?
-All the plotting was done using the \textit{seaborn} and \textit{bokeh} libraries.
-\textit{pyLDAvis} was used for some additional visualization purposes with regards to topic models.
+This, in combination with the fact that there exists several tools for these purposes in Python, such as \textit{numpy} \footnote{Numpy, http://www.numpy.org/}, \textit{nltk} \footnote{Natural Language Toolkit, https://www.nltk.org/}, \textit{scikit-learn} \footnote{scikit-learn, http://scikit-learn.org/stable/} and \textit{gensim} \footnote{Gensim, https://radimrehurek.com/gensim/}.
+All the plotting was done using the \textit{seaborn} \footnote{Seaborn, https://seaborn.pydata.org/} and \textit{bokeh} \footnote{Bokeh, https://bokeh.pydata.org/en/latest/} libraries.
+\textit{pyLDAvis} \footnote{pyLDAvis, https://github.com/bmabey/pyLDAvis} was used for some additional visualization purposes with regards to topic models.
 
 However, when it comes to the active learning, there does not seem to be a proven mainstream library that contains a set of readily available algorithms.
 In order to achieve better integration between the active learning system and the existing infrastructure at Sectra, as well as making adaptions such as the number of items queried at each iteration, an active learning framework was created.
@@ -55,23 +55,42 @@ The fields include:
     \item \textbf{Urgent}: If the examination is urgent or not.
     \item \textbf{Pharma}: List of administrated pharmaceuticals.
 \end{enumerate}
-%TODO: Include full report
 \begin{figure}
 \begin{verbatim}
     {
-        'ExamId': 24550003, 
-        'ReportText': '',
-        'Anamnesis': '',
-        'Question': '',
-        'PatientAlert': ' ', 
-        'ExamComment': None, 
-        'Canceled': False, 
-        'ExamName': '',
-        'ExamCode': '81100', 
-        'PatientSex': 'MALE', 
-        'PatientAge': 71, 
-        'Urgent': -1, 
-        'Pharma': None
+        'ExamId':       3302250, 
+        'ReportText':   '[NUM-SEQ] 
+                        Craniell datortomografi utan och med 
+                        intravenös kontrast:
+                        
+                        Frontalt på höger sida finns ett c:a 
+                        4 x 3 cm stort lågattenuerande område, tolkas 
+                        representera rest efter genomgången 
+                        parenchymskada, troligen äldre kontusionsblödning. 
+                        Subcorticalt på ömse sidor om centralfåran på höger 
+                        sida finns ett några cm-stort lågattenuerande 
+                        område som kan vara ischemiskt. Lätt sänkt 
+                        attenuering av vit substans periventrikulärt 
+                        förenlig med leuko-araios av degenerativ natur. För 
+                        åldern normalstora ventriklar. Corticala sulci upp 
+                        mot konvexiteten är något smalare än förväntat 
+                        för åldern. 
+                        
+                        Någon tumörsuspekt förändring påvisas ej.',
+        'Canceled':     False, 
+        'Question':     'Förändring vä temporalt?',
+        'PatientAlert': 'Hepatit C-positiv.', 
+        'ExamComment':  "Alla kontrastfrågor: UA mnn", 
+        'ExamName':     'DT hjärna utan och med iv kontrast',
+        'Anamnesis':    'Pat med skalltrauma på 60-talet. Kommer nu med nattliga 
+                        från-varoattacker. Skrikigt beteende som tolkats som 
+                        epilepsi. CT är aldrig gjort. HEPATIT C-positiv."',
+        'ExamCode':     '81081', 
+        'PatientSex':   'MALE', 
+        'PatientAge':   59, 
+        'Urgent':       0, 
+        'Pharma':       [{"ExamId": 3200240, "Units": "100 ml", 
+                        "Pharma": "Omnipaque Inj.lösn 300 mg I/ml"}]
     }
 \end{verbatim}
 \caption{A sample report from the dataset provided by Sectra}
@@ -149,7 +168,7 @@ The data points were plotted in a 2D plot after reducing the dimensions using t-
 Since each data point is associated with several different topics, there exists several way of coloring each data point in order to gain an understanding of them.
 In this case, simply the topic with the highest probability for a given data point was used to determine the color.
 A plot of this can be seen in Figure~\ref{fig:lda-dist}.
-Although it might be hard to interpret as a 2D plot in this report, using the \textit{bookeh} library an interactive plot was generated, so hovering over each data point would show the content of the report, making this a convenient way to explore the data and the generated topics.
+Although it might be hard to interpret as a 2D plot in this report, using the \textit{bokeh} library an interactive plot was generated, so hovering over each data point would show the content of the report, making this a convenient way to explore the data and the generated topics.
 
 \begin{figure}
     \centering

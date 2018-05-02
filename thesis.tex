@@ -6,7 +6,11 @@
 \usepackage{color}
 \usepackage{caption,subcaption}
 \usepackage{verbatim}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
 
 % \usepackage{changebar}
 
@@ -52,9 +56,10 @@
 \chapterstyle{VZ43}
 
 \include{intro}
+\include{background}
 \include{theory}
 \include{method}
-\include{results}
+%\include{results}
 \include{discussion}
 \include{conclusion}
 \printbibliography

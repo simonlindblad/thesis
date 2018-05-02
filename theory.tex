@@ -190,7 +190,7 @@ A frequently used method is k-means++, that has been shown to improve both the s
     \centering
     \thirdsubfig{kmeans-init}{Initial seeds}
     \thirdsubfig{kmeans-iter1}{Iteration 1}
-    \newline
+    \quad
     \thirdsubfig{kmeans-init2}{Centroids after iteration 1}
     \thirdsubfig{kmeans-iter2}{Iteration 2}
     \thirdsubfig{kmeans-init3}{Centroids after iteration 2}
@@ -225,7 +225,7 @@ With the current word as input, co-occurring words within a certain range are pr
 A bigger range is more computationally complex, but results in word vectors of higher quality.
 
 Word2vec does not require labels to be provided with the data, but uses the data itself to generate targets.
-For this reason it is sometimes called a semi-supervised technique.
+For this reason it is sometimes called a self-supervised technique.
 
 \section{Text Classification}
 
@@ -471,6 +471,30 @@ The resulting equation, called maximum loss reduction with maximal confidence, i
     D^*_S = \arg \max_{D_S} \big ( \sum_{x \in D_S} \sum_{i=1}^k (\frac{1 - \hat{y}^if^i_{D_L}(x)}{2}) \big )
 \end{equation}
 
+The full algorithm for the approach can be seen in Algorithm~\ref{alg:mmc}.
+
+\begin{algorithm}
+    \begin{algorithmic}
+        \REQUIRE Labeled set $D_L$\\
+                 Unlabeled set $D_U$ \\
+                 Number of classes $k$ \\
+                 Number of selected examples per iteration $S$
+        \REPEAT
+            \STATE Train $k$ binary SVM classifiers $f^1$, \dots, $f^k$ based on training data $D_L$.
+            \FOR{each $x \in D_U$ \textbf{do}}
+                \STATE Predict its label vector using the method described in Section~\ref{subsec:mmc}.
+                \STATE Calculate the expected loss reduction with the most confident label vector $\hat{y}$, $score(x) = \sum_{i=1}^k (\frac{1 - \hat{y}^if^i_{D_L}(x)}{2})$
+            \ENDFOR
+            \STATE Sort $score(x)$ in decreasing order for all $x$ in $D_U$.
+            \STATE Select a set of $S$ examples $D_S^*$ with the largest scores, and update the training set $D_L \Leftarrow D_L + D^*_S$.
+        \UNTIL{enough instances are queried}
+    \end{algorithmic}
+
+    \caption{Maximum Loss Reduction with Maximal Confidence procedure. Taken from Yang et al\@.~\cite{yang2009effective}, with some modifications to the notations used in order to make it coherent with the rest of the report.}
+    \label{alg:mmc}
+\end{algorithm}
+
+
 \subsection{Adaptive Active Learning}\label{subsec:adaptive-active-learning}
 
 In their paper, Li et al\@.~\cite{li2013active} presents two approaches to active learning:
@@ -525,15 +549,47 @@ where $\beta$ is a parameter controlling the weight put on the two measures.
 This parameter is chosen by in each iteration evaluating a discrete set of values, for example $\{0, 0.1, 0.2, \dots, 1\}$.
 Then selecting $\beta$ based on the most informative sample amongst them.
 Equation~\ref{eq:approx-generalization-error} shows the \textit{approximate generalization error}, which is used to select the sample.
-\begin{equation}
+\begin{equation}\label{eq:calc-epsilon}
     \epsilon(x) = \sum_{x \in D_U} \max_{i \in f(x)^+}(1-f^i(x)) + \max_{i \in f(x)^-}(1+f^i(x))
 \end{equation}
 
 where $f(x)^+$ and $f(x)^-$ are the predicted positive labels, and negative labels, respectively.
 So, the sample is then selected by:
-\begin{equation}
+\begin{equation}\label{eq:x-star}
     x^* = \arg \min_{x \in D_U} \epsilon(x)
 \end{equation}
+
+The complete algorithm for the integrated approach can be seen in Algorithm~\ref{alg:adaptive-active-learning}.
+
+\begin{algorithm}
+    \begin{algorithmic}
+        \REQUIRE Labeled set $D_L$ \\ 
+                 Unlabeled set $D_U$ \\ 
+                 Parameter set $B$
+        \REPEAT
+            \STATE Train multi-label SVM classifier $F^0$ on $D_L$.
+            \FOR{each $x_i \in D_U$ \textbf{do}}
+                \STATE Compute $u(x_i)$ and $c(x_i)$.
+            \ENDFOR
+            \FOR{each $\beta \in B$ \textbf{do}}
+                \STATE Mark a candidate instance $x = \arg\max_{x \in D_U} q(x, \beta)$
+            \ENDFOR
+            \STATE Copy all marked candidate instances into a set $S$.
+            \FOR{each $x \in S$ \textbf{do}}
+                \STATE Produce $\hat{y}$ using classifier $F^0$.
+                \STATE Retrain a new classifier $F$ on $(x, \hat{y}) \cup D_L$.
+                \STATE Compute $e(x)$ using classifier $F$ and Equation~\ref{eq:calc-epsilon}.
+            \ENDFOR
+            \STATE Select instance $x^*$ from $S$ using Equation~\ref{eq:x-star}
+            \STATE Remove $x^*$ from $D_U$, query its label vector $y^*$.
+            \STATE Add $(x^*, y^*)$ to $D_L$.
+        \UNTIL{enough instances are queried}
+    \end{algorithmic}
+
+    \caption{Adaptive Active Learning Procedure. Taken from Li et al\@.~\cite{li2013active}, , with some modifications to the notations used in order to make it coherent with the rest of the report.}
+    \label{alg:adaptive-active-learning}
+\end{algorithm}
+
 
 \section{Evaluation Metrics}\label{sec:evaluation-metrics}
 

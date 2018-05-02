@@ -7,15 +7,22 @@ One way of increasing the efficiency as well as the quality of healthcare is to 
 As the population is growing it is of utmost importance to ensure that the quality of diagnoses remain high, and to minimize the risk of missing some critical piece of information.
 Taking advantage of the available medical information is key to create aforementioned systems.
 
+The purpose of this thesis is to evaluate different techniques for labeling multi-label medical reports.
+It is done at Sectra Medical Imaging IT Solutions AB in conjunction with a research project where they investigate how they can use machine learning and text mining techniques on clinical reports to improve their products.
+By actively choosing the reports to be labeled, the goal is to make the set of labeled reports more useful in future systems.
+
+\section{Motivation}
+\label{sec:motivation}
+
 Information pertaining to a patient's diagnosis is often in the form of written clinical reports.
-This is one example of information that can be utilized in automated systems, by extracting information from old reports, the process of writing new ones can be enriched.
+This is one example of data that can be utilized in automated systems, by extracting information from old reports, the process of writing new ones can be enriched.
 A system could show cases with similar features as the one currently being written, the doctor could then compare the findings and check if they have obtained an abnormal result.
 Being able to perform such a comparison will result in extra quality assurance in the diagnostic flow.
 It could also provide doctors with more confidence in that their diagnosis is correct.
 
 The problem systems like this would face is to categorize medical reports in order to make further suggestions.
 One approach that is commonly used for such problems is machine learning.
-Machine learning is a field where a set of inputs is used to create a mapping to some output values~\cite{bishop2006pattern}.
+Which is a field where a set of inputs is used to create a mapping to some output values~\cite{bishop2006pattern}.
 This is done by using data to build a, usually statistical, model.
 
 The task of predicting a category, or class, for a given text document is called text classification.
@@ -52,39 +59,14 @@ For example, a news article be on several subjects, such as both economics and s
 Just because the category sport has been identified, the entire document has to be read in order to find any additional categories.
 This makes the use of active learning to enhance the labeling of documents even more useful in the multi-labeled case.  
 
-\section{Motivation}
-\label{sec:motivation}
-
-This thesis is carried out at Sectra Medical Imaging IT Solutions AB, as a part of their research group.
-They are currently pursuing a research project with Region Skåne, which is responsible for the healthcare in Skåne, that is located in southern Sweden.
-The intention behind the project is to use machine learning techniques to, among other things, be able to suggest categories to doctors while they are writing medical reports.
-Another case is to use the categories of documents to present doctors with medical reports that are handling similar cases from the past.
-With this information the doctors could get an extra quality assurance check in their diagnostic flow.
-
-In order to build these system, you need a substantial amount of labeled clinical reports.
-Therefore, the purpose of this thesis is to increase the quality and efficiency of the process of labeling these reports.
-This will be done by using unsupervised learning techniques such as topic models and clustering to first remove documents that are not supposed to be labeled.
-These invalid reports are documents that describe patients never showing up for a scan, deceased patients and patients being moved to a different hospital, among others.
-For the labeling, a system is to be built to use active learning in conjunction with the aforementioned unsupervised techniques to increase the quality of the labeled documents.
-In the work that they have done so far in the research project, the doctor that primarily worked with the labeling of reports stated that the distribution over the labeled categories is very skewed.
-The vast majority of labeled documents were assigned the same few categories.
-This in turn leads the models to require a lot of labeled samples to work well.
-By using active learning we can reduce the number of labeled samples needed to obtain an accurate model.
-
 \section{Aim}
 \label{sec:aim}
 
 The purpose with this thesis project is to evaluate different solutions to increase the quality of labeled reports, and thereby reducing the amount of them needed for use within the project.
 Resulting from this will be a complete, standalone, system for labeling reports.
 The reports are interactively queried so a user can label the reports that are deemed most useful by the system.
-This will then be used together with an existing web interface that Sectra created for the purpose of labeling reports, which can be seen in Figure~\ref{fig:web-interface}.
-
-\begin{figure}
-      \centering
-      \includegraphics[scale=0.25]{web-interface}
-      \caption{A screenshot of the interface used to label clinical reports at Sectra}
-      \label{web-interface}
-\end{figure}
+Labeling data to use in machine learning will probably be necessary for a long time ahead, but the aim here is to create a system that makes it easier.
+This will then be used together with an existing web interface that Sectra created for the purpose of labeling reports.
 
 \section{Research questions}
 \label{sec:research-questions}
