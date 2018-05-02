@@ -400,5 +400,12 @@ From a perspective of the person labeling, it could feel more productive not ass
 The more prosperous outcome from a balanced dataset would be that the models using the data in later stages could also benefit from this, and obtain better results.
 
 The configurations used here are the same as in Table~\ref{fig:active-learning-configurations}.
-Every iteration, the distribution of labels assigned are stored.
-An evaluation of how the distribution progresses can then be done by comparing the class imbalance between the different strategies at different stages.
+Every iteration, the distribution of labels assigned are stored and analyzed.
+He et al\@. discusses the usage of ROC curves and measures such as g-means to compare multi-class imbalanced data.
+However, since the doctor involved at Sectra specifically requested that labels should be more uniformly distributed. 
+The evaluation will therefore focus on measuring that instead of the models performance, which is done in ~\ref{sec:exp2-method}.
+An evaluation of how the distribution progresses was done by comparing how the class imbalance is affected by the number of new samples obtained from the different methods.
+
+Ertekin et al\@.~\cite{ertekin2007learning} used a class imbalance ratio to compare how well an active learning strategy worked.
+This was only done for the binary case.
+In order to get a measure for the multi-label problem, the evaluation of class imbalance was measured by the percentage of all total labels that were in the most common class, as well as in the top 3 most common classes.
