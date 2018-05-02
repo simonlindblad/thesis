@@ -181,8 +181,8 @@ A simple approach to k-means clustering can be seen as:
 \end{enumerate}
 
 A visualization of this can be seen in Figure~\ref{fig:kmeans-iterations}.
-One advantage that K-means has over K-medoid is that it requires a small number of iterations, especially compared to K-medoid~\cite{aggarwal2012survey, schutze1997projections}.
-However, K-means is rather sensitive to the selection of initial seeds.
+One advantage that k-means has over K-medoid is that it requires a small number of iterations, especially compared to K-medoid~\cite{aggarwal2012survey, schutze1997projections}.
+However, k-means is rather sensitive to the selection of initial seeds.
 One approach is to just select them randomly, or selecting them based on the result of another lightweight clustering method.
 A frequently used method is k-means++, that has been shown to improve both the speed and accuracy of k-means clustering~\cite{arthur2007k}.
 
@@ -194,12 +194,12 @@ A frequently used method is k-means++, that has been shown to improve both the s
     \thirdsubfig{kmeans-init2}{Centroids after iteration 1}
     \thirdsubfig{kmeans-iter2}{Iteration 2}
     \thirdsubfig{kmeans-init3}{Centroids after iteration 2}
-    \caption{(a) to (e) shows iterations of K-means until convergence.
+    \caption{(a) to (e) shows iterations of k-means until convergence.
         In (e) it can be seen that the new centroids capture the same documents as the previous iteration, and we have converged.}
     \label{fig:kmeans-iterations}
 \end{figure}
 
-K-means is commonly used with Euclidean distance, which is defined on two $n$ dimensional points $p1$ and $p2$ as:
+k-means is commonly used with Euclidean distance, which is defined on two $n$ dimensional points $p1$ and $p2$ as:
 \begin{equation}
     d(p1, p2) = \sqrt{(p1_1 - p2_1)^2 + (p1_2 - p2_2)^2 + \hdots + (p1_n - p2_n)^2}
 \end{equation}
