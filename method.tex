@@ -174,14 +174,22 @@ Hovering over each data point would show the content of the report and the topic
 \begin{figure}
     \centering
     \includegraphics[scale=0.25]{figures/lda-2d-distribution.png}
-    \caption{A 2D plot of the text data, where each point is colored by the most prominent topic}
+    \caption{A 2D plot of the text data, where each point is colored by topic with the highest probability}
     \label{fig:lda-dist}
 \end{figure}
 
-Samples of the generated topics can be seen in [FIGURE].
+Samples of the generated topics can be seen in Figure~\ref{fig:topic-wordclouds}.
 Another way to visualize the topics for inspection is using the techniques described by Sievert et al\@.~\cite{sievert2014ldavis}.
 They propose a \textit{relevance} measure where the probability for a certain term within a topic is weighted against how common that topic is in the entire corpus.
 The interactive interface provided by pyLDAvis can be seen in Figure~\ref{fig:ldavis-sample}.
+
+\begin{figure}
+    \centering
+    \thirdsubfigimg{wordcloud-1}{A wordcloud over the words occurring in topic 1 for an 75 topic LDA model.}
+    \thirdsubfigimg{wordcloud-17}{A wordcloud over the words occurring in topic 16 for an 75 topic LDA model}
+    \caption{Wordclouds for a 75 topic LDA model}
+    \label{fig:topic-wordclouds}
+\end{figure}
 
 A word2vec model was used on the entire dataset to evaluate see the relationship between terms and find possible synonyms.
 In order to find synonyms, all words in the dataset that had a similarity over 95\% were manually inspected.
@@ -215,7 +223,7 @@ As described in Section~\ref{sec:topic-modeling}, in order to use the LDA model 
 The same applies to the number of clusters with k-means, which is described in Section~\ref{sec:k-means}.
 Selecting the best model was done by evaluating different number of topics $k_{LDA}$ and the number of clusters $k_{c}$.
 The topic models were evaluated with $k_{LDA}$ set to 25, 50, 75, 100, 150, 200.
-Evaluating the clusters were done by combining the different topic models with the different cluster sizes to find the best combination.
+Evaluating the clusters was done by combining the different topic models with the different cluster sizes to find the best combination.
 The different combinations can be seen in Table~\ref{tab:topic-kmeans-configs}.
 \begin{table}[!ht]
     \centering
@@ -283,7 +291,7 @@ The reason for only using a subset is that the number of reports available would
 The models were fitted on 72 000, or 90\%, of these reports, and the additional 10\% were used as a held-out set to evaluate the models.
 To determine which topic model that should be used in the filtering of invalid reports, the perplexity was compared and the models with the lowest perplexity was chosen.
 Perplexity is used in the original LDA paper by Blei et al\@.~\cite{blei2003latent} to compare different number of topics.
-Hofman used it to evaluate the pLSI based topic models~\cite{hofmann1999probabilistic}.
+Hofmann used it to evaluate the pLSI based topic models~\cite{hofmann1999probabilistic}.
 
 In order to make the models able to separate the invalid reports from the valid reports they had to be manually analyzed.
 They are both unsupervised methods and were therefore not fitted with a specific target.
@@ -293,13 +301,14 @@ The training set was used to be analyze and identify important topics, whereas t
 
 First, the LDA model was analyzed.
 This was done by inspecting the topics in the same way that was done in the exploratory study, Section~\ref{sec:exploratory-study}.
-Based on the distribution of the most likely topics for the invalid reports in the traning set, topics with a high indication of a report being invalid was selected for further analysis.
+Based on the distribution of the most likely topics for the invalid reports in the training set, topics with a high indication of a report being invalid was selected for further analysis.
 A combination of these topics together with the length of the report text, as well as the number of topics assigned with a high probability to a report were used to determine whether or not a report was invalid or not.
+After some analysis, the number of topics that were assigned to a report with the probability of over 10\%, referred to as prominent topics, was used as well.
 
 Filtering out these reports with k-means results in a simpler method.
 K-means does not give any probability for its clusters, so filtering by the clusters must be done as a binary decision.
-Length restrections were applied as before.
-The specefic cluster that contained the most invalid reports was then used to determine if reports were invalid or not.
+Length restrictions were applied as before.
+The specific cluster that contained the most invalid reports was then used to determine if reports were invalid or not.
 
 \subsection{Alternatives to Label Reports at Random}\label{sec:exp2-method}
 
@@ -369,27 +378,27 @@ In total there were 18 configurations, based upon the three different methods.
         \hline
         \textbf{ID} & \textbf{Active Learning Strategy} & \textbf{Initial Sampling} & \textbf{Initial Sample Size}\\
         \hline
-        1 & Binary Version Space Minimization & Random & 25\\
-        2 & Binary Version Space Minimization & Random & 50\\
-        3 & Binary Version Space Minimization & Random & 100\\
-        4 & Binary Version Space Minimization & Sampled from clusters & 25\\
-        5 & Binary Version Space Minimization & Sampled from clusters & 50\\
-        6 & Binary Version Space Minimization & Sampled from clusters & 100\\
-        7 & Maximum Loss Reduction with Maximum Confidence & Random & 25\\
-        8 & Maximum Loss Reduction with Maximum Confidence & Random & 50\\
-        9 & Maximum Loss Reduction with Maximum Confidence & Random & 100\\
-        10 & Maximum Loss Reduction with Maximum Confidence & Sampled from clusters & 25\\
-        11 & Maximum Loss Reduction with Maximum Confidence & Sampled from clusters & 50\\
-        12 & Maximum Loss Reduction with Maximum Confidence & Sampled from clusters & 100\\
-        13 & Adaptive Active Learning & Random & 25\\
-        14 & Adaptive Active Learning & Random & 50\\
-        15 & Adaptive Active Learning & Random & 100\\
-        16 & Adaptive Active Learning & Sampled from clusters & 25\\
-        17 & Adaptive Active Learning & Sampled from clusters & 50\\
-        18 & Adaptive Active Learning & Sampled from clusters & 100\\
+        1 & BinMin & Random & 25\\
+        2 & BinMin & Random & 50\\
+        3 & BinMin & Random & 100\\
+        4 & BinMin & Sampled from clusters & 25\\
+        5 & BinMin & Sampled from clusters & 50\\
+        6 & BinMin & Sampled from clusters & 100\\
+        7 & MMC & Random & 25\\
+        8 & MMC & Random & 50\\
+        9 & MMC & Random & 100\\
+        10 & MMC & Sampled from clusters & 25\\
+        11 & MMC & Sampled from clusters & 50\\
+        12 & MMC & Sampled from clusters & 100\\
+        13 & Adaptive & Random & 25\\
+        14 & Adaptive & Random & 50\\
+        15 & Adaptive & Random & 100\\
+        16 & Adaptive & Sampled from clusters & 25\\
+        17 & Adaptive & Sampled from clusters & 50\\
+        18 & Adaptive & Sampled from clusters & 100\\
         \hline
     \end{tabular}
-    \caption{The different configurations of active learning strategies evaluated}
+    \caption{The different configurations of active learning strategies evaluated. BinMin stands for Binary Version Space Minimization, MMC stands for Maximum Loss Reduction with Maximum Confidence and Adaptive stands for Adaptive Active Learning.}
     \label{fig:active-learning-configurations}
 \end{table}
 

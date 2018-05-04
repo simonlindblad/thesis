@@ -76,82 +76,111 @@ Given that the names got similar coordinates in the plot, identifying the sectio
 \begin{figure}
     \centering
     \includegraphics[scale=0.25]{figures/word2vec-names.png}
-    \caption{A 2D plot of the zoomed in word2vec plot. Most of the values here are names. This represents the red box zoomed in from Figure~\ref{fig:word2vec-overview}}.
+    \caption{A 2D plot of the zoomed in word2vec plot. Most of the values here are names. This represents the red box in from Figure~\ref{fig:word2vec-overview}}.
     \label{fig:word2vec-names}
 \end{figure}
 
 \section{Filter Out Invalid Clinical Reports Using Topic Models and Clustering}\label{sec:exp1-result}
 
-\textit{Still to be done: Add actual concrete results}
-
 The LDA models were evaluated by calculating the perplexity on the held-out set as described in Section~\ref{sec:exp1-method}.
-Perplexity for the evaluated models can be seen in Figure~\ref{fig:lda-perplexity}.
+Perplexity for the evaluated models can be seen in Figure~\ref{fig:lda-perplexity}, with the lowest score being better.
 Based on this, the selected model was the LDA model with 75 topics.
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.8]{figures/lda-perplexity.png}
+    \includegraphics[scale=0.9]{figures/lda-perplexity.png}
     \caption{The perplexity scores for the different LDA models}
     \label{fig:lda-perplexity}
 \end{figure}
 
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.9]{figures/invalid_reports_most_likely_topics_histogram.png}
+    \caption{The distribution of the topics with the highest probability for the invalid reports in the training set. Note that only topics that occurred at least once are shown in the histogram.}
+    \label{fig:invalid-reports-most-likely-topics}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.9]{figures/valid_reports_most_likely_topics_histogram.png}
+    \caption{The distribution of the topics with the highest probability for the valid reports in the training set. Note that only topics that occurred at least once are shown in the histogram.}
+    \label{fig:valid-reports-most-likely-topics}
+\end{figure}
+
 The next step was identifying the topics that were assigned to the invalid reports.
+The distribution of the topics with the highest likelihood for the invalid reports in the training set can be seen in Figure~\ref{fig:invalid-reports-most-likely-topics}.
+A couple of topics, 1 and 17 clearly stands out as the ones that most invalid reports gets assigned.
+Specifically, topic 1 had a count of 131 reports from the invalid reports in the training set, and topic 17 had 358.
+Some invalid reports have topics 0, 3, 9, 16, 47, 53, 58, 61, 62 as the most likely topic.
+53 is the third most common, with a count of 3.
+
+The corresponding plot for the valid reports can be seen in Figure~\ref{fig:valid-reports-most-likely-topics}.
+There is a lot more variety among the most likely topics here.
+Topics 1 and 17 occurs very infrequently.
+Topic 1 occurs 0 times, while topic 17 occurs 2 times.
+The third most common topic from the invalid reports, 53, occurs 28 times.
+The ones having topic 17 had 4 and 8 prominent topics assigned to them.
+
+Each topic that is assigned to a report with a probability above 10\% was considered to be a prominent topic.
+The number of prominent topics for the invalid reports can be seen in Figure~\ref{fig:invalid-reports-prominent-topic-count}.
+1, 2 and 3 number of prominent topics are the most common.
+And there are barely any reports having less than 6.
+The corresponding plot for the valid reports can be seen in Figure~\ref{fig:valid-reports-prominent-topic-count}.
+In the case of valid reports, 6 is the most common number of prominent topics. 
+The topics are a lot more spread out than in the case of the invalid reports.
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.8]{figures/distribution_invalid_reports_likely.png}
-    \caption{The distribution of invalid reports that got the topics assigned to them with a probability larger than 10\%}
-    \label{fig:invalid-reports-topic-dist-likely}
+    \includegraphics[scale=0.9]{figures/invalid_reports_prominent_topics_count_histogram}
+    \caption{The distribution of the number of prominent topics assigned to the invalid reports in the training set.}
+    \label{fig:invalid-reports-prominent-topic-count}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.8]{figures/distribution_invalid_reports_highest_likelihood.png}
-    \caption{The distribution of invalid reports that got the topics assigned to them with the highest probability}
-    \label{fig:invalid-reports-topic-dist-likeliest}
+    \includegraphics[scale=0.9]{figures/valid_reports_prominent_topics_count_histogram}
+    \caption{The distribution of the number of prominent topics assigned to the valid reports in the training set.}
+    \label{fig:valid-reports-prominent-topic-count}
 \end{figure}
 
-Each topic that is assigned to a report with a probability above 10\% is considered to be a prominent topic.
-The distribution of the most likely topics for the invalid reports can be seen in Figure~\ref{fig:invalid-reports-topic-dist-likely} and Figure~\ref{fig:invalid-reports-topic-dist-likeliest}.
-Figure~\ref{fig:invalid-reports-topic-dist-likely} shows the distribution for the different topics where prominent topics for the invalid reports are counted.
-Figure~\ref{fig:invalid-reports-topic-dist-likeliest} shows the distribution for the different topics where the topic with the highest probability for each invalid report is counted.
-A couple of topics, namely 2 and 28 stands out as the ones with by far the most invalid reports.
-But topics 4, 65 and 31 also show significant counts.
-In Figure~\ref{fig:invalid-reports-topic-dist-likely} figure a few more topics, such as 19, shows a higher count.
+Another idea was to evaluate whether or not 17 and 1 was among the most probable topics for the reports.
+A simple evaluation of this on the set of valid reports showed that it was not a good approach.
+For example, seeing if 17 or 1 had more than 10\% probability returned 48 and 45 reports, respectively.
+Checking if both were above the threshold returned 11 reports.
+This threshold was tested with 1\% increments from 5\% to 20\% without giving any good results.
 
-The results of the analysis of the number of prominent topics assigned to each report can be seen in Figure~\ref{fig:no_topics_invalid} and Figure~\ref{fig:no_topics_all}.
-Among the invalid reports, the most common number of prominent topic is 2, while it is 6 topics for the entire set of reports.
-For the entire set of reports, being assigned 2 topics is the 6th most common number.
-This result indicates that there is a relationship between the number of prominent topics assigned to each report, and wether that report is invalid or not.
-
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.8]{figures/no_topics_per_invalid_report}
-    \caption{The distribution of the number of prominent topics assigned to the invalid reports}
-    \label{fig:no_topics_invalid}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.8]{figures/no_topics_per_report}
-    \caption{The distribution of the number of prominent topics assigned to the reports}
-    \label{fig:no_topics_all}
-\end{figure}
-
-Labels were determined to be invalid or not by the following criterion:
+Based on these findings, reports were determined to be invalid or not by the following criterion:
 \begin{itemize}
-    \item Having either topic 2 or 28 among its most probable topic.
-    \item Being shorter than 400 characters.
-    \item Not having more than 5 prominent topics assigned to it.
+    \item Having either topic 1 or 17 as its most probable topic.
+    \item Not having more than 6 prominent topics assigned to it.
 \end{itemize}
 
-\textit{The result of this was...}
+The evaluation on the validation set can be seen in Figure~\ref{tab:exp1-eval}.
+In the figure you can also see the results of the logistic regression classifier, which was fitted with the topic vectors as features and the invalid/valid labels as targets.
+
+\begin{table}
+    \centering
+    \begin{tabular}{|c|cc|}
+        \hline
+        & \textbf{Manual} & \textbf{Logistic Regression} \\
+        \hline
+        \textbf{Precision} & 97.2\% & 98.7\% \\
+        \textbf{Recall} & 100\% & 100\% \\
+        \textbf{$F_1$-measure} & 98.6\% & 99.4\%\\
+        \textbf{Accuracy} & 97.9\% & 99.1\%\\
+        \hline
+    \end{tabular}
+    \caption{The results of the classification of the invalid reports. The manual column represents the use of manual interpretation of the LDA model.}
+    \label{tab:exp1-eval}
+\end{table}
 
 \section{Alternatives to Labeling at Random}
 
 \textit{Still to be done: Compare the different initial sample sizes (currently same plot)}
 
-The first technique used in this experiment was to explore and try to find a relationship between the initial set of labeled data and the inherit structure of it, obtained and visualized with the use of the LDA model.
+The first technique used in this experiment was used to explore and try to find a relationship between the initial set of labels and the inherit structure of the data.
+This involved fitting and visualizing the LDA model.
+In order to clearly show any existing relationship between the clusters and the 
 However, the relationship is not clear enough so that a cluster or topic could simply be mapped to a certain label.
 The resulting plot can be seen in Figure~\ref{fig:categories-lda-50}.
 From this plot it is clear that there is a grouping of labels.
