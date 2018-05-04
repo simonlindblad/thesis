@@ -19,6 +19,38 @@
 \section{Method}
 \label{sec:discussion-method}
 
+Results that are based on a public dataset is naturally easier to reproduce.
+The method becomes more reliable in the sense that the same results can be expected by reproducing the concrete steps.
+However, the clinical dataset from Sectra is not publically available.
+Therefore any results that are derived from specific attributes of that dataset might not be reasonable to expect when applied in a new environment.
+
+The comparisons of the active learning algorithms are using the Reuters dataset, which both public and a standard dataset for evaluation.
+Reproducing these results might therefore be an easier tasks.
+Any issues with the reliability in this case might come from the implementation of the presented in Chapter~\ref{cha:theory}.
+The implementations of the Binary Version Space Minimization, Maximum Loss Reduction with Maximum Confidence and Adaptive Active Learning are based on the algorithms, but written independently for this thesis.
+They have not faced any public scrutiny and their correctnes can not be guaranteed.
+
+The usage and analysis of the LDA model was done in a rather way.
+During the exploration phase and the first experiment, the relationships and pattern found was in part a result of the authors intuition.
+For this reason, if another party would perform the same study they might come up with different results and find other patterns.
+However, the relationships found between the topics and the invalid reports are rather explicit, so the main difference between different researchers might be the specific thresholds.
+For example, the 10\% threshold for prominent topics was chosen based on the author's experience with the dataset after seeing several iterations of topic models.
+By using logistic regression for comparisson the subjectiveness of the thresholds can be compared with an objective baseline, which improves the reliability of the results.
+Any subsequent study is more likely to obtain similar results with this approach.
+
+Another aspect that is questionable when it comes to the first experiment is the labeling of the invalid reports.
+This was done manually by the author, without any medical knowledge.
+However, the nature of the labeling is rather trivial.
+The medical knowledge required to understand the result of an examination is far greater than the one needed to see if an examination was performed.
+Which in most cases can be identified not despite of, but because of the lack of medical information.
+The number of labeled reports, X, is probably sufficient to manually identify broad relationships to set some categorization rules based on the output of the LDA.
+However, the logistic regression based classification might have been able to achieve better results with more data to train on.
+This could have been done rather easily without the time contraints of this thesis work.
+In order to obtain a more balanced sample to train on, an active learning system could, as we have seen, be used.
+However, the system developed in this thesis was not finished when the labeling was done, and it is not focused on the binary classification task.
+Evaluating the categorization of invalid reports by accuracy, precision, recall and F1-score are fairly standard.
+The metrics have been used in a lot of text classification and information retrieval research~\cite{aggarwal2012surveyclass, bishop2006pattern}.
+
 %GThis is where the applied method is discussed and criticized.
 %GTaking a self-critical stance to the method used is an
 %Gimportant part of the scientific approach.
