@@ -310,6 +310,17 @@ K-means does not give any probability for its clusters, so filtering by the clus
 Length restrictions were applied as before.
 The specific cluster that contained the most invalid reports was then used to determine if reports were invalid or not.
 
+After some initial experiments with the topics generated it was clear that the topic vectors contained patterns ripe for exploitation.
+A topic vector is a vector with the topic probabilities for a document.
+The patterns are clear enough to motivate the manual identification of topics that are important to differentiate between invalid and valid reports.
+In order to compare this result with some more objective baseline, a logistic regression classifier was fitted and evaluated as well.
+A set of reports were already labeled with ``invalid'' or ``valid'' in order to evaluate the manual interpretation approach.
+This set was therefore used to fit the classifier.
+The topic vectors were used as features, and the targets were the labels indicating if a report is valid or not.
+
+Both of these approaches were evaluated using four different metrics, recall, precision, $F_1$-measure and accuracy.
+All of which are described in Section~\ref{sec:evaluation-metrics}.
+
 \subsection{Alternatives to Label Reports at Random}\label{sec:exp2-method}
 
 This was done by first doing a literature study, and then exploring the relation between the initial set of labeled data with the structure of the data through clustering and topic analysis.

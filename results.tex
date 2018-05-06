@@ -66,14 +66,14 @@ Since names are commonly used in similar contexts, they would have similar attri
 Figure~\ref{fig:word2vec-overview} and Figure~\ref{fig:word2vec-names} show how this was done.
 Given that the names got similar coordinates in the plot, identifying the section with names allowed for identification of a lot of the names used in the reports.
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[scale=0.25]{figures/word2vec-overview.png}
     \caption{A 2D plot of the full word2vec plot. Given the amount of terms used there is a lot to analyze.}
     \label{fig:word2vec-overview}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[scale=0.25]{figures/word2vec-names.png}
     \caption{A 2D plot of the zoomed in word2vec plot. Most of the values here are names. This represents the red box in from Figure~\ref{fig:word2vec-overview}}.
@@ -86,21 +86,21 @@ The LDA models were evaluated by calculating the perplexity on the held-out set 
 Perplexity for the evaluated models can be seen in Figure~\ref{fig:lda-perplexity}, with the lowest score being better.
 Based on this, the selected model was the LDA model with 75 topics.
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[scale=0.9]{figures/lda-perplexity.png}
     \caption{The perplexity scores for the different LDA models}
     \label{fig:lda-perplexity}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[scale=0.9]{figures/invalid_reports_most_likely_topics_histogram.png}
     \caption{The distribution of the topics with the highest probability for the invalid reports in the training set. Note that only topics that occurred at least once are shown in the histogram.}
     \label{fig:invalid-reports-most-likely-topics}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[scale=0.9]{figures/valid_reports_most_likely_topics_histogram.png}
     \caption{The distribution of the topics with the highest probability for the valid reports in the training set. Note that only topics that occurred at least once are shown in the histogram.}
@@ -129,14 +129,14 @@ The corresponding plot for the valid reports can be seen in Figure~\ref{fig:vali
 In the case of valid reports, 6 is the most common number of prominent topics. 
 The topics are a lot more spread out than in the case of the invalid reports.
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[scale=0.9]{figures/invalid_reports_prominent_topics_count_histogram}
     \caption{The distribution of the number of prominent topics assigned to the invalid reports in the training set.}
     \label{fig:invalid-reports-prominent-topic-count}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[scale=0.9]{figures/valid_reports_prominent_topics_count_histogram}
     \caption{The distribution of the number of prominent topics assigned to the valid reports in the training set.}
@@ -158,7 +158,7 @@ Based on these findings, reports were determined to be invalid or not by the fol
 The evaluation on the validation set can be seen in Figure~\ref{tab:exp1-eval}.
 In the figure you can also see the results of the logistic regression classifier, which was fitted with the topic vectors as features and the invalid/valid labels as targets.
 
-\begin{table}
+\begin{table}[h!]
     \centering
     \begin{tabular}{|c|cc|}
         \hline
@@ -180,17 +180,19 @@ In the figure you can also see the results of the logistic regression classifier
 
 The first technique used in this experiment was used to explore and try to find a relationship between the initial set of labels and the inherit structure of the data.
 This involved fitting and visualizing the LDA model.
-In order to clearly show any existing relationship between the clusters and the 
-However, the relationship is not clear enough so that a cluster or topic could simply be mapped to a certain label.
-The resulting plot can be seen in Figure~\ref{fig:categories-lda-50}.
+In order to find any existing relationship between the topics and the labeled samples they were colored based on their assigned labels.
+Unlabeled samples were hidden from the plot.
+The resulting plot can be seen in Figure~\ref{fig:categories-lda-75}.
 From this plot it is clear that there is a grouping of labels.
-However, there exists plenty of overlap between different classes.
+Certain labels are more likely to occur in documents assigned a specific topic.
+For example, the purple points in the lower part of the graph represents the ``blödning'' label, the gray labels in the middle represents ``infarkt'' and the light blue ones that are mostly concentrated in the bottom right corner represents ``infektion''.
+It is clear that these labels are not evenly spread out over all the topics, but neither are they confined enough to make a mapping between topics and labels, like they were in Section~\ref{sec:exp1-result}.
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
-    \includegraphics[scale=0.35, angle=270]{figures/categories-lda-50.png}
-    \caption{The labeled data points plotted in 2D, and colored based on the first label in alphabetical order.}
-    \label{fig:categories-lda-50}
+    \includegraphics[scale=0.2]{figures/categories-lda-75.png}
+    \caption{The labeled data points plotted in 2D, and colored based on the first label of the report in alphabetical order.}
+    \label{fig:categories-lda-75}
 \end{figure}
 
 Based on the knowledge that there exists a pattern, the initial goal was to find some methods that could exploit this.
@@ -214,7 +216,7 @@ Both of them sustaining an significant improvement over labeling at random after
 It takes sampling at random approximately 1600 labels to get to an accuracy of 78\%.
 Adaptive Active Learning acquires this accuracy after around 300 labels, and BinaryMinimization and MMC after 450.
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[scale=0.5]{figures/al-25-accuracy.png}
     \caption{Accuracy of the models with initial sample size 25}
