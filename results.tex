@@ -176,10 +176,8 @@ In the figure you can also see the results of the logistic regression classifier
 
 \section{Alternatives to Labeling at Random}
 
-\textit{Still to be done: Compare the different initial sample sizes (currently same plot)}
-
-The first technique used in this experiment was used to explore and try to find a relationship between the initial set of labels and the inherit structure of the data.
-This involved fitting and visualizing the LDA model.
+The first thing that was done with regards to this experiment was to explore and try to find a relationship between the initial set of labels and the inherit structure of the data.
+This was done by visualizing the LDA model again.
 In order to find any existing relationship between the topics and the labeled samples they were colored based on their assigned labels.
 Unlabeled samples were hidden from the plot.
 The resulting plot can be seen in Figure~\ref{fig:categories-lda-75}.
@@ -193,6 +191,65 @@ It is clear that these labels are not evenly spread out over all the topics, but
     \includegraphics[scale=0.2]{figures/categories-lda-75.png}
     \caption{The labeled data points plotted in 2D, and colored based on the first label of the report in alphabetical order.}
     \label{fig:categories-lda-75}
+\end{figure}
+
+In Figure~\ref{fig:category-label-distribution} the counts of most likely topics for four most common categories are displayed.
+These categories are ``infarkt'', ``kärlsjukdom'', ``normal'' and ``blödning''.
+From the histograms it is clear that documents of a certain category are more likely to be assigned certain topics, at least in these cases.
+Even though there exist a clear relationship, it is not exclusive enough to make any clear relation.
+The number of topics assigned and reports labeled for these 4 topics can be seen in Table~\ref{tab:topic-categories}.
+
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{|c|cc|}
+        \hline
+        \textbf{Label} & \textbf{No. reports} & \textbf{No. most likely topics} \\
+        \hline
+        Normal & 181 & 28\\
+        Tumör & 29 & 15\\
+        Infarkt & 105 & 27\\
+        Blödning & 69 & 19\\
+        Kärlsjukdom & 145 & 28\\
+        Hydrocefalus & 10 & 5\\
+        Demens & 14 & 9\\
+        Trauma & 27 & 12\\
+        Cysta & 9 & 7\\
+        Missbildning & 3 & 3\\
+        Inklämmning & 4 & 1\\
+        Infektion & 29 & 15\\
+        Syndrom & 2 & 2\\
+        Metabol & 1 & 1\\
+        \hline
+    \end{tabular}
+    \caption{The number of reports assigned a certain category, as well as the number of different topics assigned as the most likely one for reports with the given category.}
+    \label{tab:topic-categories}
+\end{table}
+
+\begin{figure}[h!]
+    \centering
+    \thirdsubfigimg{infarkt}{The counts of most likely topics for the ``infarkt'' label.}
+    \thirdsubfigimg{kärlsjukdom}{The counts of most likely topics for the ``kärlsjukdom'' label.}
+    \quad
+    \thirdsubfigimg{normal}{The counts of most likely topics for the ``normal'' label.}
+    \thirdsubfigimg{blödning}{The counts of most likely topics for the ``blödning'' label.}
+    \caption{The counts of the most likely topics for the four most common categories.}
+    \label{fig:category-label-distribution}
+\end{figure}
+
+In order to analyze these topics further, Figure~\ref{fig:topic-category-distribution} shows the different categories that has a certain topic assigned to it as the most likely one.
+Taking into account the information from Table~\ref{tab:topic-categories}, i.e. that some categories are a lot more common than others, there is not a clear enough pattern to distinguish between different categories based on the topics.
+This does not take the multi-label nature of the data into account.
+If a report has multiple labels assigned to it, both of the labels are counted separately.
+
+\begin{figure}[h!]
+    \centering
+    \thirdsubfigimg{categories-topic-13}{The counts categories where the most likely topic for the report was 13.}
+    \thirdsubfigimg{categories-topic-16}{The counts categories where the most likely topic for the report was 16.}
+    \quad
+    \thirdsubfigimg{categories-topic-25}{The counts categories where the most likely topic for the report was 25.}
+    \thirdsubfigimg{categories-topic-35}{The counts categories where the most likely topic for the report was 35.}
+    \caption{The categories of the different reports that are assigned a certain topic as the most likely one.}
+    \label{fig:topic-category-distribution}
 \end{figure}
 
 Based on the knowledge that there exists a pattern, the initial goal was to find some methods that could exploit this.
