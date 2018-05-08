@@ -241,6 +241,7 @@ Example of use cases for text classification is categorization of news articles,
 There exists several different models for classifying text.
 Decision trees, neural networks and Support Vector Machines (SVM) are some have been previously applied to the text domain with successful results~\cite{aggarwal2012survey}.
 In this thesis, SVM are the main focus, since they have been studied extensively in the context of active learning. %TODO: CITE ALL OF THE SUPPORT VECTOR MACHINE ACTIVE LEARNING PAPERS
+Logistic regression is used for the binary classification task of classifying invalid reports.
 
 \subsection{Support Vector Machines}
 
@@ -274,6 +275,43 @@ The equation with the slack variables become:
 \end{equation}
 
 A smaller $C$-value allows more points to be misclassified, which is done in order to achieve better generalization.
+
+\subsubsection{Logistic Regression}
+
+Despite having regression in the name, logistic regression is a classification model.
+It is appropriate to use when there are categorical, binary, targets.
+Logistic regression works by determining the conditional probability of a class $C_1$, given a feature vector $\phi$.
+This probability can then be used with a certain threshold to determine whether or not a data point is a part of a certain class or not.
+Consider the case where we have two classes, $C_1$ and $C_2$.
+Their probabilities are then calculated by~\cite{bishop2006pattern}:
+
+\begin{equation}\label{eq:logistic-regression}
+    P(C_1|\phi) = sigm(w^Tx)
+\end{equation}
+
+, where $sigm$ is the \textit{logistic sigmoid} function defined as:
+
+\begin{equation}
+    sigm(a) = \frac{1}{1+e^{-a}}
+\end{equation}
+
+The probability for $C_2$ is then obtained with:
+
+\begin{equation}
+    P(C_2|\phi) = 1 - P(C_1|\phi)
+\end{equation}
+
+From Equation~\ref{eq:logistic-regression} it is clear that the number of parameters in the model is the same as the number of dimensions in the feature vector.
+Maximum likelihood is used in order to determine the values of these parameters.
+For a dataset with the features $x_n$ for $n=1,...,N$ and targets $t_n \in \{0,1\}$, the likelihood function can be written as:
+
+\begin{equation}
+    P(\boldsymbol{t}|w) = \prod_{n=1}^N P(C_1|\phi)^{t_n}(1-y_n)^{1-t_n}
+\end{equation}
+
+, where $\boldsymbol{t} = (t_1, ..., t_N)^T$.
+
+This is traditionally used with the Iterative Reweighted Least Squares method~\cite{bishop2006pattern}.
 
 \subsection{Multi-Label Classification}\label{subsec:multi-label-classification}
 
