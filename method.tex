@@ -28,7 +28,7 @@ The query strategy module contains the different active learning algorithms for 
 Two different datasets were used in this thesis.
 They were the dataset of clinical reports provided by Sectra, as well as Reuters-21578 \footnote{Reuters-21578, https://archive.ics.uci.edu/ml/datasets/reuters-21578+text+categorization+collection}.
 The latter was used in order to be able to simulate a multi-label labeling process.
-Before being integrated into Sectras system, the different strategies needed to be evaluated from an objective point of view, so that any tradeoffs were known beforehand.
+Before being integrated into Sectra's system, the different strategies needed to be evaluated from an objective point of view, so that any tradeoffs were known beforehand.
 Since the vast majority of the dataset from Sectra was unlabeled, this could not effectively been done using only that.
 
 The set of reports provided by Sectra contained 1068904 different entries, where 493 were initially labeled.
@@ -142,7 +142,7 @@ The steps were:
           For example, this included names of the doctors that had written the report.
           By removing names of doctors the idea is to make the system more applicable to new reports, written by other doctors.
     \item Accents from the words were removed.
-    \item The text was tokenized and then stemmed using the swedish Porter2 stemmer \footnote{Swedish Porter Stemmer, http://snowball.tartarus.org/algorithms/swedish/stemmer.html}.
+    \item The text was tokenized and then stemmed using the Swedish Porter2 stemmer \footnote{Swedish Porter Stemmer, http://snowball.tartarus.org/algorithms/swedish/stemmer.html}.
 \end{enumerate}
 Most of these steps have been performed in previous research  dealing with text analysis in the form of classification or active learning~\cite{tong2001support, blei2003latent, brinker2006active, sarioglu2013topic}.
 
