@@ -1,8 +1,10 @@
 \chapter{Method}
 \label{cha:method}
 
-The task of making a better system for labeling clinical reports was approached with different text mining techniques, support vector machines and three learning querying strategies.
+The task of making a better system for labeling clinical reports was approached with different text mining techniques, support vector machines and three active learning strategies.
 At first, the framework and tools used in the system are described, followed by a description of the provided dataset.
+This chapter starts with describing the framework and tools used in the system and experiments.
+After that there will be a description of the datasets used.
 Finally, the experiments used to answer the research questions are presented.
 
 \section{Frameworks, Tools and Implementation}
@@ -13,14 +15,14 @@ Most of the plotting was done using the \textit{seaborn} \footnote{Seaborn, http
 \textit{pyLDAvis} \footnote{pyLDAvis, https://github.com/bmabey/pyLDAvis} was used for some additional visualization purposes with regards to topic models.
 
 However, when it comes to active learning, there does not seem to be a proven mainstream library that contains a set of readily available algorithms.
-In order to achieve better integration between the active learning system and the existing infrastructure at Sectra, as well as making adaptions such as the number of items queried at each iteration, an active learning framework was written from scratch.
+In order to achieve better integration between the active learning system and the existing infrastructure at Sectra, as well as making adaptions such as the number of items queried in each iteration, an active learning framework was written from scratch.
 The ground for this framework were the algorithms presented in Section~\ref{sec:active-learning}.
 
 This framework consisted of three modules, called \textit{model}, \textit{dataset}, and \textit{query strategy}.
 The model is a wrapper around different machine learning models.
 By providing an interface for a distance or certainty measure, any underlying model able to provide such an interface can be incorporated.
 For accessing the data pool a dataset wrapper was written, with an interface for accessing the labeled and unlabeled pools.
-Putting this in its own module opens up the possibility for using several different storage solutions, such as a database or files.
+Putting this in its own module opens up the possibility for using several different storage solutions, such as a database or plain text files.
 The query strategy module contains the different active learning algorithms for selecting what sample to label next.
 
 \section{Datasets}\label{sec:datasets}
@@ -62,14 +64,14 @@ The fields include:
                         4 x 3 cm stort lågattenuerande område, tolkas 
                         representera rest efter genomgången 
                         parenchymskada, troligen äldre kontusionsblödning. 
-                        Subcorticalt på ömse sidor om centralfåran på höger 
-                        sida finns ett några cm-stort lågattenuerande 
-                        område som kan vara ischemiskt. Lätt sänkt 
-                        attenuering av vit substans periventrikulärt 
-                        förenlig med leuko-araios av degenerativ natur. För 
-                        åldern normalstora ventriklar. Corticala sulci upp 
-                        mot konvexiteten är något smalare än förväntat 
-                        för åldern. 
+                        Subcorticalt på ömse sidor om centralfåran på 
+                        höger sida finns ett några cm-stort 
+                        lågattenuerande område som kan vara ischemiskt. 
+                        Lätt sänkt attenuering av vit substans 
+                        periventrikulärt förenlig med leuko-araios av 
+                        degenerativ natur. För åldern normalstora 
+                        ventriklar. Corticala sulci upp mot konvexiteten 
+                        är något smalare än förväntat för åldern. 
                         
                         Någon tumörsuspekt förändring påvisas ej.',
         'Canceled':     False, 
@@ -77,9 +79,10 @@ The fields include:
         'PatientAlert': 'Hepatit C-positiv.', 
         'ExamComment':  "Alla kontrastfrågor: UA mnn", 
         'ExamName':     'DT hjärna utan och med iv kontrast',
-        'Anamnesis':    'Pat med skalltrauma på 60-talet. Kommer nu med nattliga 
-                        från-varoattacker. Skrikigt beteende som tolkats som 
-                        epilepsi. CT är aldrig gjort. HEPATIT C-positiv."',
+        'Anamnesis':    'Pat med skalltrauma på 60-talet. Kommer nu med 
+                        nattliga från-varoattacker. Skrikigt beteende 
+                        som tolkats som epilepsi. CT är aldrig gjort. 
+                        HEPATIT C-positiv."',
         'ExamCode':     '81081', 
         'PatientSex':   'MALE', 
         'PatientAge':   59, 
@@ -96,9 +99,9 @@ The work was mainly concerned with the ReportText field, since it contains the r
 But the for the complete Active Learning system the Anamnesis was used as well.
 The labels that were initially assigned to these reports were:
 ``Blödning'', ``Infektion'', ``Metabol'', ``Tumör'', ``Cysta'', ``Missbildning'', ``Syndrom'', ``Demens'', ``Hydrocefalus'', ``Infarkt'', ``Kärlsjukdom'', ``Trauma'', ``Systemsjukdom'', ``Inklämmning'' and ``Normal''.
-
-The distribution of labels among these initially labeled reports can be seen in Figure~\ref{fig:class-distribution}
-Note that this is only a count of the individual labels, and the multi-label nature of the labeling is not taken into account in the plot.
+The distribution of categories among these initially labeled reports can be seen in Figure~\ref{fig:class-distribution}
+Note that this is only a count of the different labels.
+The plot is therefore is disregarding which labels occurred together.
 
 \begin{figure}
     \includegraphics[scale=0.5]{figures/class-distribution.png}
@@ -154,14 +157,14 @@ The additional tokens are bigrams, which are pairs of tokens (i.e. processed wor
 By storing the frequency of how often such a pair occurs in the document, alongside the regular one word tokens, some positional information is retained.
 
 \section{Exploratory Study}\label{sec:exploratory-study}
-For the exploratory study we used the representation described in Section~\ref{sec:pre-processing}, but without the bigrams.
+For the exploratory study we used the representation described in Section~\ref{sec:pre-processing}.
 The main goal of this phase was to get to know and to better understand the dataset.
 A part of this goal was to go through the fields for the different reports to see how they worked and what values could be expected.
 In order to visualize the data in a 2D plot, t-distributed stochastic neighbor embedding (t-SNE) was used.
-It is a dimensionality reduction technique, that is able to transform high dimensional data into two dimensions, trying to retain as much variance as possible.
+It is a dimensionality reduction technique, that is able to transform high dimensional data into two dimensions, while working to retain as much variance as possible.
 
 The first step was to fit an LDA model to the data.
-For the purpose of exploring the data, the number of topics were chosen to be a 100, with the hope of it not resulting in too granular topics that would be hard to manually analyze
+For the purpose of exploring the data, the number of topics was chosen to be a 100, with the hope of it not resulting in too granular topics that would be hard to manually analyze.
 A 100 topics is what is in the middle of the range Chang et al\@.~\cite{chang2009reading} used for evaluating the interpretability of topics.
 Since the purpose of this is only to explore the data, it seemed like a sufficient starting point.
 The data points were plotted in a 2D plot after reducing the dimensions using t-SNE.
@@ -194,7 +197,7 @@ The interactive interface provided by pyLDAvis can be seen in Figure~\ref{fig:ld
 A word2vec model was used on the entire dataset to evaluate see the relationship between terms and find possible synonyms.
 In order to find synonyms, all words in the dataset that had a similarity over 95\% were manually inspected.
 In addition to finding synonyms, this model was used to identify names and other identifiers in the reports.
-They would come up as similar entities from the model.
+They would come up as similar entities by the model, since they are often use in the same context.
 Accomplishing this was done by exploring the data through an interactive plot, after using t-SNE to reduce the number of dimensions.
 
 \begin{figure}
@@ -207,115 +210,54 @@ Accomplishing this was done by exploring the data through an interactive plot, a
 \section{Experiments}\label{sec:exp1-method}
 In this section the experiments used to answer the research questions are described.
 There is one experiment designed for each question.
-The first experiment is trying to identify reports that are deemed to be invalid, the second one is a study to see what are the alternatives to labeling data points at random, as well as a comparison of how well they perform according to certain metrics.
+The first experiment is trying to identify reports that are deemed to be invalid, the second one is a study to see what the alternatives to labeling data points at random are, as well as a comparison of how well they perform according to certain metrics.
 Finally, the third one aims to compare how the distribution of labels in the labeled dataset compared between the different methods.
 
-\subsection{Filter Out Invalid Clinical Reports Using Topic Models and Clustering}
+\subsection{Filter Out Invalid Clinical Reports Using Topic Models}
 
-The task was to evaluate how well topic modeling and clustering could be used to filter out invalid reports.
+The task was to evaluate how well unsupervised techniques could be used to filter out invalid reports.
 Invalid reports are considered to be reports that describe a situation where an examination never took place.
 This can be because of a deceased patient, a patient being moved to another hospital, a patient did not show up or for some reason did not want to go through with the examination.
 
-Different topic model and cluster sizes were tested for this purpose.
-The topic model used was Latent Dirichlet Allocation, and the clustering algorithm used was k-means.
-The k-means clustering used the latent topic vectors produced by the topic model as representation when finding the clusters.
-As described in Section~\ref{sec:topic-modeling}, in order to use the LDA model the number of topics has to be selected.
-The same applies to the number of clusters with k-means, which is described in Section~\ref{sec:k-means}.
-Selecting the best model was done by evaluating different number of topics $k_{LDA}$ and the number of clusters $k_{c}$.
-The topic models were evaluated with $k_{LDA}$ set to 25, 50, 75, 100, 150, 200.
-Evaluating the clusters was done by combining the different topic models with the different cluster sizes to find the best combination.
-The different combinations can be seen in Table~\ref{tab:topic-kmeans-configs}.
-\begin{table}[!ht]
-    \centering
-    \begin{tabular}{|ccc|}
-        \hline
-        ID & $k_{LDA}$ & $k_{c}$\\
-        \hline
-        1 & 25 & 25 \\
-        2 & 25 & 50 \\
-        3 & 25 & 75 \\
-        4 & 25 & 100 \\
-        5 & 25 & 150 \\
-        6 & 25 & 200 \\
-        7 & 50 & 25 \\
-        8 & 50 & 50 \\
-        9 & 50 & 75 \\
-        10 & 50 & 100 \\
-        11 & 50 & 150 \\
-        12 & 50 & 200 \\
-        13 & 75 & 25 \\
-        14 & 75 & 50 \\
-        15 & 75 & 75 \\
-        16 & 75 & 100 \\
-        17 & 75 & 150 \\
-        18 & 75 & 200 \\
-        \hline
-    \end{tabular}
-    \quad
-    \begin{tabular}{|ccc|}
-        \hline
-        ID & $k_{LDA}$ & $k_{c}$\\
-        \hline
-        19 & 100 & 25 \\
-        20 & 100 & 50 \\
-        21 & 100 & 75 \\
-        22 & 100 & 100 \\
-        23 & 100 & 150 \\
-        24 & 100 & 200 \\
-        25 & 150 & 25 \\
-        26 & 150 & 50 \\
-        27 & 150 & 75 \\
-        28 & 150 & 100 \\
-        29 & 150 & 150 \\
-        30 & 150 & 200 \\
-        31 & 200 & 25 \\
-        32 & 200 & 50 \\
-        33 & 200 & 75 \\
-        34 & 200 & 100 \\
-        35 & 200 & 150 \\
-        36 & 200 & 200 \\
-        \hline
-    \end{tabular}
-    \caption{The different combination of topic model/k-means clusters that were evaluated.}
-    \label{tab:topic-kmeans-configs}
-\end{table}
-
-In order to evaluate how well they performed on the clinical data, a set of reports had to be marked as valid/invalid.
-This was done by creating a script that presented a report to the user, and allowed it to be marked as valid or invalid.
-5358 reports were labeled, in order to obtain 500 invalid reports.
-The labels were skewed, containing only 500 invalid reports, which makes up 9.3\% of the labels.
-In order to get a more balanced dataset, 4358 of the valid reports were dismissed at random.
+Different topic models were tested for this purpose.
+The topic model used was Latent Dirichlet Allocation.
+In order to use the LDA model the number of topics as to be selected, as described in Section~\ref{sec:topic-modeling}.
+Selecting the best model was done by evaluating different number of topics $k_{LDA}$.
+The different values that were evaluated was 25, 50, 75, 100, 150, 200.
 
 80 000 reports were used in the experiment, and they were selected at random.
-The reason for only using a subset is that the number of reports available would be too big to use in the final active-learning system due to time constraints.
+The reason for only using a subset is that the number of reports available would be too big to use in the final active learning system due to performance constraints.
 The models were fitted on 72 000, or 90\%, of these reports, and the additional 10\% were used as a held-out set to evaluate the models.
-To determine which topic model that should be used in the filtering of invalid reports, the perplexity was compared and the models with the lowest perplexity was chosen.
+To determine which topic model that should be used in the filtering of invalid reports, their perplexity was compared and the models with the lowest perplexity was chosen.
 Perplexity is used in the original LDA paper by Blei et al\@.~\cite{blei2003latent} to compare different number of topics.
-Hofmann used it to evaluate the pLSI based topic models~\cite{hofmann1999probabilistic}.
+Hofmann used it to evaluate the pLSI based topic models as well~\cite{hofmann1999probabilistic}.
 
+In order to evaluate how well the models performed on the clinical data, a set of reports had to be marked as valid/invalid.
+This was done by creating a script that presented a report to the user, and allowed it to be marked as valid or invalid.
+5358 reports were labeled by the author, out of wich 623 were marked as invalid. 
+The labels were skewed, containing only 623 invalid reports, which makes up 10.4\% of the labels.
+In order to obtain a more balanced dataset, 3653 of the valid reports were dismissed at random making it 1000 in total.
 In order to make the models able to separate the invalid reports from the valid reports they had to be manually analyzed.
 They are both unsupervised methods and were therefore not fitted with a specific target.
-Approaching this in a way that would result in the models overfitted to the analyzed data could be hard since they are manually analyzed. 
+Approaching this in a way that would not result in the models overfitted to the analyzed data could potentially be hard since they are manually analyzed. 
 To reduce the bias in the evaluation, the labeled reports were split into a training set and validation set, containing 80\% and 20\% of the reports respectively.
 The training set was used to be analyze and identify important topics, whereas the validation set was used to evaluate how well the model performed.
 
-First, the LDA model was analyzed.
+First, the different toipcs were manually identified using the aforementioned visualization tools.
+The words with the highest probability within a topic was used in order to identify topics that corresponded with terms such as cancelled or transferred.
 This was done by inspecting the topics in the same way that was done in the exploratory study, Section~\ref{sec:exploratory-study}.
+After that the labeled training set was used to identify more patterns among the invalid reports.
 Based on the distribution of the most likely topics for the invalid reports in the training set, topics with a high indication of a report being invalid was selected for further analysis.
-A combination of these topics together with the length of the report text, as well as the number of topics assigned with a high probability to a report were used to determine whether or not a report was invalid or not.
-After some analysis, the number of topics that were assigned to a report with the probability of over 10\%, referred to as prominent topics, was used as well.
-
-Filtering out these reports with k-means results in a simpler method.
-K-means does not give any probability for its clusters, so filtering by the clusters must be done as a binary decision.
-Length restrictions were applied as before.
-The specific cluster that contained the most invalid reports was then used to determine if reports were invalid or not.
+A combination of these topics together with the number of topics assigned with a high probability to a report were used to determine whether or not a report was invalid or not.
+After some analysis, the number of topics that were assigned to a report with the probability of over 10\% was used as well.
+In the report these are referred to as prominent topics.
 
 After some initial experiments with the topics generated it was clear that the topic vectors contained patterns ripe for exploitation.
-A topic vector is a vector with the topic probabilities for a document.
+A topic vector is the vector with the topic probabilities for a document.
 The patterns are clear enough to motivate the manual identification of topics that are important to differentiate between invalid and valid reports.
-In order to compare this result with some more objective baseline, a logistic regression classifier was fitted and evaluated as well.
+In order to compare this result with some more objective baseline, a logistic regression classifier was fitted on the data and evaluated as well.
 A set of reports were already labeled with ``invalid'' or ``valid'' in order to evaluate the manual interpretation approach.
-This set was therefore used to fit the classifier.
+This set was thus used to fit the classifier.
 The topic vectors were used as features, and the targets were the labels indicating if a report is valid or not.
 
 Both of these approaches were evaluated using four different metrics, recall, precision, $F_1$-measure and accuracy.
@@ -325,23 +267,28 @@ All of which are described in Section~\ref{sec:evaluation-metrics}.
 
 This was done by first doing a literature study, and then exploring the relation between the initial set of labeled data with the structure of the data through clustering and topic analysis.
 At first, the labeled data was transformed using the LDA and k-means models.
+The k-means model used the latent topic vectors from the LDA model as representation of the text data.
 After that, they were plotted in the same 2D space as before.
-The color of the labeled data was set based on the first label, after an instance's labels had been sorted.
+The color of a point in the plot was based on the first label of a sorted list of the point's labels.
 
 Just as before this was an interactive plot, hovering over the data points revealed the report as well as the topics and the cluster assigned to the data point.
 The goal of this was to see if there existed a relationship between the topics/clusters and the labeled assigned to the data point.
+The relationships were explored further by creating histograms over the most likely topics for different labels, as well as histograms over categories that had a certain topic as its most likely topic.
+This was done on the 4 most common labels, since most of the others lacked the amount of reports necessary to identify a clear pattern.
 Even if the labels are not the same in the final system, knowledge of an existing relationship might still be exploited even if the specific labels change.
-Based on multi-label nature of the data and the results of this plot, active learning approaches were researched, with the goal of identifying methods that would be applicable in a multi-label setting.
+Based on multi-label nature of the data and the results of this analysis, active learning approaches were researched with the goal of identifying methods that would be applicable in a multi-label setting.
 The research touched upon both methods that exploit the structure of the data, and methods that are purely uncertainty based.
 
 After establishing the techniques that had some indication on providing a better labeling process than sampling documents at random, they were evaluated.
 In the end, the algorithms described in Section~\ref{sec:active-learning} were the ones selected for evaluation.
+Some motivation for the choices are presented in Chapter~\ref{cha:results}.
 
 In order to provide a thorough evaluation of how well they techniques perform a set of already labeled documents was needed.
 For this reason, the Reuters-21578 dataset was used.
 The properties of the dataset, as well as a comparison between it and the clinical data provided by Sectra can be found in Section~\ref{sec:datasets}.
 The dataset is common in active learning research and has been used by Brinker et al\@.~\cite{brinker2006active} and Yang et al\@.~\cite{yang2009effective}, among others.
-With this set of of labeled reports, a simulation could be used to compare the different strategies with different metrics.
+With this set of labeled reports, a simulation of the labeling procesfs was run.
+The result fot he simulation was used to compare the different strategies with regard to some evaluation metrics.
 The metrics used were:
 \begin{enumerate}
     \item Accuracy
@@ -354,7 +301,6 @@ The metrics used were:
 \end{enumerate}
 
 These are described in Section~\ref{sec:evaluation-metrics} and are frequently used to compare different active learning methods, for example by Yang et al\@.~\cite{yang2009effective}, Dasgupta et al\@.~\cite{dasgupta2008hierarchical} and Li et al\@.~\cite{li2013active}.
-In addition to these metrics, the time it took to query samples with each model was also compared.
 
 With this dataset, the same pre-processing steps that were applied to the clinical dataset were applied to the Reuters data too.
 Some modifications of this includes the stopwords, instead of a curated list of words, the unmodified list of english stopwords provided by nltk was used.
@@ -367,12 +313,11 @@ The strategies compared were:
     \item \textit{Maximum Loss Reduction with Maximum Confidence}: Described in Section~\ref{subsec:mmc}
     \item \textit{Adaptive Active Learning}: Described in Section~\ref{subsec:adaptive-active-learning}
 \end{itemize}
-
-The strategies need a small initial set of labeled reports so that they can base the calculations on something.
+They need a small initial set of labeled reports which they can use to get initial predictions from the SVM model, upon which the strategies base their calculations.
 The techniques were evaluated both by selecting this initial set of points at random, as well as selecting them from the clusters generated by the k-means algorithm.
 Sampling from the clusters was done by iterating over the clusters and selecting an equal number of data points from each clusters.
 All samples selected from a given cluster were chosen randomly amongst the members of the clusters.
-In addition, the number of clusters selected was 25, in order to get an equal number of reports from each cluster in the different experimental settings.
+Furthermore, the number of clusters selected was 25, in order to get an equal number of reports from each cluster in the different experimental settings.
 The topic model selected in Section~\ref{sec:exp1-method} was used as input to the k-means algorithm.
 
 Since the different models may depend on the initial samples in different ways, different initial sizes were evaluated.
@@ -414,15 +359,15 @@ In total there were 18 configurations, based upon the three different methods.
 \end{table}
 
 \section{Evaluating the Label Balance}
-The goal with the last experiment is to evaluate how the labels in the produced labeled dataset is distributed.
+The goal with the last experiment was to evaluate how the labels in the produced labeled dataset are distributed.
 A set where the labels are more evenly, or uniform, distributed would be preferable.
 From a perspective of the person labeling, it could feel more productive not assigning the same labels most of the time.
 The more prosperous outcome from a balanced dataset would be that the models using the data in later stages could also benefit from this, and obtain better results.
 
 The configurations used here are the same as in Table~\ref{fig:active-learning-configurations}.
 Every iteration, the distribution of labels assigned are stored and analyzed.
-He et al\@. discusses the usage of ROC curves and measures such as g-means to compare multi-class imbalanced data.
-However, since the doctor involved at Sectra specifically requested that labels should be more uniformly distributed. 
+He et al\@. discusses the usage of ROC curves and measures such as g-means to compare multi-class imbalanced data~\ref{he2009learning}.
+However, the doctor involved at Sectra specifically requested that labels should be more uniformly distributed. 
 The evaluation will therefore focus on measuring that instead of the models performance, which is done in ~\ref{sec:exp2-method}.
 An evaluation of how the distribution progresses was done by comparing how the class imbalance is affected by the number of new samples obtained from the different methods.
 
