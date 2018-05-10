@@ -63,21 +63,23 @@ The original value was replaced with the new one in the final system.
 
 In order to identify names from this word2vec model, it was plotted using the an interactive plot that allowed for exploring the data.
 Since names are commonly used in similar contexts, they would have similar attributes in the word embedding model.
-Figure~\ref{fig:word2vec-overview} and Figure~\ref{fig:word2vec-names} show how this was done.
+Figure~\ref{fig:word2vec-names-overview} shows how this was done.
 Given that the names got similar coordinates in the plot, identifying the section with names allowed for identification of a lot of the names used in the reports.
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[scale=0.25]{figures/word2vec-overview.png}
-    \caption{A 2D plot of the full word2vec plot. Given the amount of terms used there is a lot to analyze.}
-    \label{fig:word2vec-overview}
-\end{figure}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[scale=0.25]{figures/word2vec-names.png}
-    \caption{A 2D plot of the zoomed in word2vec plot. Most of the values here are names. This represents the red box in from Figure~\ref{fig:word2vec-overview}}.
-    \label{fig:word2vec-names}
+\begin{figure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \fbox{\includegraphics[scale=0.25]{figures/word2vec-overview.png}}
+        \caption{A 2D plot of the full word2vec model.}
+    \end{subfigure}
+    \quad
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \fbox{\includegraphics[scale=0.25]{figures/word2vec-names.png}}
+        \caption{A 2D plot of the subset of the word2vec model covering the names.}
+    \end{subfigure}
+    \caption{Two figures illustrating how the names were discovered in the word2vec plot. The (b) plot represents the red square in (a).}
+    \label{fig:word2vec-names-overview}
 \end{figure}
 
 \section{Filter Out Invalid Clinical Reports Using Topic Models and Clustering}\label{sec:exp1-result}
@@ -258,79 +260,82 @@ However, the method described by Dasgupta et al\@. is made for the single-label 
 The same applies to the density based technique suggested by Attenberg et al\@.~\cite{attenberg2013class}.
 
 Most of the active learning research seems to be focused on binary, or maybe multi-class classification.
-Therefor, the methods described in Section~\ref{sec:active-learning} where the ones decided on.
-Methods that are fully reliant on a models certainty, such as Binary Version Space Minimization~\cite{brinker2006active} are tested.
-In addition to this, methods incorporating some information about the data in the form of label cardinality is included as well.
+Thus the methods described in Section~\ref{sec:active-learning} where the ones decided on.
+Methods that are fully reliant on a models certainty, such as Binary Version Space Minimization~\cite{brinker2006active} are used.
+Furthermore, methods incorporating some information about the data in the form of label cardinality is included as well.
 These techniques are MMC and Adaptive Active Learning~\cite{yang2009effective, li2013active}.
 An attempt to take advantage of the structure of the data is done by selecting the initial samples from different clusters, as described in Section~\ref{sec:exp2-method}.
 
-The first metric for evaluation was Accuracy.
-A plot of this can be seen in Figure~\ref{fig:al-accuracy-25} to Figure~\ref{fig:al-accuracy-200}.
-It contains the accuracy evaluations for the different number of initial sample sizes.
-It can easily be seen that the adaptive learner performs significantly better for the first 400 added samples.
-However, after that MMC and Binary Version Space Minimization catches up to it, and surpasses it in terms of accuracy after around 800 labels.
-Both of them sustaining an significant improvement over labeling at random after round 200 labels.
-It takes sampling at random approximately 1600 labels to get to an accuracy of 78\%.
-Adaptive Active Learning acquires this accuracy after around 300 labels, and BinaryMinimization and MMC after 450.
+The plot for evaluating accuracy on the strategies with initial sample sizes of 25, 50 and 100 can be seen in Figure~\ref{fig:al-accuracy-25}, Figure~\ref{fig:al-accuracy-50}, and Figure~\ref{fig:al-accuracy-100} respectively.
+Note that when retrieving the initial sample from the clusters, only samples with label cardinality 1 was retrieved.
+MMC requires at least two different label cardinalities in the initial sample in order for the logistic regression model to work.
+For that reason, MMC with cluster initialization was not evaluated.
+In Table~\ref{tab:active-learning-accuracy-25} to Table~\ref{tab:active-learning-accuracy-100} it can be seen how many labels were required to reach a certain accuracy.
 
-\begin{figure}[h!]
+\includeaccuracyplot{25}
+\includeaccuracyplot{50}
+\includeaccuracyplot{100}
+
+\begin{table}
     \centering
-    \includegraphics[scale=0.5]{figures/al-25-accuracy.png}
-    \caption{Accuracy of the models with initial sample size 25}
-    \label{fig:al-accuracy-25}
-\end{figure}
+    \begin{tabular}{|ccccc|}
+        \hline
+        \textbf{Strategy} & \textbf{Initial Sample} & \textbf{75 \%} & \textbf{80 \%} & \textbf{85 \%}\\
+        \hline
+        BinMin & Random & 405 & 505 & 905\\
+        BinMin & Cluster & 345 & 525 & 885\\
+        MMC & Random & 485 & 625 & 825\\
+        MMC & Cluster & N/A & N/A & N/A\\
+        Adaptive & Random & 325 & 465 & 925\\
+        Adaptive & Cluster & 305 & 445 & 965\\
+        \hline
+    \end{tabular}
+    \caption{The number of labeled reports in total that the strategies required to achieve the different accuracy values, with initial sample size 25.}
+    \label{tab:active-learning-accuracy-25}
+\end{table}
 
-When it comes to micro F1-Score, the results between the different methods are similar.
-Adaptive Active Learning performs better than the rest in the beginning, but the other active learning strategies obtain similar results after around 500 labels.
-One difference from the accuracy evaluation is that Binary Version Space Minimization does not quite surpass the adaptive learner in the same way.
-The gap to random sampling is smaller as well.
-The results can be seen in Figure~\ref{fig:al-micro-f1-25} to Figure~\ref{fig:al-micro-f1-25}.
-
-\begin{figure}
+\begin{table}
     \centering
-    \includegraphics[scale=0.5]{figures/al-25-micro-f1.png}
-    \caption{Accuracy of the models with initial sample size 25}
-    \label{fig:al-micro-f1-25}
-\end{figure}
+    \begin{tabular}{|ccccc|}
+        \hline
+        \textbf{Strategy} & \textbf{Initial Sample} & \textbf{75 \%} & \textbf{80 \%} & \textbf{85 \%}\\
+        \hline
+        BinMin & Random & 370 & 570 & 790\\
+        BinMin & Cluster & 345 & 550 & 910\\
+        MMC & Random & 510 & 650 & 910\\
+        MMC & Cluster & N/A & N/A & N/A\\
+        Adaptive & Random & 310 & 470 & 690\\
+        Adaptive & Cluster & 350 & 470 & 870\\
+        \hline
+    \end{tabular}
+    \caption{The number of labeled reports in total that the strategies required to achieve the different accuracy values, with initial sample size 50.}
+    \label{tab:active-learning-accuracy-50}
+\end{table}
 
-The same applies to micro recall.
-The one difference is that the Adaptive Active Learner strategy is performing better than the rest for more iterations.
-It takes approximately 1000 added labels for the BinaryMinimization to obtain similar micro recall.
-This can be seen in Figure~\ref{fig:al-micro-fig:al-micro-recall-25}.
-The random sampling performs considerably worse than the rest.
-
-\begin{figure}
+\begin{table}
     \centering
-    \includegraphics[scale=0.5]{figures/al-25-micro-recall.png}
-    \caption{Micro recall of the models with initial sample size 25}
-    \label{fig:al-micro-recall-25}
-\end{figure}
+    \begin{tabular}{|ccccc|}
+        \hline
+        \textbf{Strategy} & \textbf{Initial Sample} & \textbf{75 \%} & \textbf{80 \%} & \textbf{85 \%}\\
+        \hline
+        BinMin & Random & 420 & 620 & 840\\
+        BinMin & Cluster & 420 & 600 & 960\\
+        MMC & Random & 560 & 700 & 960\\
+        MMC & Cluster & N/A & N/A & N/A\\
+        Adaptive & Random & 360 & 520 & 740\\
+        Adaptive & Cluster & 400 & 520 & 920\\
+        \hline
+    \end{tabular}
+    \caption{The number of labeled reports in total that the strategies required to achieve the different accuracy values, with initial sample size 100.}
+    \label{tab:active-learning-accuracy-100}
+\end{table}
 
-The micro precision of the models are very similar between all strategies.
-Algorithms using clustering obtains a higher precision between 200-400 added labels, but not by that much.
-From 200 added labels and onwards, Adaptive Active Learner is worse than Binary Version Space Minimization.
+The micro and macro $F_1$-score, recall and precision for the initial sample size of 25 can be seen in Figure~\ref{fig:result-25}.
+The same evaluation for the initial sample size of 50 and 100 can be seen in Figure~\ref{fig:result-50} and Figure~\ref{fig:result-100}, respectively.
 
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.5]{figures/al-100-micro-precision.png}
-    \caption{Micro precision of the models with initial sample size 25}
-    \label{fig:al-micro-precision-25}
-\end{figure}
-
-Another important aspect of the evaluation is the time it takes.
-This can be seen in Figure~\ref{fig:al-time}.
-Time is constant for the random sampling, very close to 0.
-For the Binary Minimization, the time increases a bit every iteration, but stays under 200 seconds for the first samples.
-MMC gets similar results, but takes a bit longer.
-The Adaptive Active Learner takes far longer time than the other methods.
-
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.5]{figures/al-time.png}
-    \caption{Time to query a new set of samples by the different strategies}
-    \label{fig:al-micro-precision-25}
-\end{figure}
-
+\includeevaluationplot{25}
+\includeevaluationplot{50}
+\includeevaluationplot{100}
 
 \section{Evaluating the Label Balance}
 

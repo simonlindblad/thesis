@@ -27,7 +27,7 @@ The query strategy module contains the different active learning algorithms for 
 
 \section{Datasets}\label{sec:datasets}
 
-Two different datasets were used in this thesis.
+Two different datasets were used in thisthesis.
 They were the dataset of clinical reports provided by Sectra, as well as Reuters-21578 \footnote{Reuters-21578, https://archive.ics.uci.edu/ml/datasets/reuters-21578+text+categorization+collection}.
 The latter was used in order to be able to simulate a multi-label labeling process.
 Before being integrated into Sectra's system, the different strategies needed to be evaluated from an objective point of view, so that any tradeoffs were known beforehand.
@@ -215,15 +215,14 @@ Finally, the third one aims to compare how the distribution of labels in the lab
 
 \subsection{Filter Out Invalid Clinical Reports Using Topic Models}
 
-The task was to evaluate how well unsupervised techniques could be used to filter out invalid reports.
+The task here was to evaluate how well unsupervised techniques could be used to filter out invalid reports.
 Invalid reports are considered to be reports that describe a situation where an examination never took place.
 This can be because of a deceased patient, a patient being moved to another hospital, a patient did not show up or for some reason did not want to go through with the examination.
 
 Different topic models were tested for this purpose.
 The topic model used was Latent Dirichlet Allocation.
-In order to use the LDA model the number of topics as to be selected, as described in Section~\ref{sec:topic-modeling}.
-Selecting the best model was done by evaluating different number of topics $k_{LDA}$.
-The different values that were evaluated was 25, 50, 75, 100, 150, 200.
+In order to use the LDA model the number of topics, $k$, has to be selected, as described in Section~\ref{sec:topic-modeling}.
+The different values of $k$ that were evaluated was 25, 50, 75, 100, 150, 200.
 
 80 000 reports were used in the experiment, and they were selected at random.
 The reason for only using a subset is that the number of reports available would be too big to use in the final active learning system due to performance constraints.
@@ -232,9 +231,9 @@ To determine which topic model that should be used in the filtering of invalid r
 Perplexity is used in the original LDA paper by Blei et al\@.~\cite{blei2003latent} to compare different number of topics.
 Hofmann used it to evaluate the pLSI based topic models as well~\cite{hofmann1999probabilistic}.
 
-In order to evaluate how well the models performed on the clinical data, a set of reports had to be marked as valid/invalid.
-This was done by creating a script that presented a report to the user, and allowed it to be marked as valid or invalid.
-5358 reports were labeled by the author, out of wich 623 were marked as invalid. 
+In order to evaluate how well the selected model performed on the clinical data, a set of reports had to be marked as valid/invalid.
+This was done by creating a script that presented a report to the user, and requested the label.
+5358 reports were labeled by the author, out of which 623 were marked as invalid. 
 The labels were skewed, containing only 623 invalid reports, which makes up 10.4\% of the labels.
 In order to obtain a more balanced dataset, 3653 of the valid reports were dismissed at random making it 1000 in total.
 In order to make the models able to separate the invalid reports from the valid reports they had to be manually analyzed.
@@ -243,7 +242,7 @@ Approaching this in a way that would not result in the models overfitted to the 
 To reduce the bias in the evaluation, the labeled reports were split into a training set and validation set, containing 80\% and 20\% of the reports respectively.
 The training set was used to be analyze and identify important topics, whereas the validation set was used to evaluate how well the model performed.
 
-First, the different toipcs were manually identified using the aforementioned visualization tools.
+First, the different topics were manually identified using the aforementioned visualization tools.
 The words with the highest probability within a topic was used in order to identify topics that corresponded with terms such as cancelled or transferred.
 This was done by inspecting the topics in the same way that was done in the exploratory study, Section~\ref{sec:exploratory-study}.
 After that the labeled training set was used to identify more patterns among the invalid reports.
@@ -366,7 +365,7 @@ The more prosperous outcome from a balanced dataset would be that the models usi
 
 The configurations used here are the same as in Table~\ref{fig:active-learning-configurations}.
 Every iteration, the distribution of labels assigned are stored and analyzed.
-He et al\@. discusses the usage of ROC curves and measures such as g-means to compare multi-class imbalanced data~\ref{he2009learning}.
+He et al\@. discusses the usage of ROC curves and measures such as g-means to compare multi-class imbalanced data~\cite{he2009learning}.
 However, the doctor involved at Sectra specifically requested that labels should be more uniformly distributed. 
 The evaluation will therefore focus on measuring that instead of the models performance, which is done in ~\ref{sec:exp2-method}.
 An evaluation of how the distribution progresses was done by comparing how the class imbalance is affected by the number of new samples obtained from the different methods.

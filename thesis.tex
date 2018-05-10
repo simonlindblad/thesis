@@ -37,9 +37,9 @@
 \externalsupervisor{Mikael Nilsson}
 \supervisor{Marco Kuhlmann}
 \examiner{Arne Jönsson}
-\titleenglish{Labeling Clinical Reports with Topic Modeling and Active Learning}
+\titleenglish{Labeling Clinical Reports with \\Active Learning and Topic Modeling}
 %\subtitleenglish{with a sbtitle}
-\titleswedish{Uppmärkning av kliniska rapporter genom topic modeller och active learning}
+\titleswedish{Uppmärkning av kliniska rapporter genom active learning och topic modeller}
 \thesissubject{Datavetenskap}
 
 \publicationyear{2018}
@@ -57,10 +57,35 @@
     \end{subfigure}
 }
 
+\newcommand{\includeaccuracyplot}[1]{
+  \begin{figure}[h!]
+      \centering
+      \includegraphics[width=\textwidth]{figures/al-#1-accuracy.png}
+      \caption{Accuracy of the models with initial sample size #1}
+      \label{fig:al-accuracy-#1}
+  \end{figure}
+}
+
+\newcommand{\includeevaluationplot}[1]{
+  \begin{figure}
+      \centering
+      \thirdsubfigimg{al-#1-micro-f1}{The micro $F_1$-score for the strategies}
+      \thirdsubfigimg{al-#1-macro-f1}{The macro $F_1$-score for the strategies}
+      \quad
+      \thirdsubfigimg{al-#1-micro-recall}{The micro recall for the strategies}
+      \thirdsubfigimg{al-#1-macro-recall}{The macro recall for the strategies}
+      \quad
+      \thirdsubfigimg{al-#1-micro-precision}{The micro precision for the strategies}
+      \thirdsubfigimg{al-#1-macro-precision}{The macro precision for the strategies}
+      \caption{The metrics for the strategies when the initial sample size of #1 was used.}
+      \label{fig:result-#1}
+\end{figure}
+}
+
 \newcommand{\thirdsubfigimg}[2]{
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
-        \fbox{\includegraphics[width=6cm]{figures/#1.png}}
+        \fbox{\includegraphics[width=\textwidth]{figures/#1.png}}
         \caption{#2}
         \label{subfig:#1}
     \end{subfigure}
