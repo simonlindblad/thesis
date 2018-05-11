@@ -1,13 +1,56 @@
 \chapter{Discussion}
 \label{cha:discussion}
 
-%This chapter contains the following sub-headings.
+The discussion chapter is separated into three parts.
+First, it goes through and analyzes the results from Chapter~\ref{cha:results}.
+This is followed by an analysis of the methods described in Chapter~\ref{cha:method}.
+At last the work is discussed in a wider concept, based on the ethical and societal impact techniques like these may have.
 
 \section{Results}
 \label{sec:discussion-results}
 
+Obtaining 97.9 \% and 99.1 \% accuracy for classifying invalid reports must be considered a good results.
+The reports describing the cases where an examination did not happen uses a fairly different vocabulary.
+For these cases there is a lack of medical terms, while expressions such as ``cancelled'', or ``new time'' are a lot more common.
+This distinction makes it rather easy for the topic model to identify the topics relating to this.
+The vocabulary is quite unique.
+There is some overlap of course, the manual identification of topics did get a worse precision.
+That is, it got more false misclassifications than the logistic regression model.
+A probable reason for this is that there exists some information in the topics other than topic 1 and 17 that can help in identifying reports that have these as their most likely topic, but still is not invalid.
+One such thing could be a more finely tuned notion of prominent topics.
+However, given the clear relationship between certain topics and whether the reports are invalid, it might even be sufficient to have a finely tuned list of keywords to look for when classifying the reports.
+
+Looking at how the different strategies perform in terms of accuracy and $F_1$-score, it is clear that for the first 600-700 labels, MMC performs considerably worse than the rest.
+That is including random sampling.
+It is equally clear that it performs better when the initial sample is bigger.
+One reason behind this may be MMC's dependence on the label cardinality of the samples.
+MMC's dependence on label cardinality can be seen in Section~\ref{subsec:mmc}.
+If the information on label cardinality is not varied, the predictions that MMC base the calculations upon wont be as good.
+In the paper by Yang et al\@.~\cite{yang2009effective}, MMC performs significantly better than than Binary Version Space Minimization at all stages.
+One obvious reason for this discrepancy could be the implementation used in this paper, as is discussed in Section~\ref{sec:discussion-results}.
+Another one can be the initial sample size used in that paper, even when they compare different initial sample sizes, they start at 100 samples and go up to a 1000.
+
+Adaptive Active Learning performs the best of the evaluated strategies in both accuracy and $F_1$-score. 
+A probable reason for this is the extra computations the strategy does in order to find the best weight between the certainty based, and the cardinality based, strategies.
+Even if the cardinality predictions is not deemed to be very good in the beginning, for example, it would simply put more weight on the certainty measure.
+
+Binary Version Space Minimization on the other hand performs very similarly to random sampling for the first samples.
+The reason for this is rather simple.
+In the strategy finds the class that is the closest for each data point, and selects the minimum of those.
+If there are several with the same minimum value they are selected at random from those.
+Until all classes has been sampled at least one, the minimum for all data points will be that class, and it will be equal among all data points.
+Therefore, it will be the same as selecting randomly among all the samples, in the same way that random sampling is doing.
+However, when all samples have been sampled, and quickly outperforms the random sampling in terms of accuracy and $F_1$-score.
+
+In the end, the different strategies all perform better than random sampling.
+The ones that are based on MMC and Binary Version Space Minimization tend to perform a bit better than Adaptive Active Learning when more than 1200-1300 samples are added.
+This may very well be related to the fact that the distributions for MMC and Binary Version Space Minimization is considerably more uniform when a lot of labels have been requested.
+
+Add some things regarding the initial clustering. Maybe move to earlier to have a good continuation into discussing distributions.
 %Are there anything in the results that stand out and need be
-%analyzed and commented on? How do the results relate to the
+%analyzed and commented on? 
+
+% How do the results relate to the
 %material covered in the theory chapter? What does the theory
 %imply about the meaning of the results? For example, what
 %does it mean that a certain system got a certain numeric value
@@ -19,102 +62,54 @@
 \section{Method}
 \label{sec:discussion-method}
 
-Results that are based on a public dataset is naturally easier to reproduce.
+Results that are based on a public dataset are naturally easier to reproduce.
 The method becomes more reliable in the sense that the same results can be expected by reproducing the concrete steps.
-However, the clinical dataset from Sectra is not publically available.
-Therefore any results that are derived from specific attributes of that dataset might not be reasonable to expect when applied in a new environment.
+However, the clinical dataset from Sectra is not publicly available.
+Thus any results that are derived from specific attributes of that dataset might not be exactly reproducible in a new environment.
+The comparisons of the active learning algorithms are using the Reuters dataset, which is both public and a standard dataset for evaluation.
+Reproducing these results might therefore be more reasonable.
 
-The comparisons of the active learning algorithms are using the Reuters dataset, which both public and a standard dataset for evaluation.
-Reproducing these results might therefore be an easier tasks.
-Any issues with the reliability in this case might come from the implementation of the presented in Chapter~\ref{cha:theory}.
-The implementations of the Binary Version Space Minimization, Maximum Loss Reduction with Maximum Confidence and Adaptive Active Learning are based on the algorithms, but written independently for this thesis.
-They have not faced any public scrutiny and their correctnes can not be guaranteed.
+During the exploration phase and the first experiment, the study of the LDA model and its topics was in some part based on the author's intuition.
+For this reason, if another party would perform the same study they might identify other patterns.
+For example, the 10 \% threshold put on what is considered a prominent topic was purely based on intuition after exploring the dataset.
+However, the patterns are later studied in a more objective way when they are visualized in the form of relationships between the topics and assigned labels.
+The manual identification of topics in the first experiment is then compared to a more objective solution in the form of the logistic regression classifier.
+Results derived from this classifier can therefore be seen as more reliable and reproducible.
+Any subsequent study is more likely to obtain similar results with the logistic regression classifier.
 
-The usage and analysis of the LDA model was done in a rather way.
-During the exploration phase and the first experiment, the relationships and pattern found was in part a result of the authors intuition.
-For this reason, if another party would perform the same study they might come up with different results and find other patterns.
-However, the relationships found between the topics and the invalid reports are rather explicit, so the main difference between different researchers might be the specific thresholds.
-For example, the 10\% threshold for prominent topics was chosen based on the author's experience with the dataset after seeing several iterations of topic models.
-By using logistic regression for comparisson the subjectiveness of the thresholds can be compared with an objective baseline, which improves the reliability of the results.
-Any subsequent study is more likely to obtain similar results with this approach.
-
-Another aspect that is questionable when it comes to the first experiment is the labeling of the invalid reports.
+Another aspect of the experiment on invalid reports is the labeling process.
 This was done manually by the author, without any medical knowledge.
-However, the nature of the labeling is rather trivial.
+Some reports may have been misidentified, but the nature of the labeling is rather trivial in this case.
 The medical knowledge required to understand the result of an examination is far greater than the one needed to see if an examination was performed.
-Which in most cases can be identified not despite of, but because of the lack of medical information.
-The number of labeled reports, X, is probably sufficient to manually identify broad relationships to set some categorization rules based on the output of the LDA.
-However, the logistic regression based classification might have been able to achieve better results with more data to train on.
-This could have been done rather easily without the time contraints of this thesis work.
-In order to obtain a more balanced sample to train on, an active learning system could, as we have seen, be used.
-However, the system developed in this thesis was not finished when the labeling was done, and it is not focused on the binary classification task.
-Evaluating the categorization of invalid reports by accuracy, precision, recall and F1-score are fairly standard.
-The metrics have been used in a lot of text classification and information retrieval research~\cite{aggarwal2012surveyclass, bishop2006pattern}.
+Which in most cases can be identified not despite of, but because of the lack of medical terms.
+The number of reports labeled seems to be sufficient for the task, but it may have been improved a bit if more reports had been labeled.
 
-%GThis is where the applied method is discussed and criticized.
-%GTaking a self-critical stance to the method used is an
-%Gimportant part of the scientific approach.
-%G
-%GA study is rarely perfect. There are almost always things one
-%Gcould have done differently if the study could be repeated or
-%Gwith extra resources. Go through the most important
-%Glimitations with your method and discuss potential
-%Gconsequences for the results. Connect back to the method
-%Gtheory presented in the theory chapter. Refer explicitly to
-%Grelevant sources.
-%G
-%GThe discussion shall also demonstrate an awareness of methodological
-%Gconcepts such as replicability, reliability, and validity. The concept
-%Gof replicability has already been discussed in the Method chapter
-%G(\ref{cha:method}). Reliability is a term for whether one can expect
-%Gto get the same results if a study is repeated with the same method. A
-%Gstudy with a high degree of reliability has a large probability of
-%Gleading to similar results if repeated. The concept of validity is,
-%Gsomewhat simplified, concerned with whether a performed measurement
-%Gactually measures what one thinks is being measured. A study with a
-%Ghigh degree of validity thus has a high level of credibility. A
-%Gdiscussion of these concepts must be transferred to the actual context
-%Gof the study.
-%G
-%GThe method discussion shall also contain a paragraph of
-%Gsource criticism. This is where the authors’ point of view on
-%Gthe use and selection of sources is described.
-%G
-%GIn certain contexts it may be the case that the most relevant
-%Ginformation for the study is not to be found in scientific
-%Gliterature but rather with individual software developers and
-%Gopen source projects. It must then be clearly stated that
-%Gefforts have been made to gain access to this information,
-%Ge.g. by direct communication with developers and/or through
-%Gdiscussion forums, etc. Efforts must also be made to indicate
-%Gthe lack of relevant research literature. The precise manner
-%Gof such investigations must be clearly specified in a method
-%Gsection. The paragraph on source criticism must critically
-%Gdiscuss these approaches.
-%G
-%GUsually however, there are always relevant related research.
-%GIf not about the actual research questions, there is certainly
-%Gimportant information about the domain under study.
-%G
-%G\section{The work in a wider context}
-%G\label{sec:work-wider-context}
-%G
-%GThere must be a section discussing ethical and societal
-%Gaspects related to the work. This is important for the authors
-%Gto demonstrate a professional maturity and also for achieving
-%Gthe education goals. If the work, for some reason, completely
-%Glacks a connection to ethical or societal aspects this must be
-%Gexplicitly stated and justified in the section Delimitations in
-%Gthe introduction chapter.
-%G
-%GIn the discussion chapter, one must explicitly refer to sources
-%Grelevant to the discussion.
-%G
-%G%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%G%%% lorem.tex ends here
-%G
-%G%%% Local Variables: 
-%G%%% mode: latex
-%G%%% TeX-master: "demothesis"
-%G%%% End: 
-%G
+A rather ironic part of the labeling of invalid reports is that it did not use an active learning system.
+The analysis of the invalid reports were completed before the work with active learning started.
+While the active learning system dealt with in this report focused on multi-label data, it could have been beneficial to use.
+Evaluating the categorization of invalid reports by accuracy, precision, recall and F1-score are fairly standard.
+The metrics have been used in a lot of text classification and information retrieval research~\cite{aggarwal2012surveyclass, bishop2006pattern}, and should enable comparisons of the results with other sources.
+
+The entire first and second experiments were based on the author's implementation of the algorithms described in Section~\ref{sec:active-learning}.
+These were based on the algorithms in the papers, but may contain bugs or misinterpretations.
+Exposure to public scrutiny may have been able to find any faults, and in turn make the results more reliable, since any bugs most definitely effect the results of the study.
+
+The analysis of distributions is evaluated using some non-standard techniques.
+Comparing imbalanced datasets in binary classification can easily be done with the ratio between the most balanced and imbalanced datasets.
+This is hard to do in multi-label classification. 
+The that this report uses are instead fairly non-standard, but focuses on being intuitive in measuring how uniform the set is.
+So the validity of the results here can rightly be criticized.
+By using non-standard metrics, an argument can be made that it does not accurately achieve what it aims to do.
+On the other side, they are clearly defined, and make intuitive sense.
+If if the most common categories makes up most labels assigned, the dataset is probably not very well balanced.
+The ratio between the smallest and the biggest such category is an attempt to generalize the imbalance ratio used when measuring the binary case.
+It too makes intuitive sense, a big ratio between them indicates that there is at least a couple of classes where the labeled set is imbalanced.
+
+The sources used in the thesis are a mix of scientific articles and books.
+One theme amongst the active learning sources is that some of them are quite old.
+Some papers, such as the one by Tong et al.~\cite{tong2001support}, is from the early 2000 but provided a lot of the foundation that new techniques are based on.
+Research relating to multi-label active learning is also relatively sparse, compared to multi-class or binary.
+Newer techniques often seem to be focused on specific enhancement for using them with images.
+Besides that, sources used to provide an overview of the field, such as Settles~\cite{settles2012active} and Tong et al\@.~\cite{tong2001active} are rather well cited, being cited by a couple of thousand papers each.
+
+\section{The Work in a Wider Context}
