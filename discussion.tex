@@ -9,6 +9,8 @@ At last the work is discussed in a wider concept, based on the ethical and socie
 \section{Results}
 \label{sec:discussion-results}
 
+Add some things regarding the initial clustering. Maybe move to earlier to have a good continuation into discussing distributions.
+
 Obtaining 97.9 \% and 99.1 \% accuracy for classifying invalid reports must be considered a good results.
 The reports describing the cases where an examination did not happen uses a fairly different vocabulary.
 For these cases there is a lack of medical terms, while expressions such as ``cancelled'', or ``new time'' are a lot more common.
@@ -46,7 +48,6 @@ In the end, the different strategies all perform better than random sampling.
 The ones that are based on MMC and Binary Version Space Minimization tend to perform a bit better than Adaptive Active Learning when more than 1200-1300 samples are added.
 This may very well be related to the fact that the distributions for MMC and Binary Version Space Minimization is considerably more uniform when a lot of labels have been requested.
 
-Add some things regarding the initial clustering. Maybe move to earlier to have a good continuation into discussing distributions.
 %Are there anything in the results that stand out and need be
 %analyzed and commented on? 
 
@@ -95,9 +96,9 @@ These were based on the algorithms in the papers, but may contain bugs or misint
 Exposure to public scrutiny may have been able to find any faults, and in turn make the results more reliable, since any bugs most definitely effect the results of the study.
 
 The analysis of distributions is evaluated using some non-standard techniques.
-Comparing imbalanced datasets in binary classification can easily be done with the ratio between the most balanced and imbalanced datasets.
-This is hard to do in multi-label classification. 
-The that this report uses are instead fairly non-standard, but focuses on being intuitive in measuring how uniform the set is.
+Comparing imbalanced datasets in binary classification can easily be done with the ratio between the two classes.
+This is harder to do in multi-label classification. 
+The evaluations that this report uses are instead fairly non-standard, but focuses on being intuitive in measuring how uniform the set is.
 So the validity of the results here can rightly be criticized.
 By using non-standard metrics, an argument can be made that it does not accurately achieve what it aims to do.
 On the other side, they are clearly defined, and make intuitive sense.
@@ -113,3 +114,19 @@ Newer techniques often seem to be focused on specific enhancement for using them
 Besides that, sources used to provide an overview of the field, such as Settles~\cite{settles2012active} and Tong et al\@.~\cite{tong2001active} are rather well cited, being cited by a couple of thousand papers each.
 
 \section{The Work in a Wider Context}
+
+A discussion regarding how an active learning system affects the world around us is probably more interesting from a perspective of what it enables.
+By being able to obtain a high quality set of labeled reports with less effort, people can create powerful machine learning models with less time spent on gathering data.
+These systems can, and probably will, have a profound effect on the world.
+Besides the improvements it may make to healthcare overall, it can also effect the job of those working within the field.
+Replacing doctors with systems based on artificial intelligence may not happen any time soon.
+One key advantage humans have, in the current state of the field, is creativity and emotional intelligence.
+However, the jobs of doctors may change drastically given the aid these systems can provide them with.
+They systems could, for example, aid doctors in determining diagnoses.
+Jobs that are of a more administrative nature may be replaced sooner.
+
+Another interesting aspect is the trust in these systems.
+In order for doctors to be able to trust the systems, the process by which the different models make decisions will probably have to be rather open.
+Besides the understandability of model, the storage and treatment of the data is another area where there have to be trust in the systems.
+Any computer system may be faced with breaches from an intruder.
+However, automating such systems may make it easier to enforce certain procedures for how the data should be treated.
