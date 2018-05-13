@@ -11,38 +11,38 @@ At last the work is discussed in a wider concept, based on the ethical and socie
 
 Add some things regarding the initial clustering. Maybe move to earlier to have a good continuation into discussing distributions.
 
-Obtaining 97.9 \% and 99.1 \% accuracy for classifying invalid reports must be considered a good results.
+Obtaining 97.9 \% and 99.1 \% accuracy for classifying invalid reports must be considered a good result.
 The reports describing the cases where an examination did not happen uses a fairly different vocabulary.
-For these cases there is a lack of medical terms, while expressions such as ``cancelled'', or ``new time'' are a lot more common.
+For these cases there is a lack of medical terms, while expressions such as ``canceled'', or ``new time'' are a lot more common.
 This distinction makes it rather easy for the topic model to identify the topics relating to this.
 The vocabulary is quite unique.
-There is some overlap of course, the manual identification of topics did get a worse precision.
-That is, it got more false misclassifications than the logistic regression model.
+There is some overlap of course, the manual identification of topics did get a worse precision than the logistic regressio model.
+That is, it got more invalid reports when trying to identify the valid ones.
 A probable reason for this is that there exists some information in the topics other than topic 1 and 17 that can help in identifying reports that have these as their most likely topic, but still is not invalid.
 One such thing could be a more finely tuned notion of prominent topics.
-However, given the clear relationship between certain topics and whether the reports are invalid, it might even be sufficient to have a finely tuned list of keywords to look for when classifying the reports.
+However, given the clear relationship between certain topics and categories, it might even be sufficient to have a well curated list of keywords to look for when classifying the reports.
 
 Looking at how the different strategies perform in terms of accuracy and $F_1$-score, it is clear that for the first 600-700 labels, MMC performs considerably worse than the rest.
 That is including random sampling.
 It is equally clear that it performs better when the initial sample is bigger.
 One reason behind this may be MMC's dependence on the label cardinality of the samples.
 MMC's dependence on label cardinality can be seen in Section~\ref{subsec:mmc}.
-If the information on label cardinality is not varied, the predictions that MMC base the calculations upon wont be as good.
+If the information on label cardinality is not varied, the predictions that MMC base its calculations upon will not be as good.
 In the paper by Yang et al\@.~\cite{yang2009effective}, MMC performs significantly better than than Binary Version Space Minimization at all stages.
 One obvious reason for this discrepancy could be the implementation used in this paper, as is discussed in Section~\ref{sec:discussion-results}.
 Another one can be the initial sample size used in that paper, even when they compare different initial sample sizes, they start at 100 samples and go up to a 1000.
 
 Adaptive Active Learning performs the best of the evaluated strategies in both accuracy and $F_1$-score. 
 A probable reason for this is the extra computations the strategy does in order to find the best weight between the certainty based, and the cardinality based, strategies.
-Even if the cardinality predictions is not deemed to be very good in the beginning, for example, it would simply put more weight on the certainty measure.
+If the cardinality predictions is not deemed to be very good in the beginning, it would simply put more weight on the certainty measure, and vice versa.
 
 Binary Version Space Minimization on the other hand performs very similarly to random sampling for the first samples.
 The reason for this is rather simple.
-In the strategy finds the class that is the closest for each data point, and selects the minimum of those.
+The strategy finds the class that is the closest to the decision boundary for each data point, and selects the minimum of those.
 If there are several with the same minimum value they are selected at random from those.
-Until all classes has been sampled at least one, the minimum for all data points will be that class, and it will be equal among all data points.
+Until all classes has been sampled at least one, the minimum for all data points will be the same class, and it will be equal among all data points.
 Therefore, it will be the same as selecting randomly among all the samples, in the same way that random sampling is doing.
-However, when all samples have been sampled, and quickly outperforms the random sampling in terms of accuracy and $F_1$-score.
+However, when all classes have been sampled, and quickly outperforms the random sampling in terms of accuracy and $F_1$-score.
 
 In the end, the different strategies all perform better than random sampling.
 The ones that are based on MMC and Binary Version Space Minimization tend to perform a bit better than Adaptive Active Learning when more than 1200-1300 samples are added.
@@ -76,7 +76,7 @@ For example, the 10 \% threshold put on what is considered a prominent topic was
 However, the patterns are later studied in a more objective way when they are visualized in the form of relationships between the topics and assigned labels.
 The manual identification of topics in the first experiment is then compared to a more objective solution in the form of the logistic regression classifier.
 Results derived from this classifier can therefore be seen as more reliable and reproducible.
-Any subsequent study is more likely to obtain similar results with the logistic regression classifier.
+Any subsequent study is more likely to obtain similar results this approach.
 
 Another aspect of the experiment on invalid reports is the labeling process.
 This was done manually by the author, without any medical knowledge.
@@ -86,7 +86,7 @@ Which in most cases can be identified not despite of, but because of the lack of
 The number of reports labeled seems to be sufficient for the task, but it may have been improved a bit if more reports had been labeled.
 
 A rather ironic part of the labeling of invalid reports is that it did not use an active learning system.
-The analysis of the invalid reports were completed before the work with active learning started.
+The analysis of the invalid reports was completed before the work with active learning started.
 While the active learning system dealt with in this report focused on multi-label data, it could have been beneficial to use.
 Evaluating the categorization of invalid reports by accuracy, precision, recall and F1-score are fairly standard.
 The metrics have been used in a lot of text classification and information retrieval research~\cite{aggarwal2012surveyclass, bishop2006pattern}, and should enable comparisons of the results with other sources.
@@ -98,12 +98,14 @@ Exposure to public scrutiny may have been able to find any faults, and in turn m
 The analysis of distributions is evaluated using some non-standard techniques.
 Comparing imbalanced datasets in binary classification can easily be done with the ratio between the two classes.
 This is harder to do in multi-label classification. 
+Another common approach is to measure how well a model performs, with $F_1$-score for example.
+This was already done in in research question 2, and does not measure the uniformity of the distribution explicitly, but rather implicitly by assuming that it will make the models perform better.
 The evaluations that this report uses are instead fairly non-standard, but focuses on being intuitive in measuring how uniform the set is.
 So the validity of the results here can rightly be criticized.
 By using non-standard metrics, an argument can be made that it does not accurately achieve what it aims to do.
 On the other side, they are clearly defined, and make intuitive sense.
 If if the most common categories makes up most labels assigned, the dataset is probably not very well balanced.
-The ratio between the smallest and the biggest such category is an attempt to generalize the imbalance ratio used when measuring the binary case.
+The ratio between the smallest and the biggest category is an attempt to generalize the imbalance ratio used when measuring the binary case.
 It too makes intuitive sense, a big ratio between them indicates that there is at least a couple of classes where the labeled set is imbalanced.
 
 The sources used in the thesis are a mix of scientific articles and books.
@@ -120,13 +122,15 @@ By being able to obtain a high quality set of labeled reports with less effort, 
 These systems can, and probably will, have a profound effect on the world.
 Besides the improvements it may make to healthcare overall, it can also effect the job of those working within the field.
 Replacing doctors with systems based on artificial intelligence may not happen any time soon.
-One key advantage humans have, in the current state of the field, is creativity and emotional intelligence.
+One key advantage humans have, with the current state of the field, is creativity and emotional intelligence.
+Things that are of great importance in healthcare and dealing with patients.
 However, the jobs of doctors may change drastically given the aid these systems can provide them with.
-They systems could, for example, aid doctors in determining diagnoses.
+They systems could, for example, help doctors in determining diagnoses.
 Jobs that are of a more administrative nature may be replaced sooner.
 
 Another interesting aspect is the trust in these systems.
 In order for doctors to be able to trust the systems, the process by which the different models make decisions will probably have to be rather open.
 Besides the understandability of model, the storage and treatment of the data is another area where there have to be trust in the systems.
-Any computer system may be faced with breaches from an intruder.
-However, automating such systems may make it easier to enforce certain procedures for how the data should be treated.
+Any computer system may be faced with breaches from an intruder, and the hospital records often already digitized today.
+However, automating the systems may make it easier to enforce certain procedures for how the data should be treated.
+Something that might be of great importance going forward.

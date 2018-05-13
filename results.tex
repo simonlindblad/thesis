@@ -19,7 +19,7 @@
 
 In this chapter the results are described.
 First, the outcome from the exploratory study is presented, followed by the different experiments.
-The first experiment, filtering out invalid reports, presents the evaluation of the topic model and k-means model used to filter out the reports, as well as the specific topics and clusters used in the process.
+The first experiment, filtering out invalid reports, presents the evaluation of the topic model used to filter out the reports, as well as the specific topics and how they were used in the process.
 In the second one, the methods considered and the decisions behind which ones that were appropriate are presented.
 Finally, the last section goes through the result of evaluating the different active learning techniques.
 
@@ -34,7 +34,8 @@ The evaluation of more concrete relationships were done within the context of th
 
 The word2vec model produced results that allowed for synonyms to be detected.
 By doing this, 420 pairs were discovered.
-The vast majority of these were names, medical terms that (some of which the author was unable to evaluate, and therefore excluded) as well as words that are used in similar contexts, which includes opposites like ``left'' and ``right''.
+The vast majority of these were names and words that are used in similar contexts, which includes opposites like ``left'' and ``right''.
+Some of the medical terms was hard to interpret, and were therefore not considered to be synonyms.
 Disregarding these, the synonyms and misspellings that were decided for use in the final system can be seen in Table~\ref{tab:synonyms}.
 The original value was replaced with the new one in the final system.
 
@@ -61,7 +62,7 @@ The original value was replaced with the new one in the final system.
     \label{tab:synonyms}
 \end{table}
 
-In order to identify names from this word2vec model, it was plotted using the an interactive plot that allowed for exploring the data.
+In order to identify names from this word2vec model, the word vectors were plotted using the an interactive plot that allowed for exploration of the data.
 Since names are commonly used in similar contexts, they would have similar attributes in the word embedding model.
 Figure~\ref{fig:word2vec-names-overview} shows how this was done.
 Given that the names got similar coordinates in the plot, identifying the section with names allowed for identification of a lot of the names used in the reports.
@@ -85,31 +86,28 @@ Given that the names got similar coordinates in the plot, identifying the sectio
 \section{Filter Out Invalid Clinical Reports Using Topic Models and Clustering}\label{sec:exp1-result}
 
 The LDA models were evaluated by calculating the perplexity on the held-out set as described in Section~\ref{sec:exp1-method}.
-Perplexity for the evaluated models can be seen in Figure~\ref{fig:lda-perplexity}, with the lowest score being better.
+Perplexity for the evaluated models can be seen in Figure~\ref{fig:lda-perplexity}, where a low score is better.
 Based on this, the selected model was the LDA model with 75 topics.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[scale=0.9]{figures/lda-perplexity.png}
+    \includegraphics[width=\textwidth]{figures/lda-perplexity.png}
     \caption{The perplexity scores for the different LDA models}
     \label{fig:lda-perplexity}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[scale=0.9]{figures/invalid_reports_most_likely_topics_histogram.png}
-    \caption{The distribution of the topics with the highest probability for the invalid reports in the training set. Note that only topics that occurred at least once are shown in the histogram.}
-    \label{fig:invalid-reports-most-likely-topics}
-\end{figure}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[scale=0.9]{figures/valid_reports_most_likely_topics_histogram.png}
-    \caption{The distribution of the topics with the highest probability for the valid reports in the training set. Note that only topics that occurred at least once are shown in the histogram.}
-    \label{fig:valid-reports-most-likely-topics}
+    \thirdsubfigimg{invalid_reports_most_likely_topics_histogram}{The distribution of the topics with the highest probability for the invalid reports in the training set.}
+    \thirdsubfigimg{valid_reports_most_likely_topics_histogram}{The distribution of the topics with the highest probability for the valid reports in the training set.}
+    \caption{Distribution over the most likely topics for the valid and invalid reports. Note that only topics that occurred at least once are shown in the histogram.}
+    \label{fig:most-likely-topics}
 \end{figure}
 
 The next step was identifying the topics that were assigned to the invalid reports.
+First, topic 1 and 17 were identified as interesting based on the word distribution they represented.
+The most common terms for these two topics can be seen in Figure~\ref{fig:topic-wordclouds}.
+To verify this, the labeled data was analyzed.
 The distribution of the topics with the highest likelihood for the invalid reports in the training set can be seen in Figure~\ref{fig:invalid-reports-most-likely-topics}.
 A couple of topics, 1 and 17 clearly stands out as the ones that most invalid reports gets assigned.
 Specifically, topic 1 had a count of 131 reports from the invalid reports in the training set, and topic 17 had 358.
@@ -123,31 +121,25 @@ Topic 1 occurs 0 times, while topic 17 occurs 2 times.
 The third most common topic from the invalid reports, 53, occurs 28 times.
 The ones having topic 17 had 4 and 8 prominent topics assigned to them.
 
-Each topic that is assigned to a report with a probability above 10\% was considered to be a prominent topic.
+Each topic that was assigned to a report with a probability above 10\% was considered to be a prominent topic.
 The number of prominent topics for the invalid reports can be seen in Figure~\ref{fig:invalid-reports-prominent-topic-count}.
 1, 2 and 3 number of prominent topics are the most common.
-And there are barely any reports having less than 6.
+And there are barely any reports having more than 6.
 The corresponding plot for the valid reports can be seen in Figure~\ref{fig:valid-reports-prominent-topic-count}.
 In the case of valid reports, 6 is the most common number of prominent topics. 
 The topics are a lot more spread out than in the case of the invalid reports.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[scale=0.9]{figures/invalid_reports_prominent_topics_count_histogram}
-    \caption{The distribution of the number of prominent topics assigned to the invalid reports in the training set.}
-    \label{fig:invalid-reports-prominent-topic-count}
-\end{figure}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[scale=0.9]{figures/valid_reports_prominent_topics_count_histogram}
-    \caption{The distribution of the number of prominent topics assigned to the valid reports in the training set.}
-    \label{fig:valid-reports-prominent-topic-count}
+    \thirdsubfigimg{invalid_reports_prominent_topics_count_histogram}{The distribution of the number of prominent topics assigned to the invalid reports in the training set.}
+    \thirdsubfigimg{valid_reports_prominent_topics_count_histogram}{The distribution of the number of prominent topics assigned to the valid reports in the training set.}
+    \caption{The distribution of the number of prominent topics for the two categories.}
+    \label{fig:prominent-topic-dist}
 \end{figure}
 
 Another idea was to evaluate whether or not 17 and 1 was among the most probable topics for the reports.
 A simple evaluation of this on the set of valid reports showed that it was not a good approach.
-For example, seeing if 17 or 1 had more than 10\% probability returned 48 and 45 reports, respectively.
+For example, seeing if 17 or 1 had more than 10\% probability returned 48 and 45 valid reports, respectively.
 Checking if both were above the threshold returned 11 reports.
 This threshold was tested with 1\% increments from 5\% to 20\% without giving any good results.
 
@@ -157,14 +149,14 @@ Based on these findings, reports were determined to be invalid or not by the fol
     \item Not having more than 6 prominent topics assigned to it.
 \end{itemize}
 
-The evaluation on the validation set can be seen in Figure~\ref{tab:exp1-eval}.
+The evaluation on the validation set can be seen in Table~\ref{tab:exp1-eval}.
 In the figure you can also see the results of the logistic regression classifier, which was fitted with the topic vectors as features and the invalid/valid labels as targets.
 
 \begin{table}[h!]
     \centering
     \begin{tabular}{|c|cc|}
         \hline
-        & \textbf{Manual} & \textbf{Logistic Regression} \\
+        & \textbf{Manual Identification} & \textbf{Logistic Regression} \\
         \hline
         \textbf{Precision} & 97.2\% & 98.7\% \\
         \textbf{Recall} & 100\% & 100\% \\
@@ -172,7 +164,7 @@ In the figure you can also see the results of the logistic regression classifier
         \textbf{Accuracy} & 97.9\% & 99.1\%\\
         \hline
     \end{tabular}
-    \caption{The results of the classification of the invalid reports. The manual column represents the use of manual interpretation of the LDA model.}
+    \caption{The results of the classification of the invalid reports. The manual identification column represents the use of manual interpretation of the LDA topics to find the invalid reports.}
     \label{tab:exp1-eval}
 \end{table}
 
@@ -180,7 +172,7 @@ In the figure you can also see the results of the logistic regression classifier
 
 The first thing that was done with regards to this experiment was to explore and try to find a relationship between the initial set of labels and the inherit structure of the data.
 This was done by visualizing the LDA model again.
-In order to find any existing relationship between the topics and the labeled samples they were colored based on their assigned labels.
+In order to find any existing relationship between the topics and the labeled samples, the points were colored based on their assigned labels.
 Unlabeled samples were hidden from the plot.
 The resulting plot can be seen in Figure~\ref{fig:categories-lda-75}.
 From this plot it is clear that there is a grouping of labels.
@@ -188,14 +180,14 @@ Certain labels are more likely to occur in documents assigned a specific topic.
 For example, the purple points in the lower part of the graph represents the ``blödning'' label, the gray labels in the middle represents ``infarkt'' and the light blue ones that are mostly concentrated in the bottom right corner represents ``infektion''.
 It is clear that these labels are not evenly spread out over all the topics, but neither are they confined enough to make a mapping between topics and labels, like they were in Section~\ref{sec:exp1-result}.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
     \centering
-    \includegraphics[scale=0.2]{figures/categories-lda-75.png}
+    \includegraphics[width=\textwidth]{figures/categories-lda-75.png}
     \caption{The labeled data points plotted in 2D, and colored based on the first label of the report in alphabetical order.}
     \label{fig:categories-lda-75}
 \end{figure}
 
-In Figure~\ref{fig:category-label-distribution} the counts of most likely topics for four most common categories are displayed.
+In Figure~\ref{fig:category-label-distribution} the counts of most likely topics for the four most common categories are displayed.
 These categories are ``infarkt'', ``kärlsjukdom'', ``normal'' and ``blödning''.
 From the histograms it is clear that documents of a certain category are more likely to be assigned certain topics, at least in these cases.
 Even though there exist a clear relationship, it is not exclusive enough to make any clear relation.
@@ -239,7 +231,7 @@ The number of topics assigned and reports labeled for these 4 topics can be seen
 \end{figure}
 
 In order to analyze these topics further, Figure~\ref{fig:topic-category-distribution} shows the different categories that has a certain topic assigned to it as the most likely one.
-Taking into account the information from Table~\ref{tab:topic-categories}, i.e. that some categories are a lot more common than others, there is not a clear enough pattern to distinguish between different categories based on the topics.
+Taking into account the information from Table~\ref{tab:topic-categories}, i.e. that some categories are a lot more common than others in the labeled dataset, there is not a clear enough pattern to distinguish between different categories based on the topics.
 This does not take the multi-label nature of the data into account.
 If a report has multiple labels assigned to it, both of the labels are counted separately.
 
@@ -255,7 +247,7 @@ If a report has multiple labels assigned to it, both of the labels are counted s
 \end{figure}
 
 Based on the knowledge that there exists a pattern, the initial goal was to find some methods that could exploit this.
-Some active learning approaches using different forms of clustering, such as Dasgupta et al\@'s approach using hierarchical clustering~\cite{dasgupta2008hierarchical} would be good contenders.
+Some active learning approaches using different forms of clustering, such as Dasgupta et al\@'s approach using hierarchical clustering~\cite{dasgupta2008hierarchical}, would be good contenders.
 However, the method described by Dasgupta et al\@. is made for the single-label case with no obvious way of extending the technique into multi-label.
 The same applies to the density based technique suggested by Attenberg et al\@.~\cite{attenberg2013class}.
 
@@ -267,7 +259,7 @@ These techniques are MMC and Adaptive Active Learning~\cite{yang2009effective, l
 An attempt to take advantage of the structure of the data is done by selecting the initial samples from different clusters, as described in Section~\ref{sec:exp2-method}.
 
 The plot for evaluating accuracy on the strategies with initial sample sizes of 25, 50 and 100 can be seen in Figure~\ref{fig:al-accuracy-25}, Figure~\ref{fig:al-accuracy-50}, and Figure~\ref{fig:al-accuracy-100} respectively.
-Note that when retrieving the initial sample from the clusters, only samples with label cardinality 1 was retrieved.
+Note that when retrieving the initial sample from the clusters, only samples with label cardinality 1 was retrieved after 10 tries.
 MMC requires at least two different label cardinalities in the initial sample in order for the logistic regression model to work.
 For that reason, MMC with cluster initialization was not evaluated.
 In Table~\ref{tab:active-learning-accuracy-25} to Table~\ref{tab:active-learning-accuracy-100} it can be seen how many labels were required to reach a certain accuracy.
@@ -403,32 +395,32 @@ The corresponding table for the evaluation after 2000 new labels can be seen in 
     \centering
     \begin{tabular}{|cccccc|}
         \hline
-        \textbf{Strategy} & \textbf{Initial Sample} & \textbf{No. labels} & \textbf{Top Class} & \textbf{Top 3 Classes} & \textbf{Small/Big Ratio}\\
+        \textbf{Strategy} & \textbf{Initial Sample} & \textbf{Top Class} & \textbf{Top 3 Classes} & \textbf{Small/Big Ratio}\\
         \hline
-        Random & Random & 500 & 16.1 \% & 42.5 \% & 7.5 \\
-        BinMin & Random & 500 & 23.6 \% & 53.1 \% & 96.0 \\
-        BinMin & Clusters & 500 & 19.8 \% & 49.0 \% & 80.0 \\
-        Adaptive & Random & 500 & 16.3 \% & 41.1 \% & 9.2 \\
-        Adaptive & Clusters & 500 & 16.5 \% & 39.3 \% & 49.5 \\
-        MMC & Random & 500 & 14.6 \% & 37 \% & 11.8 \\
+        Random & Random &  16.1 \% & 42.5 \% & 7.5 \\
+        BinMin & Random &  23.6 \% & 53.1 \% & 96.0 \\
+        BinMin & Clusters & 19.8 \% & 49.0 \% & 80.0 \\
+        Adaptive & Random & 16.3 \% & 41.1 \% & 9.2 \\
+        Adaptive & Clusters & 16.5 \% & 39.3 \% & 49.5 \\
+        MMC & Random & 14.6 \% & 37 \% & 11.8 \\
         \hline
     \end{tabular}
     \caption{The results after analyzing the label distribution after 500 new labels has been added.}
-    \label{tab:distribution-result}
+    \label{tab:distribution-result-500}
 \end{table}
 
 \begin{table}[h!]
     \centering
     \begin{tabular}{|cccccc|}
         \hline
-        \textbf{Strategy} & \textbf{Initial Sample} & \textbf{No. labels} & \textbf{Top Class} & \textbf{Top 3 Classes} & \textbf{Small/Big Ratio}\\
+        \textbf{Strategy} & \textbf{Initial Sample} & \textbf{Top Class} & \textbf{Top 3 Classes} & \textbf{Small/Big Ratio}\\
         \hline
-        Random & Random & 2000 & 37.5 \% & 64.2 \% & 28.5 \\
-        BinMin & Random & 2000 & 16.1 \% & 42.5 \% & 7.5 \\
-        BinMin & Clusters & 2000 & 15.7 \% & 41.5 \% & 7.3 \\
-        Adaptive & Random & 2000 & 29.6 \% & 51.8 \% & 33.8 \\
-        Adaptive & Clusters & 2000 & 29.4 \% & 52.0 \% & 34.7 \\
-        MMC & Random & 2000 & 16.6 \% & 41 \% & 9.6 \\
+        Random & Random & 37.5 \% & 64.2 \% & 28.5 \\
+        BinMin & Random & 16.1 \% & 42.5 \% & 7.5 \\
+        BinMin & Clusters & 15.7 \% & 41.5 \% & 7.3 \\
+        Adaptive & Random & 29.6 \% & 51.8 \% & 33.8 \\
+        Adaptive & Clusters & 29.4 \% & 52.0 \% & 34.7 \\
+        MMC & Random & 16.6 \% & 41 \% & 9.6 \\
         \hline
     \end{tabular}
     \caption{The results after analyzing the label distribution after 2000 labels has been added.}

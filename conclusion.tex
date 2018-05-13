@@ -35,12 +35,12 @@
 
 The system can be seen to have been done in two parts: filtering out the invalid reports, and identifying an active learning strategy that could be used to improve the labeling process.
 Identifying and filtering out invalid reports was treated in the first research question.
-It resulted in a rather good separation of invalid reports from the valid ones.
-Accomplishing this using only unsupervised techniques seems possible, even if using them together with a supervised technique gave a better result.
-But manually identifying topics and using them to filter out the invalid reports was clearly possible.
+It resulted in a rather good separation of the two categories.
+Accomplishing this using only unsupervised techniques is possible, even if using them together with a supervised technique gave a better result.
+But manually identifying relevant topics and classyfing based on this information was clearly a working approach.
 It did not achieve 100 \% accuracy, so there is room for improvement, but the separation has to be seen as successful.
 
-When it comes to the alternatives to labeling reports at random, there are a few alternatives.
+When it comes to the alternatives to labeling reports at random, the second research question, there are a few alternatives.
 The ones chosen for evaluation here were the ones that were adapted for the multi-label scenario.
 These were: 
 \begin{itemize}
@@ -56,14 +56,15 @@ All of the above performed better than random sampling in the long run.
 When it comes to the distribution of labels, the strategies all performed better than random sampling at all stages.
 After 2000 labels, BinMin and MMC had a more even distribution than Adaptive Active Learning.
 While early on, MMC and the adaptive approach were a lot more even than BinMin.
-So, as a summary, the different strategies all made the dataset more uniform than labeling at random.
+So, in various degrees during the labeling process, the different strategies all made the dataset more uniform than labeling at random.
 
-For future research, it would be interesting to look into how to use the structure of the data further in the strategies, besides only obtaining initial samples from clusters.
+For future research, it would be interesting to look into how to further use the structure of the data in active learning strategies, besides only obtaining initial samples from clusters.
 An example of this would be to find a good way to adapt the approach described by Dasgupta et al\@.~\cite{dasgupta2008hierarchical} to the multi-label case.
 With their approach to binary classification, it is rather easy to define a measure to see when a cluster overwhelmingly consisting of one class.
 However, if a data point can consist of any combination of labels it becomes a lot harder.
 Using the full approach, including the usage of clusters to classify the points without another model, might be hard for this reason.
-Researching whether or not the hierarchical clustering could aid the selection of data points that have not been sampled as much might be more approachable.
-Another thing that would be of interest would be to vary the text representation and classification models to see how they get effected by the different strategies.
-One example of this could be to use recurrent neural networks instead of SVM's, and see if the different active learning strategies have the same effects in that case.
-For the text representation, maybe word2vec or latent topic vectors could be used instead of bag of words to highlight different features of the text.
+Researching whether or not the hierarchical clustering could aid the selection of data points, instead of both selection and classyfing, might be more approachable.
+
+Another thing that would be of interest is to vary the text representation and classification models to see how they get effected by the different strategies.
+One example of this could be to use recurrent neural networks instead of SVM's, and see if the different active learning strategies affects the models differently.
+For the text representation, word2vec or latent topic vectors could be used instead of bag of words to highlight different features of the text.
