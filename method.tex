@@ -326,6 +326,8 @@ Here, the sizes evaluated are: 25, 50, 100.
 The reason for this is that an large initial sample size would make it hard for the human annotator to see a difference in the class balance early on.
 In each iteration, 25 labels were queried.
 The ones selected every iterations were the 25 best one according to the strategy's measure.
+100 iterations were run per strategy.
+Making it 2500 labels that are labeled, in addition to the initial sample.
 The different active learning configurations that were tried is displayed in Table~\ref{fig:active-learning-configurations}
 In total there were 18 configurations, based upon the three different methods.
 Every configuration was evaluated 5 times, and it is the average of those runs that are considered to be the final results.

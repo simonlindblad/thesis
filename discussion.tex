@@ -47,6 +47,24 @@ However, when all classes have been sampled, and quickly outperforms the random 
 In the end, the different strategies all perform better than random sampling.
 The ones that are based on MMC and Binary Version Space Minimization tend to perform a bit better than Adaptive Active Learning when more than 1200-1300 samples are added.
 This may very well be related to the fact that the distributions for MMC and Binary Version Space Minimization is considerably more uniform when a lot of labels have been requested.
+Binary version space minimization is the only technique that reached 89 \% accuracy within the first 2500 labels to be labeled.
+It is possible that other techniques would have reached it given more labels, but it is clear that binary version space minimization reaches a peek accuracy earlier.
+The technique always tries to sample from the most uncertain category.
+This category may be the one that stands in the way for the others to achieve a higher accuracy.
+
+Looking at the distribution of the labels it is instantly clear that the three strategies outperforms random sampling significantly.
+MMC and Adaptive Active Learning are by far the best one after only 500 labels are labeled.
+When 2000 data points are labeled, binary version space minization is the best one, albeit slightly compared to MMC.
+It can probably be attributed to it selecting the most uncertain class in every iteration.
+The most uncertain class is probably the one with the fewest samples, causing the distribution to be more uniform over time.
+
+While binary version space minimization always selects the sample that is the most uncertain in one single class, one can view MMC and adaptive active learning as more of an average of the uncertainty over the categories for a data point.
+They also incorporate the label cardinality information.
+This averaging trait may be beneficial for the distribution early on.
+The model is most likely rather uncertain about most categories, so instead of focusing on the one with the aboslutely lowest value they select the data point that will give the overall most information.
+As with the evaluation on model performance, binary version space minimization seem to perform better in the long run.
+One could include MMC in this too, the difference between the two could probably be neglected in most applications.
+However, if only a few hundred labels are supposed to be labeled, adaptive active learning is unrivaled when all metrics are considered.
 
 %Are there anything in the results that stand out and need be
 %analyzed and commented on? 
@@ -94,6 +112,7 @@ The metrics have been used in a lot of text classification and information retri
 The entire first and second experiments were based on the author's implementation of the algorithms described in Section~\ref{sec:active-learning}.
 These were based on the algorithms in the papers, but may contain bugs or misinterpretations.
 Exposure to public scrutiny may have been able to find any faults, and in turn make the results more reliable, since any bugs most definitely effect the results of the study.
+Each experiment is run 5 times in order to make the results more reliable.
 
 The analysis of distributions is evaluated using some non-standard techniques.
 Comparing imbalanced datasets in binary classification can easily be done with the ratio between the two classes.
