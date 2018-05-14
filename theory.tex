@@ -400,11 +400,11 @@ Based on the version space duality, it is a good approximation for dividing the 
 
 \subsection{Binary Version Space Minimization}\label{subsec:binmin}
 
-\textit{Binary version space minimization} is a generalization of uncertainty sampling, that is designed to make it work with multi-label data.
+Binary version space minimization (BSVM) is a generalization of uncertainty sampling, that is designed to make it work with multi-label data.
 The approach taken is to decompose the multi-label problem to several binary tasks with the binary relevance method, as is discussed in Section~\ref{subsec:multi-label-classification}.
 The unlabeled point that is chosen for labeling is then the one with the smallest SVM margin across all the binary classification tasks.
 By doing this, it does not incorporate the multiple labels into the decision process, but treats all classes individually and equally. 
-Selecting a new data $x_{new}$ to be labeled using binary version space minimization can formally be defined as:
+Selecting a new data $x_{new}$ to be labeled using BSVM can formally be defined as:
 \begin{equation}
     x_{new} = \arg\min_{x \in D_U} \big( \min_{i \in \{1 \dots n\}} y_i(x) \big)
 \end{equation}
@@ -532,7 +532,7 @@ In their paper, Li et al\@.~\cite{li2013active} presents two approaches to activ
     \item Max-Margin Uncertainty Sampling
     \item Label Cardinality Inconsistency 
 \end{itemize}
-These two techniques are then combined in a weighted fashion into what they call Adaptive Active Learning.
+These two techniques are then combined in a weighted fashion into what they call Adaptive Active Learning (AAL).
 
 \subsubsection{Max-Margin Uncertainty Sampling}
 
@@ -611,7 +611,7 @@ The complete algorithm for the integrated approach can be seen in Algorithm~\ref
         \UNTIL{enough instances are queried}
     \end{algorithmic}
 
-    \caption{Adaptive Active Learning Procedure. Taken from Li et al\@.~\cite{li2013active}, , with some modifications to the notations used in order to make it coherent with the rest of the report.}
+    \caption{AAL Procedure. Taken from Li et al\@.~\cite{li2013active}, , with some modifications to the notations used in order to make it coherent with the rest of the report.}
     \label{alg:adaptive-active-learning}
 \end{algorithm}
 

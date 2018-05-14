@@ -4,21 +4,19 @@
 The discussion chapter is separated into three parts.
 First, it goes through and analyzes the results from Chapter~\ref{cha:results}.
 This is followed by an analysis of the methods described in Chapter~\ref{cha:method}.
-At last the work is discussed in a wider concept, based on the ethical and societal impact techniques like these may have.
+At last the work is discussed in a wider context, based on the ethical and societal impact techniques like these may have.
 
 \section{Results}
 \label{sec:discussion-results}
-
-Add some things regarding the initial clustering. Maybe move to earlier to have a good continuation into discussing distributions.
 
 Obtaining 97.9 \% and 99.1 \% accuracy for classifying invalid reports must be considered a good result.
 The reports describing the cases where an examination did not happen uses a fairly different vocabulary.
 For these cases there is a lack of medical terms, while expressions such as ``canceled'', or ``new time'' are a lot more common.
 This distinction makes it rather easy for the topic model to identify the topics relating to this.
 The vocabulary is quite unique.
-There is some overlap of course, the manual identification of topics did get a worse precision than the logistic regressio model.
+There is some overlap of course, the manual identification of topics did get a worse precision than the logistic regression model.
 That is, it got more invalid reports when trying to identify the valid ones.
-A probable reason for this is that there exists some information in the topics other than topic 1 and 17 that can help in identifying reports that have these as their most likely topic, but still is not invalid.
+A probable reason for this is that there exists some information in the topics other than topic 1 and 17 that can help in identifying reports that have these as their most likely topic, but is valid.
 One such thing could be a more finely tuned notion of prominent topics.
 However, given the clear relationship between certain topics and categories, it might even be sufficient to have a well curated list of keywords to look for when classifying the reports.
 
@@ -28,43 +26,43 @@ It is equally clear that it performs better when the initial sample is bigger.
 One reason behind this may be MMC's dependence on the label cardinality of the samples.
 MMC's dependence on label cardinality can be seen in Section~\ref{subsec:mmc}.
 If the information on label cardinality is not varied, the predictions that MMC base its calculations upon will not be as good.
-In the paper by Yang et al\@.~\cite{yang2009effective}, MMC performs significantly better than than Binary Version Space Minimization at all stages.
+In the paper by Yang et al\@.~\cite{yang2009effective}, MMC performs significantly better than than Binary Version Space Minimization (BSVM) at all stages.
 One obvious reason for this discrepancy could be the implementation used in this paper, as is discussed in Section~\ref{sec:discussion-results}.
-Another one can be the initial sample size used in that paper, even when they compare different initial sample sizes, they start at 100 samples and go up to a 1000.
+Another one can be the initial sample sizes used in their paper, even when they compare different initial sample sizes, they start at 100 samples and go up to a 1000.
 
-Adaptive Active Learning performs the best of the evaluated strategies in both accuracy and $F_1$-score. 
+Adaptive Active Learning (AAL) performs the best of the evaluated strategies in both accuracy and $F_1$-score. 
 A probable reason for this is the extra computations the strategy does in order to find the best weight between the certainty based, and the cardinality based, strategies.
 If the cardinality predictions is not deemed to be very good in the beginning, it would simply put more weight on the certainty measure, and vice versa.
 
-Binary Version Space Minimization on the other hand performs very similarly to random sampling for the first samples.
+BSVM on the other hand performs very similarly to random sampling for the first samples.
 The reason for this is rather simple.
-The strategy finds the class that is the closest to the decision boundary for each data point, and selects the minimum of those.
-If there are several with the same minimum value they are selected at random from those.
+The strategy finds the class that is the closest to the decision boundary for each data point, and selects the minimum distance of those.
+If there are several documents with the same minimum value they are selected at random from those.
 Until all classes has been sampled at least one, the minimum for all data points will be the same class, and it will be equal among all data points.
-Therefore, it will be the same as selecting randomly among all the samples, in the same way that random sampling is doing.
+Therefore, it will be the same as selecting randomly among all the samples.
 However, when all classes have been sampled, and quickly outperforms the random sampling in terms of accuracy and $F_1$-score.
 
 In the end, the different strategies all perform better than random sampling.
-The ones that are based on MMC and Binary Version Space Minimization tend to perform a bit better than Adaptive Active Learning when more than 1200-1300 samples are added.
-This may very well be related to the fact that the distributions for MMC and Binary Version Space Minimization is considerably more uniform when a lot of labels have been requested.
-Binary version space minimization is the only technique that reached 89 \% accuracy within the first 2500 labels to be labeled.
-It is possible that other techniques would have reached it given more labels, but it is clear that binary version space minimization reaches a peek accuracy earlier.
+The ones that are based on MMC and BSVM tend to perform a bit better than AAL when more than 1200-1300 samples are added.
+This may very well be related to the fact that the distributions for MMC and BSVM is considerably more uniform when a lot of labels have been requested.
+BSVM is the only technique that reached 89 \% accuracy within the first 2500 labels to be labeled.
+It is possible that other techniques would have reached it given more labels, but it is clear that BSVM reaches a peek accuracy earlier.
 The technique always tries to sample from the most uncertain category.
-This category may be the one that stands in the way for the others to achieve a higher accuracy.
+The lack of reports in this category can be the thing that prohibits the other strategies from achieving a higher accuracy.
 
 Looking at the distribution of the labels it is instantly clear that the three strategies outperforms random sampling significantly.
-MMC and Adaptive Active Learning are by far the best one after only 500 labels are labeled.
-When 2000 data points are labeled, binary version space minization is the best one, albeit slightly compared to MMC.
+MMC and AAL are by far the most balanced one after only 500 labels are labeled.
+When 2000 data points are labeled, BSVM is the most balanced one, albeit slightly compared to MMC.
 It can probably be attributed to it selecting the most uncertain class in every iteration.
 The most uncertain class is probably the one with the fewest samples, causing the distribution to be more uniform over time.
 
-While binary version space minimization always selects the sample that is the most uncertain in one single class, one can view MMC and adaptive active learning as more of an average of the uncertainty over the categories for a data point.
+While BSVM always selects the sample that is the most uncertain in one single class, one can view MMC and AAL as more of an average of the uncertainty over the categories for a data point.
 They also incorporate the label cardinality information.
 This averaging trait may be beneficial for the distribution early on.
 The model is most likely rather uncertain about most categories, so instead of focusing on the one with the aboslutely lowest value they select the data point that will give the overall most information.
-As with the evaluation on model performance, binary version space minimization seem to perform better in the long run.
+As with the evaluation on model performance, BSVM seem to perform better in the long run.
 One could include MMC in this too, the difference between the two could probably be neglected in most applications.
-However, if only a few hundred labels are supposed to be labeled, adaptive active learning is unrivaled when all metrics are considered.
+However, if only a few hundred labels are supposed to be labeled, AAL is unrivaled when all metrics are considered.
 
 %Are there anything in the results that stand out and need be
 %analyzed and commented on? 
@@ -90,7 +88,7 @@ Reproducing these results might therefore be more reasonable.
 
 During the exploration phase and the first experiment, the study of the LDA model and its topics was in some part based on the author's intuition.
 For this reason, if another party would perform the same study they might identify other patterns.
-For example, the 10 \% threshold put on what is considered a prominent topic was purely based on intuition after exploring the dataset.
+For example, the 10\% threshold put on what is considered a prominent topic was purely based on intuition after exploring the dataset.
 However, the patterns are later studied in a more objective way when they are visualized in the form of relationships between the topics and assigned labels.
 The manual identification of topics in the first experiment is then compared to a more objective solution in the form of the logistic regression classifier.
 Results derived from this classifier can therefore be seen as more reliable and reproducible.
@@ -112,7 +110,6 @@ The metrics have been used in a lot of text classification and information retri
 The entire first and second experiments were based on the author's implementation of the algorithms described in Section~\ref{sec:active-learning}.
 These were based on the algorithms in the papers, but may contain bugs or misinterpretations.
 Exposure to public scrutiny may have been able to find any faults, and in turn make the results more reliable, since any bugs most definitely effect the results of the study.
-Each experiment is run 5 times in order to make the results more reliable.
 
 The analysis of distributions is evaluated using some non-standard techniques.
 Comparing imbalanced datasets in binary classification can easily be done with the ratio between the two classes.
@@ -122,8 +119,8 @@ This was already done in in research question 2, and does not measure the unifor
 The evaluations that this report uses are instead fairly non-standard, but focuses on being intuitive in measuring how uniform the set is.
 So the validity of the results here can rightly be criticized.
 By using non-standard metrics, an argument can be made that it does not accurately achieve what it aims to do.
-On the other side, they are clearly defined, and make intuitive sense.
-If if the most common categories makes up most labels assigned, the dataset is probably not very well balanced.
+On the other hand, they are clearly defined, and make intuitive sense.
+If if the most common categories make up most of the labels assigned, the dataset is probably not very well balanced.
 The ratio between the smallest and the biggest category is an attempt to generalize the imbalance ratio used when measuring the binary case.
 It too makes intuitive sense, a big ratio between them indicates that there is at least a couple of classes where the labeled set is imbalanced.
 
@@ -139,17 +136,17 @@ Besides that, sources used to provide an overview of the field, such as Settles~
 A discussion regarding how an active learning system affects the world around us is probably more interesting from a perspective of what it enables.
 By being able to obtain a high quality set of labeled reports with less effort, people can create powerful machine learning models with less time spent on gathering data.
 These systems can, and probably will, have a profound effect on the world.
-Besides the improvements it may make to healthcare overall, it can also effect the job of those working within the field.
+Besides the improvements it may make to healthcare overall, it can also effect the jobs of those working within the field.
 Replacing doctors with systems based on artificial intelligence may not happen any time soon.
 One key advantage humans have, with the current state of the field, is creativity and emotional intelligence.
-Things that are of great importance in healthcare and dealing with patients.
+Both are things that are of great importance in healthcare and dealing with patients.
 However, the jobs of doctors may change drastically given the aid these systems can provide them with.
 They systems could, for example, help doctors in determining diagnoses.
-Jobs that are of a more administrative nature may be replaced sooner.
+Jobs that are of a more administrative nature are in more danger of being replaced in the near future.
 
 Another interesting aspect is the trust in these systems.
-In order for doctors to be able to trust the systems, the process by which the different models make decisions will probably have to be rather open.
+In order for doctors to be able to trust the systems, the process by which the different models make decisions will have to be rather open.
 Besides the understandability of model, the storage and treatment of the data is another area where there have to be trust in the systems.
-Any computer system may be faced with breaches from an intruder, and the hospital records often already digitized today.
+Any computer system may be faced with breaches from an intruder, and the hospital records are often already digitized today.
 However, automating the systems may make it easier to enforce certain procedures for how the data should be treated.
 Something that might be of great importance going forward.
