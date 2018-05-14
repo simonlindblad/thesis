@@ -270,16 +270,17 @@ In Table~\ref{tab:active-learning-accuracy-25} to Table~\ref{tab:active-learning
 
 \begin{table}
     \centering
-    \begin{tabular}{|ccccc|}
+    \begin{tabular}{|cccccccc|}
         \hline
-        \textbf{Strategy} & \textbf{Initial Sample} & \textbf{75 \%} & \textbf{80 \%} & \textbf{85 \%}\\
+        \textbf{Strategy} & \textbf{Initial Sample} & \textbf{75 \%} & \textbf{80 \%} & \textbf{85 \%} & \textbf{87 \%} & \textbf{89 \%} & \textbf{89 \%}\\
         \hline
-        BinMin & Random & 405 & 505 & 905\\
-        BinMin & Cluster & 345 & 525 & 885\\
-        MMC & Random & 485 & 625 & 825\\
-        MMC & Cluster & N/A & N/A & N/A\\
-        Adaptive & Random & 325 & 465 & 925\\
-        Adaptive & Cluster & 305 & 445 & 965\\
+        BinMin & Random & 475 & 650 & 1100 & 1450 & 1675 & 2425\\
+        BinMin & Cluster & 425 & 650 & 1100 & 1575 & 1700 & 2425\\
+        MMC & Random & 600 & 775 & 1050 & 1250 & 1575 & N/A\\
+        MMC & Cluster & N/A & N/A & N/A & N/A & N/A & N/A\\
+        Adaptive & Random & 400 & 575 & 975 & 2425 & N/A & N/A\\
+        Adaptive & Cluster & 375 & 550 & 1025 & 2300 & N/A & N/A\\
+        Random & Random & 550 & 900 & 1700 & N/A & N/A & N/A\\
         \hline
     \end{tabular}
     \caption{The number of labeled reports in total that the strategies required to achieve the different accuracy values, with initial sample size 25.}
@@ -288,16 +289,17 @@ In Table~\ref{tab:active-learning-accuracy-25} to Table~\ref{tab:active-learning
 
 \begin{table}
     \centering
-    \begin{tabular}{|ccccc|}
+    \begin{tabular}{|cccccccc|}
         \hline
-        \textbf{Strategy} & \textbf{Initial Sample} & \textbf{75 \%} & \textbf{80 \%} & \textbf{85 \%}\\
+        \textbf{Strategy} & \textbf{Initial Sample} & \textbf{75 \%} & \textbf{80 \%} & \textbf{85 \%} & \textbf{87 \%} & \textbf{89 \%} & \textbf{89 \%}\\
         \hline
-        BinMin & Random & 370 & 570 & 790\\
-        BinMin & Cluster & 345 & 550 & 910\\
-        MMC & Random & 510 & 650 & 910\\
-        MMC & Cluster & N/A & N/A & N/A\\
-        Adaptive & Random & 310 & 470 & 690\\
-        Adaptive & Cluster & 350 & 470 & 870\\
+        BinMin & Random & 450 & 625 & 1075 & 1550 & 1750 & N/A\\
+        BinMin & Cluster & 450 & 675 & 1125 & 1600 & 1725 & 2450\\
+        MMC & Random & 625 & 775 & 1100 & 1325 & 1675 & N/A\\
+        MMC & Cluster & N/A & N/A & N/A & N/A & N/A & N/A\\
+        Adaptive & Random & 375 & 575 & 925 & N/A & N/A & N/A\\
+        Adaptive & Cluster & 425 & 575 & 1075 & N/A & N/A & N/A\\
+        Random & Random & 550 & 775 & 1575 & N/A & N/A & N/A\\
         \hline
     \end{tabular}
     \caption{The number of labeled reports in total that the strategies required to achieve the different accuracy values, with initial sample size 50.}
@@ -306,16 +308,17 @@ In Table~\ref{tab:active-learning-accuracy-25} to Table~\ref{tab:active-learning
 
 \begin{table}
     \centering
-    \begin{tabular}{|ccccc|}
+    \begin{tabular}{|cccccccc|}
         \hline
-        \textbf{Strategy} & \textbf{Initial Sample} & \textbf{75 \%} & \textbf{80 \%} & \textbf{85 \%}\\
+        \textbf{Strategy} & \textbf{Initial Sample} & \textbf{75 \%} & \textbf{80 \%} & \textbf{85 \%} & \textbf{87 \%} & \textbf{89 \%} & \textbf{89 \%}\\
         \hline
-        BinMin & Random & 420 & 620 & 840\\
-        BinMin & Cluster & 420 & 600 & 960\\
-        MMC & Random & 560 & 700 & 960\\
-        MMC & Cluster & N/A & N/A & N/A\\
-        Adaptive & Random & 360 & 520 & 740\\
-        Adaptive & Cluster & 400 & 520 & 920\\
+        BinMin & Random & 400 & 600 & 1125 & 1525 & 1775 & N/A\\
+        BinMin & Cluster & 450 & 675 & 1125 & 1600 & 1725 & 2450\\
+        MMC & Random & 600 & 750 & 1100 & 1325 & 1675 & N/A\\
+        MMC & Cluster & N/A & N/A & N/A & N/A & N/A & N/A\\
+        Adaptive & Random & 350 & 525 & 925 & 2450 & N/A & N/A\\
+        Adaptive & Cluster & 450 & 600 & 1025 & N/A & N/A & N/A\\
+        Random & Random & 475 & 775 & 1700 & N/A & N/A & N/A\\
         \hline
     \end{tabular}
     \caption{The number of labeled reports in total that the strategies required to achieve the different accuracy values, with initial sample size 100.}
@@ -393,7 +396,7 @@ The corresponding table for the evaluation after 2000 new labels can be seen in 
 
 \begin{table}[h!]
     \centering
-    \begin{tabular}{|cccccc|}
+    \begin{tabular}{|ccccc|}
         \hline
         \textbf{Strategy} & \textbf{Initial Sample} & \textbf{Top Class} & \textbf{Top 3 Classes} & \textbf{Small/Big Ratio}\\
         \hline
@@ -411,7 +414,7 @@ The corresponding table for the evaluation after 2000 new labels can be seen in 
 
 \begin{table}[h!]
     \centering
-    \begin{tabular}{|cccccc|}
+    \begin{tabular}{|ccccc|}
         \hline
         \textbf{Strategy} & \textbf{Initial Sample} & \textbf{Top Class} & \textbf{Top 3 Classes} & \textbf{Small/Big Ratio}\\
         \hline
