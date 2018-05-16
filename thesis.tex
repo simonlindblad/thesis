@@ -8,8 +8,13 @@
 \usepackage{verbatim}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage{amsmath}
 
 \setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
@@ -98,9 +103,9 @@
 \chapterstyle{VZ43}
 
 \include{intro}
-\include{background}
+%\include{background}
 \include{theory}
-\include{method}
+\include{data}
 \include{results}
 \include{discussion}
 \include{conclusion}

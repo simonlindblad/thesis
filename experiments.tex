@@ -1,0 +1,25 @@
+\chapter{Experiments}
+\label{cha:experiments}
+
+In this chapter, the experiments and their results are described.
+The first experiment is concerned with the evaluation of the model performance on the labeled dataset that is provided by a sampling strategy.
+The second one analyzes the labeled dataset that was created by the sampling strategy.
+For the last experiment, an analysis and evaluation of how invalid reports can be filtered out are performed.
+
+\section{Frameworks, Tools and Implementation}
+The entire system was written in Python.
+The motivation behind this choice was mainly that, when it comes to machine learning and text mining, most of the existing infrastructure at Sectra is using Python.
+This, in combination with the fact that there exists several tools for these purposes in Python, such as \textit{numpy} \footnote{Numpy, http://www.numpy.org/}, \textit{nltk} \footnote{Natural Language Toolkit, https://www.nltk.org/}, \textit{scikit-learn} \footnote{scikit-learn, http://scikit-learn.org/stable/} and \textit{gensim} \footnote{Gensim, https://radimrehurek.com/gensim/}.
+Most of the plotting was done using the \textit{seaborn} \footnote{Seaborn, https://seaborn.pydata.org/} and \textit{bokeh} \footnote{Bokeh, https://bokeh.pydata.org/en/latest/} libraries.
+\textit{pyLDAvis} \footnote{pyLDAvis, https://github.com/bmabey/pyLDAvis} was used for some additional visualization purposes with regards to topic models.
+
+However, when it comes to active learning, there does not seem to be a proven mainstream library that contains a set of readily available algorithms.
+In order to achieve better integration between the active learning system and the existing infrastructure at Sectra, as well as making adaptions such as the number of items queried in each iteration, an active learning framework was written from scratch.
+The ground for this framework were the algorithms presented in Section~\ref{sec:active-learning}.
+
+This framework consisted of three modules, called \textit{model}, \textit{dataset}, and \textit{query strategy}.
+The model is a wrapper around different machine learning models.
+By providing an interface for a distance or certainty measure, any underlying model able to provide such an interface can be incorporated.
+For accessing the data pool a dataset wrapper was written, with an interface for accessing the labeled and unlabeled pools.
+Putting this in its own module opens up the possibility for using several different storage solutions, such as a database or plain text files.
+The query strategy module contains the different active learning algorithms for selecting what sample to label next.

@@ -8,11 +8,12 @@ As the population grows, it is of utmost importance to ensure that the quality o
 Taking advantage of the available medical information is key to create such systems.
 
 Most of the approaches that exists today to create the aforementioned automated systems need a set of categorized data in order to identify and exploit certain patterns.
-The purpose of this thesis is to evaluate different techniques for labeling multi-label medical reports.
-The work is done at Sectra Medical Imaging IT Solutions AB in connection with a research project.
-This research project works on investigating how machine learning and text mining techniques can be used on clinical reports to improve their products.
+The purpose of this thesis is to evaluate different techniques for labeling multi-label clinical reports.
 The goal is to make the set of labeled reports more useful in future systems by labeling them based on a strategy instead of selecting them at random.
-Using a selection strategy could reduce the need for a large set of labeled reports.
+By using a selection strategy, the need for a large set of labeled reports could be reduced.
+The work is done at Sectra Medical Imaging IT Solutions AB in connection with a research project they have with Region Skåne.
+Region Skåne is responsible for the healthcare in Skåne, the southern most county of Sweden.
+This research project project on investigating how to use machine learning and text mining techniques to improve the functionality of their products and aid the physicians in their work.
 
 \section{Motivation}
 \label{sec:motivation}
@@ -58,7 +59,7 @@ The goal with this approach is to capture the distribution of the categories by 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/active-learning-model.eps}
-    \caption{An overview of an active learning system.kk}
+    \caption{An overview of an active learning system. The dotted lines represents the things that some samplings strategies base their calculations on.}
     \label{fig:active-learning-model}
 \end{figure}
 
@@ -76,44 +77,63 @@ Using active learning to enhance the labeling of documents is therefore even mor
 \section{Aim}
 \label{sec:aim}
 
-This thesis is carried out at Sectra Medical Imaging IT Solutions AB, as a part of their research division that focuses on text analytics.
-The purpose with this thesis project is to evaluate different active learning techniques that can be used to increase the quato labeling  ed reports, and thereby reducing the amount of reports needed for use within the project.
+The purpose with this thesis project is to evaluate different active learning techniques that can be used to increase the quality of the labeled reports.
+Increasing the quality of the reports will also reduce the need for a large set of labeled reports within the project.
 Resulting from this will be a complete, standalone, system for labeling reports.
 The reports are interactively queried so a user can label the ones that are deemed most useful by the system.
 Labeling data to use in machine learning will probably be necessary for a long time ahead, but the aim here is to create a system that makes it more efficient.
-This will then be used in conjunction with an existing web interface that Sectra created for the purpose of labeling reports.
+The technique chosen will then be used together with an existing web interface that Sectra created for the purpose of labeling reports.
+The existing web interface can be seen in Figure~\ref{fig:web-interface}.
+
+\begin{figure}
+      \centering
+      \includegraphics[width=\textwidth]{web-interface}
+      \caption{A screenshot of the interface used to label clinical reports at Sectra. 
+               A report is presented to the user, who can then select whichever categories (the blue buttons) deemed appropriate.
+               By pressing ``next'', the system presents a new reports.}
+      \label{fig:web-interface}
+\end{figure}
+
+In the work that they have done so far in the research project a doctor has labeled an initial set of reports.
+This was done by simply selecting the reports in the order they were on file.
+The doctor that primarily worked with the labeling stated that the distribution over the labeled categories was very skewed.
+The vast majority of labeled documents were assigned to a small subset of the categories.
+A skewed dataset causes the number of clinical reports that need to be labeled to increase a lot.
+For a statistical model to be able to achieve good results with the less frequently occurring categories, a large number of reports needs to be labeled in order to obtain a good amount of reports with these categories.
+Obtaining a more balanced dataset is desirable.
+
+In addition to this, the doctors had come up with a new set of labels that were to be used.
+So the query strategies have to work from a non-existent, or very small, initial set of labeled reports.
 
 \section{Research questions}
 \label{sec:research-questions}
 
 The specific research questions that this thesis treat are presented here.
 They are the main focus of study.
+There are two main research questions, both of which relate to active learning.
+In addition to this, a question regarding how to remove reports that does not need to be labeled is treated as well.
+
+The clinical reports are of a multi-label nature.
+How we are choosing the documents to be sampled is important.
+Three different query strategies for active learning are evaluated for this purpose.
+These are: binary version space minimization, maximum loss reduction with maximum confidence and adaptive active learning.
+Their properties will be described in Chapter~\ref{cha:theory}, and a motivation behind the choice of strategies will be made in Chapter~\ref{cha:discussion}.
+The algorithms to be evaluated will be based on the models certainty, as well as taking advantage of the underlying structure of the data through clustering.
+The first two questions treats the evaluation of the different strategies.
 
 \begin{enumerate}
-
-\item \textit{To what degree is it possible to filter out invalid clinical reports by using an unsupervised techniques such as topic modeling?}
+      \item \label{intro:re-q1} 
+      \textit{How well does a machine learning model perform on the dataset provided by the data, given the constraints of the project?}
       \newline
-      In the dataset from Sectra, there are reports describing patients not showing up for, or changing the time of their appointments, deceased patients or patients that have been ordered to go to another hospital.
-      These reports do not contain any information of value from a medical point of view and should be discarded in the labeling process.
-
-      Unsupervised machine learning models such as topic modeling do by definition not require any labeled documents to train on.
-      If it is possible to, without any such data, to capture the necessary variance and group these invalid reports together and they can be removed from the labeling process before a doctor is presented with them.
-      That would result in an additional hurdle being removed from the process.
-
-\item \label{intro:re-q2} 
-      \textit{What active learning strategies are good alternatives to sample documents at random in a multi-label document labeling system? How well do these alternatives perform?}
-      \newline
-      How we are choosing the documents to be sampled is important.
       If the decision boundaries of the models can be used to pick documents that would be more informative for the model, the number of labeled documents could hopefully be reduced while still obtaining the same performance.
-      Another approach to selecting the documents to sample is to take advantage of the underlying structure of the data.
+      When choosing the algorithm to use in the final system, there are several different constraints that will affect the final results, and therefore need to be taken into consideration.
+      The number of initial reports needed for the strategies need to perform well, and the how many labeled samples need to be acquired to achieve good results will therefore be taken into account.
+      In this regard, the strategies will be evaluated based on how well an SVM model perform on the data provided by them.
+      This evaluation will be based on the accuracy, precision, recall and $F_1$-score of the model.
+      The labeling application is running on limited hardware, so the time it takes to run the strategies will also be evaluated.
 
-      The algorithms to be evaluated will be based on the models certainty, as well as taking advantage of the underlying structure of the data.
-      When choosing the algorithm to use in the final system, there are several different factors that will affect the final results, and therefore need to be taken into consideration.
-      How well the models perform on the data will be evaluated based on the accuracy, precision, recall and $F_1$-score of the models.
-      Whether or not the algorithm needs a big initial set of labeled reports is another factor that will be evaluated.
-
-  \item \label{intro:re-q3}
-      \textit{How do the algorithms from question~\ref{intro:re-q2} affect the balance of labels in the labeled dataset?}
+      \item \label{intro:re-q2}
+      \textit{How do the the strategies affect the balance of labels in the labeled dataset?}
       Another indication on the quality of the labeled reports is the balance between the classes.
       Based on the initial sampling, the underlying distribution of labels in the clinical data is far from uniform.
       There are certain categories, like the one describing that everything is okay with the patient, that are a lot more common than other more rare illnesses.
@@ -127,18 +147,35 @@ They are the main focus of study.
 
 \end{enumerate}
 
+In addition to this, after exploring the data it became clear that a substantial amount of reports states that an examination did not occur.
+There was no standard format to these, but their subject matter was very similar the third research question treats whether or not these reports can be filtered out using unsupervised machine learning techniques.
+
+\begin{enumerate}
+      \setcounter{enumi}{2}
+      \item \label{intro:re-q3}
+      \textit{To what degree is it possible to filter out invalid clinical reports by using an unsupervised techniques such as topic modeling?}
+      \newline
+      In the dataset from Sectra, there are reports describing patients not showing up for, or changing the time of their appointments, deceased patients or patients that have been ordered to go to another hospital.
+      These reports do not contain any information of value from a medical point of view and should be discarded in the labeling process.
+
+      Unsupervised machine learning models such as topic modeling do by definition not require any labeled documents to train on.
+      If it is possible to, without any such data, to capture the necessary variance and group these invalid reports together and they can be removed from the labeling process before a doctor is presented with them.
+      That would result in an additional hurdle being removed from the process.
+      The filtering of reports will be evaluated using  accuracy, precision, recall and $F_1$-score.
+\end{enumerate}
+
 \section{Delimitations}
 \label{sec:delimitations}
 
 The active learning techniques will be evaluated on the publicly available Reuters dataset.
 Even though the sampling strategies are evaluated objectively on this, the applicability of the techniques on clinical data is only evaluated by one physician.
-This evaluation is performed on the one dataset provided by Sectra, which is not available for public use.
+That part of the study is therefore inherently subjective.
+Another limitation to this evaluation is that it is performed on the dataset provided by Sectra, which is not available for public use, so any conclusions drawn from it may not be applicable in other scenarios.
 
 \section{Structure of the Report}
 \label{sec:structure}
 
-The next chapter covers the background that is relevant to understand the project.
-The background is followed by the theory chapter, which brings up the theory behind the techniques used.
-After this, the methodology is described, which is followed by a chapter covering the results.
+Chapter~\ref{cha:theory} covers the theory behind the different active learning strategies used, as well as some techniques used for classification and processing of text.
+After this, the data and an analysis of it is described in chapter~\ref{cha:data}, which is followed by Chapter~\ref{cha:experiements}, which presents the different experiments as well as their results.
 The method and results are then discussed in Chapter~\ref{cha:discussion}.
-Finally, Chapter~\ref{cha:conclusion} presents the conclusions.
+Finally, Chapter~\ref{cha:conclusion} presents the conclusions and answers the research questions.
