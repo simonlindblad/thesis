@@ -70,13 +70,13 @@ Given that the names got similar coordinates in the plot, identifying the sectio
 \begin{figure}
     \begin{subfigure}[b]{\textwidth}
         \centering
-        \fbox{\includegraphics[scale=0.25]{figures/word2vec-overview.png}}
+        \fbox{\includegraphics[width=\textwidth]{figures/word2vec-overview.png}}
         \caption{A 2D plot of the full word2vec model.}
     \end{subfigure}
     \quad
     \begin{subfigure}[b]{\textwidth}
         \centering
-        \fbox{\includegraphics[scale=0.25]{figures/word2vec-names.png}}
+        \fbox{\includegraphics[width=\textwidth]{figures/word2vec-names.png}}
         \caption{A 2D plot of the subset of the word2vec model covering the names.}
     \end{subfigure}
     \caption{Two figures illustrating how the names were discovered in the word2vec plot. The (b) plot represents the red square in (a).}
@@ -166,6 +166,15 @@ In the figure you can also see the results of the logistic regression classifier
     \caption{The results of the classification of the invalid reports. The manual identification column represents the use of manual interpretation of the LDA topics to find the invalid reports.}
     \label{tab:exp1-eval}
 \end{table}
+
+A comparison of how long time it took for the different strategies can be seen in Figure~\ref{fig:al-time-dist}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{figures/time-distribution.png}
+    \caption{The percentage of time used on the different strategies during one iteration.}
+    \label{fig:al-time-dist}
+\end{figure}
 
 \section{Alternatives to Labeling at Random}
 

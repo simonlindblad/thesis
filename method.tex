@@ -27,7 +27,7 @@ The query strategy module contains the different active learning algorithms for 
 
 \section{Datasets}\label{sec:datasets}
 
-Two different datasets were used in thisthesis.
+Two different datasets were used in this thesis.
 They were the dataset of clinical reports provided by Sectra, as well as Reuters-21578 \footnote{Reuters-21578, https://archive.ics.uci.edu/ml/datasets/reuters-21578+text+categorization+collection}.
 The latter was used in order to be able to simulate a multi-label labeling process.
 Before being integrated into Sectra's system, the different strategies needed to be evaluated from an objective point of view, so that any tradeoffs were known beforehand.
@@ -104,7 +104,7 @@ Note that this is only a count of the different labels.
 The plot is therefore is disregarding which labels occurred together.
 
 \begin{figure}
-    \includegraphics[scale=0.5]{figures/class-distribution.png}
+    \includegraphics[width=\textwidth]{figures/class-distribution.png}
     \caption{The distribution over the labels in the initial set of labeled data provided by Sectra}
     \label{fig:class-distribution}
 \end{figure}
@@ -118,7 +118,7 @@ The distribution of the top 15 Reuters-21578 categories can be seen in Figure~\r
 After filtering out the documents not labeled with any of the top 15 categories, there were 6880 documents left in the training set, and 2646 in the test set.
 
 \begin{figure}
-    \includegraphics[scale=0.6]{figures/class-distribution-reuters.png}
+    \includegraphics[width=\textwidth]{figures/class-distribution-reuters.png}
     \caption{The distribution over the labels in the Reuters data}
     \label{fig:class-distribution-reuters}
 \end{figure}
@@ -176,7 +176,7 @@ Hovering over each data point would show the content of the report and the topic
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.25]{figures/lda-2d-distribution.png}
+    \includegraphics[width=\textwidth]{figures/lda-2d-distribution.png}
     \caption{A 2D plot of the text data, where each point is colored by topic with the highest probability}
     \label{fig:lda-dist}
 \end{figure}
@@ -202,7 +202,7 @@ Accomplishing this was done by exploring the data through an interactive plot, a
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.3]{figures/ldavis-sample.png}
+    \includegraphics[width=\textwidth]{figures/ldavis-sample.png}
     \caption{A way to visualize and analyze topics based on their relevance and frequency}
     \label{fig:ldavis-sample}
 \end{figure}
@@ -286,8 +286,8 @@ In order to provide a thorough evaluation of how well they techniques perform a 
 For this reason, the Reuters-21578 dataset was used.
 The properties of the dataset, as well as a comparison between it and the clinical data provided by Sectra can be found in Section~\ref{sec:datasets}.
 The dataset is common in active learning research and has been used by Brinker et al\@.~\cite{brinker2006active} and Yang et al\@.~\cite{yang2009effective}, among others.
-With this set of labeled reports, a simulation of the labeling procesfs was run.
-The result fot he simulation was used to compare the different strategies with regard to some evaluation metrics.
+With this set of labeled reports, a simulation of the labeling process was run.
+The result of the simulation was used to compare the different strategies with regard to some evaluation metrics.
 The metrics used were:
 \begin{enumerate}
     \item Accuracy
@@ -298,8 +298,8 @@ The metrics used were:
     \item Micro F1-Score
     \item Macro F1-Score
 \end{enumerate}
-
 These are described in Section~\ref{sec:evaluation-metrics} and are frequently used to compare different active learning methods, for example by Yang et al\@.~\cite{yang2009effective}, Dasgupta et al\@.~\cite{dasgupta2008hierarchical} and Li et al\@.~\cite{li2013active}.
+In addition to this, how long time they take to run is compared as well.
 
 With this dataset, the same pre-processing steps that were applied to the clinical dataset were applied to the Reuters data too.
 Some modifications of this includes the stopwords, instead of a curated list of words, the unmodified list of english stopwords provided by nltk was used.

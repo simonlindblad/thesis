@@ -50,6 +50,19 @@ It is possible that other techniques would have reached it given more labels, bu
 The technique always tries to sample from the most uncertain category.
 The lack of reports in this category can be the thing that prohibits the other strategies from achieving a higher accuracy.
 
+The initial clustering of reports did not seem to make as much of a difference as the strategy used.
+This makes sense, the initial sample size only makes up for a little bit of the overall set of labeled reports.
+Worth noting is that the SVM model performs worse for the first couple of iterations with initial clustering.
+It quickly recovers after this and seems to perform as well, or slightly better, compared to the randomly initialized counterpart.
+The reason for the low initial performance might be due to skewed dataset.
+If we assume that the clusters captures a bit of the label information, then the labels should be more evenly distributed in the initial sample.
+On the other hand, if the test set contains mostly one or two labels, the initial set will not have seen as much of these and will therefore not be as accurate in predicting them.
+This would then greatly reduce the evaluation.
+
+All clusters will not have the same number of members.
+If most of the documents with a high label cardinality got assigned the same populous cluster, they might get neglected from the initial sample since an equal number of reports was taken from each cluster.
+This could be a reason for the clustering approach to initial sampling only obtained samples with label cardinality 1, and therefore excluding MMC from the process.
+
 Looking at the distribution of the labels it is instantly clear that the three strategies outperforms random sampling significantly.
 MMC and AAL are by far the most balanced one after only 500 labels are labeled.
 When 2000 data points are labeled, BSVM is the most balanced one, albeit slightly compared to MMC.
@@ -59,7 +72,7 @@ The most uncertain class is probably the one with the fewest samples, causing th
 While BSVM always selects the sample that is the most uncertain in one single class, one can view MMC and AAL as more of an average of the uncertainty over the categories for a data point.
 They also incorporate the label cardinality information.
 This averaging trait may be beneficial for the distribution early on.
-The model is most likely rather uncertain about most categories, so instead of focusing on the one with the aboslutely lowest value they select the data point that will give the overall most information.
+The model is most likely rather uncertain about most categories, so instead of focusing on the one with the absolutely lowest value they select the data point that will give the overall most information.
 As with the evaluation on model performance, BSVM seem to perform better in the long run.
 One could include MMC in this too, the difference between the two could probably be neglected in most applications.
 However, if only a few hundred labels are supposed to be labeled, AAL is unrivaled when all metrics are considered.
