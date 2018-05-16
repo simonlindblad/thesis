@@ -218,7 +218,7 @@ Different topic models were tested for this purpose.
 The topic model used was Latent Dirichlet Allocation.
 In order to use the LDA model the number of topics, $k$, has to be selected, as described in Section~\ref{sec:topic-modeling}.
 The different values of $k$ that were evaluated was 25, 50, 75, 100, 150, 200.
-To determine which topic model that should be used in the exploration, their perplexity was compared and the models with the lowest perplexity was chosen.
+To determine which topic model that should be used in the exploration, their perplexity was compared and the model with the lowest perplexity was chosen.
 Perplexity is used in the original LDA paper by Blei et al\@.~\cite{blei2003latent} to compare different number of topics.
 Hofmann used it to evaluate the pLSI based topic models as well~\cite{hofmann1999probabilistic}.
 80 000 reports were used in the experiment, and they were selected at random.
@@ -275,8 +275,11 @@ This provided a good way to explore the important words in each topic.
 With the initial set of labeled reports, it was natural to explore and try to find a relationship between the initial set of categories and the inherit structure of the data.
 This was done by visualizing the LDA model again.
 In order to find any existing relationship between the topics and the labeled samples, the points were colored based on their assigned labels.
+The color of a point in the plot was based on the first label of a sorted list of the point's labels.
 Unlabeled samples were hidden from the plot.
 The resulting plot can be seen in Figure~\ref{fig:categories-lda-75}.
+Even if the categories are not the same in the final system, knowledge of an existing relationship might still be exploited even if the specifics change.
+If there is an existing relationship between categories and topics, it is likely to remain since the new categories still aim to describe the reports.
 
 \begin{figure}
     \centering
@@ -290,8 +293,10 @@ Certain labels are more likely to occur in documents assigned a specific topic.
 For example, the purple points in the lower part of the graph represents the ``blödning'' label, the gray labels in the middle represents ``infarkt'' and the light blue ones that are mostly concentrated in the bottom right corner represents ``infektion''.
 It is clear that these labels are not evenly spread out over all the topics, but neither are they confined enough to make a direct mapping between topics and labels.
 
-
+To explore the relationships in more detail, they can be analyzed with the help of histograms over the topics for a certain label, as well as histograms over categories that had a certain topic as its most likely topic
+This was done on the 4 most common labels, since most of the others lacked the amount of reports necessary to identify a clear pattern.
 In Figure~\ref{fig:category-label-distribution} the counts of most likely topics for the four most common categories are displayed.
+The four most common categories were used because the others lacked the amount of reports necessary to identify a clear pattern.
 These categories are ``infarkt'', ``kärlsjukdom'', ``normal'' and ``blödning''.
 From the histograms it is clear that documents of a certain category are more likely to be assigned certain topics, at least in these cases.
 Even though there exist a clear relationship, it is not exclusive enough to make any clear relation.
@@ -351,6 +356,7 @@ If a report has multiple labels assigned to it, both of the labels are counted s
 \end{figure}
 
 \subsection{The Relationship Between Topics and Invalid Reports}
+\label{sec:topic-invalid}
 
 The next step was identifying the topics that were assigned to the invalid reports.
 First, topic 1 and 17 were identified as interesting based on the word distribution they represented.

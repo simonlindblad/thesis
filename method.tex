@@ -215,49 +215,13 @@ Finally, the third one aims to compare how the distribution of labels in the lab
 
 \subsection{Filter Out Invalid Clinical Reports Using Topic Models}
 
-The task here was to evaluate how well unsupervised techniques could be used to filter out invalid reports.
-Invalid reports are considered to be reports that describe a situation where an examination never took place.
-This can be because of a deceased patient, a patient being moved to another hospital, a patient did not show up or for some reason did not want to go through with the examination.
 
-In order to evaluate how well the selected model performed on the clinical data, a set of reports had to be marked as valid/invalid.
-This was done by creating a script that presented a report to the user, and requested the label.
-5358 reports were labeled by the author, out of which 623 were marked as invalid. 
-The labels were skewed, containing only 623 invalid reports, which makes up 10.4\% of the labels.
-In order to obtain a more balanced dataset, 3653 of the valid reports were dismissed at random making it 1000 in total.
-In order to make the models able to separate the invalid reports from the valid reports they had to be manually analyzed.
-They are both unsupervised methods and were therefore not fitted with a specific target.
-Approaching this in a way that would not result in the models overfitted to the analyzed data could potentially be hard since they are manually analyzed. 
-To reduce the bias in the evaluation, the labeled reports were split into a training set and validation set, containing 80\% and 20\% of the reports respectively.
-The training set was used to be analyze and identify important topics, whereas the validation set was used to evaluate how well the model performed.
 
-A combination of these topics together with the number of topics assigned with a high probability to a report were used to determine whether or not a report was invalid or not.
-After some analysis, the number of topics that were assigned to a report with the probability of over 10\% was used as well.
-In the report these are referred to as prominent topics.
-
-After some initial experiments with the topics generated it was clear that the topic vectors contained patterns ripe for exploitation.
-A topic vector is the vector with the topic probabilities for a document.
-The patterns are clear enough to motivate the manual identification of topics that are important to differentiate between invalid and valid reports.
-In order to compare this result with some more objective baseline, a logistic regression classifier was fitted on the data and evaluated as well.
-A set of reports were already labeled with ``invalid'' or ``valid'' in order to evaluate the manual interpretation approach.
-This set was thus used to fit the classifier.
-The topic vectors were used as features, and the targets were the labels indicating if a report is valid or not.
-
-Both of these approaches were evaluated using four different metrics, recall, precision, $F_1$-measure and accuracy.
-All of which are described in Section~\ref{sec:evaluation-metrics}.
 
 \subsection{Alternatives to Label Reports at Random}\label{sec:exp2-method}
 
-This was done by first doing a literature study, and then exploring the relation between the initial set of labeled data with the structure of the data through clustering and topic analysis.
 At first, the labeled data was transformed using the LDA and k-means models.
-The k-means model used the latent topic vectors from the LDA model as representation of the text data.
-After that, they were plotted in the same 2D space as before.
-The color of a point in the plot was based on the first label of a sorted list of the point's labels.
 
-Just as before this was an interactive plot, hovering over the data points revealed the report as well as the topics and the cluster assigned to the data point.
-The goal of this was to see if there existed a relationship between the topics/clusters and the labeled assigned to the data point.
-The relationships were explored further by creating histograms over the most likely topics for different labels, as well as histograms over categories that had a certain topic as its most likely topic.
-This was done on the 4 most common labels, since most of the others lacked the amount of reports necessary to identify a clear pattern.
-Even if the labels are not the same in the final system, knowledge of an existing relationship might still be exploited even if the specific labels change.
 Based on multi-label nature of the data and the results of this analysis, active learning approaches were researched with the goal of identifying methods that would be applicable in a multi-label setting.
 The research touched upon both methods that exploit the structure of the data, and methods that are purely uncertainty based.
 
@@ -265,101 +229,6 @@ After establishing the techniques that had some indication on providing a better
 In the end, the algorithms described in Section~\ref{sec:active-learning} were the ones selected for evaluation.
 Some motivation for the choices are presented in Chapter~\ref{cha:results}.
 
-In order to provide a thorough evaluation of how well they techniques perform a set of already labeled documents was needed.
-For this reason, the Reuters-21578 dataset was used.
-The properties of the dataset, as well as a comparison between it and the clinical data provided by Sectra can be found in Section~\ref{sec:datasets}.
-The dataset is common in active learning research and has been used by Brinker et al\@.~\cite{brinker2006active} and Yang et al\@.~\cite{yang2009effective}, among others.
-With this set of labeled reports, a simulation of the labeling process was run.
 The result of the simulation was used to compare the different strategies with regard to some evaluation metrics.
-The metrics used were:
-\begin{enumerate}
-    \item Accuracy
-    \item Micro recall
-    \item Macro recall
-    \item Micro precision
-    \item Macro precision
-    \item Micro F1-Score
-    \item Macro F1-Score
-\end{enumerate}
-These are described in Section~\ref{sec:evaluation-metrics} and are frequently used to compare different active learning methods, for example by Yang et al\@.~\cite{yang2009effective}, Dasgupta et al\@.~\cite{dasgupta2008hierarchical} and Li et al\@.~\cite{li2013active}.
-In addition to this, how long time they take to run is compared as well.
 
-With this dataset, the same pre-processing steps that were applied to the clinical dataset were applied to the Reuters data too.
-Some modifications of this includes the stopwords, instead of a curated list of words, the unmodified list of english stopwords provided by nltk was used.
-The main goal was to compare how the different techniques affected the labeled dataset, and how well an SVM model performed on it.
-Optimizing the process for the particular model and dataset was therefore not the focus of the study, but instead offering a more comprehensive comparison.
 
-The strategies compared were: 
-\begin{itemize}
-    \item \textit{BSVM (BSVM)}: Described in Section~\ref{subsec:binmin}
-    \item \textit{Maximum Loss Reduction with Maximum Confidence (MMC)}: Described in Section~\ref{subsec:mmc}
-    \item \textit{Adaptive Active Learning (AAL)}: Described in Section~\ref{subsec:adaptive-active-learning}
-\end{itemize}
-They need a small initial set of labeled reports which they can use to get initial predictions from the SVM model, upon which the strategies base their calculations.
-The techniques were evaluated both by selecting this initial set of points at random, as well as selecting them from the clusters generated by the k-means algorithm.
-Sampling from the clusters was done by iterating over the clusters and selecting an equal number of data points from each clusters.
-All samples selected from a given cluster were chosen randomly amongst the members of the clusters.
-Furthermore, the number of clusters selected was 25, in order to get an equal number of reports from each cluster in the different experimental settings.
-The topic model selected in Section~\ref{sec:exp1-method} was used as input to the k-means algorithm.
-
-Since the different models may depend on the initial samples in different ways, different initial sizes were evaluated.
-This is also done by Yang et al\@.~\cite{yang2009effective}.
-In their paper they tried quite large initial sample sizes.
-Here, the sizes evaluated are: 25, 50, 100.
-The reason for this is that an large initial sample size would make it hard for the human annotator to see a difference in the class balance early on.
-In each iteration, 25 labels were queried.
-The ones selected every iterations were the 25 best one according to the strategy's measure.
-100 iterations were run per strategy.
-Making it 2500 labels that are labeled, in addition to the initial sample.
-The different active learning configurations that were tried is displayed in Table~\ref{fig:active-learning-configurations}
-In total there were 18 configurations, based upon the three different methods.
-Every configuration was evaluated 5 times, and it is the average of those runs that are considered to be the final results.
-The reasoning behind this is to reduce the effect of a single random selection.
-
-\begin{table}
-    \centering
-    \begin{tabular}{|cccc|}
-        \hline
-        \textbf{ID} & \textbf{Active Learning Strategy} & \textbf{Initial Sampling} & \textbf{Initial Sample Size}\\
-        \hline
-        1 & BSVM & Random & 25\\
-        2 & BSVM & Random & 50\\
-        3 & BSVM & Random & 100\\
-        4 & BSVM & Sampled from clusters & 25\\
-        5 & BSVM & Sampled from clusters & 50\\
-        6 & BSVM & Sampled from clusters & 100\\
-        7 & MMC & Random & 25\\
-        8 & MMC & Random & 50\\
-        9 & MMC & Random & 100\\
-        10 & MMC & Sampled from clusters & 25\\
-        11 & MMC & Sampled from clusters & 50\\
-        12 & MMC & Sampled from clusters & 100\\
-        13 & AAL & Random & 25\\
-        14 & AAL & Random & 50\\
-        15 & AAL & Random & 100\\
-        16 & AAL & Sampled from clusters & 25\\
-        17 & AAL & Sampled from clusters & 50\\
-        18 & AAL & Sampled from clusters & 100\\
-        \hline
-    \end{tabular}
-    \caption{The different configurations of active learning strategies evaluated.}
-    \label{fig:active-learning-configurations}
-\end{table}
-
-\section{Evaluating the Label Balance}
-The goal with the last experiment was to evaluate how the labels in the produced labeled dataset are distributed.
-A set where the labels are more evenly, or uniform, distributed would be preferable.
-From a perspective of the person labeling, it could feel more productive not assigning the same labels most of the time.
-The more prosperous outcome from a balanced dataset would be that the models using the data in later stages could also benefit from this, and obtain better results.
-
-The configurations used here are the same as in Table~\ref{fig:active-learning-configurations}.
-Every iteration, the distribution of labels assigned are stored and analyzed.
-He et al\@. discusses the usage of ROC curves and measures such as g-means to compare multi-class imbalanced data~\cite{he2009learning}.
-However, the doctor involved at Sectra specifically requested that labels should be more uniformly distributed. 
-The evaluation will therefore focus on measuring that instead of the models performance, which is done in ~\ref{sec:exp2-method}.
-An evaluation of how the distribution progresses was done by comparing how the class imbalance is affected by the number of new samples obtained from the different methods.
-
-Ertekin et al\@.~\cite{ertekin2007learning} used a class imbalance ratio to compare how well an active learning strategy worked.
-This was only done for the binary case.
-In order to get a measure for the multi-label problem, the evaluation of class imbalance was measured by the percentage of all total labels that were in the most common class, as well as in the top 3 most common classes.
-Furthermore, the ratio between the biggest and the smallest class will be used in the evaluation.
