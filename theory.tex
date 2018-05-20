@@ -225,12 +225,12 @@ Under the assumption that any $x \in D_U - D_S$ has an equal effect on a model t
 
 In their paper, Yang et al\@.~\cite{yang2009effective} considers the process of finding the greatest reduction in two steps: finding a good estimate for the conditional probability $p(y|x)$, and finding a way to assess the loss reduction of a multi-label classifier.
 
-It is unfeasible for a query strategy to provide a an estimation for all possible label combinations.
+It is unfeasible for a query strategy to provide an estimation for all possible label combinations.
 If there are $n$ different labels, there will be $2^n$ different label combinations.
 In order to estimate the conditional probability $p(y|x)$, MMC uses an approach that first estimates the number of labels for a given data point, and then uses that estimate to select the most probable labels.
 Consider the case where a data point has $m$ labels.
 By obtaining the probability from our classification model for each label we can sort them in descending order.
-If the sample has $m$ labels, then those should the the first $m$ ones in the sorted list.
+If the sample has $m$ labels, then those should be the first $m$ ones in the sorted list.
 Furthermore, the probabilities for these $m$ labels are probably significantly higher than the probabilities for the labels that follow.
 There should be a clear separation between them.
 
@@ -244,7 +244,7 @@ Yang et al\@.~\cite{yang2009effective} describe the process of estimating the nu
 
 After obtaining the predicted number of labels $m$ for a sample $x$, the estimate for $p(y|x)$, denoted $\hat{y}$, is then obtained by selecting $m$ the most probable labels based on the original classification models output.
 
-now the loss for the multi-label classifier needs to be defined.
+Now the loss for the multi-label classifier needs to be defined.
 By using the model where there are $k$ different binary classifiers for a problem with $k$ labels, the model loss can be calculated by adding the loss for the different binary classifiers like:
 \begin{equation}
     L(f) = \sum_{i = 1}^k L(f^i)
