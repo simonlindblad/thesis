@@ -4,8 +4,8 @@
 In this chapter the theory behind the techniques used in this thesis work will be presented.
 The first section will treat supervised text classification, which will act like a foundation for the active learning that will come after.
 Active learning is the main focus of the chapter, and an overview of the field as well as some concrete techniques will be covered.
-The techniques covered will mainly be in regards to multi-labeled data.
-In addition to this, some unsupervised methods used in the data processing will be covered.
+The techniques will mainly be in regards to multi-labeled data.
+In addition to this, some unsupervised methods used in the data processing will be presented.
 This chapter will then end by going through the different evaluation metrics that will be use to assess the methods used.
 
 Most of this Chapter deals with text data.
@@ -24,14 +24,14 @@ The problem in text classification is to assign one or more classes to a given t
 It is mainly approached with supervised machine learning.
 That is, with a dataset that consists of a collection of text documents, where each document has one or more classes assigned to it.~\cite{bishop2006pattern}.
 With the help of these labels, a classification model is fitted to the data.
-The goal of this is for the model to be able to correctly assign a class to a a previously unseen text document.
+The goal of this is for the model to be able to correctly assign a class to a previously unseen text document.
 Some of these classification models can also produce a probability of a document being of a certain class.
 Other models are based on the concept of a margin that separates the classes, and the distance between a data point and a margin can be used to indicate how certain the model is of the assigned label~\cite{tong2001support}.
 Example of use cases for text classification is categorization of news articles, document retrieval and email filtering.
 There exist several different models for classifying text.
-Decision trees, neural networks and Support Vector Machines (SVM) are some have been previously applied to the text domain with successful results~\cite{aggarwal2012survey}.
+Decision trees, neural networks and support vector machines (SVM) are some have been previously applied to the text domain with successful results~\cite{aggarwal2012survey}.
 In this thesis, SVM are the main focus, since they have been studied extensively in the context of active learning~\cite{tong2001support, settles2012active, brinker2006active, yang2009effective}.
-Logistic regression is used for the binary classification task of identifying invalid reports. %TODO: Refer to proper thing
+Logistic regression is used for the binary classification task of identifying invalid reports in Section~\ref{sec:experiments-exp3}.
 
 \subsection{Support Vector Machines}
 
@@ -402,8 +402,8 @@ They use the structure of the data to obtain the information to use when process
 These techniques may have different goals.
 Some are used to estimate a distribution, others are used to reduce the number of dimensions in the data by trying to find dimensions that capture as much as possible of the variance, and some are used for the purpose of identifying groups of similar points within the data~\cite{bishop2006pattern}.
 When it comes to text data, there are a few common methods and techniques that are unsupervised, and can be used for different purposes.
-Examples of such techniques are \textit{topic modeling} and \textit{clustering}.
-Another interesting technique is word2vec, that is used to produce word embeddings.
+Examples of such techniques are \textit{topic modeling} and \textit{clustering}~\cite{aggarwal2012survey, crain2012dimensionality}.
+Another interesting technique is word2vec, that is used to produce word embeddings~\cite{mikolov2013efficient}.
 
 As described in Section~\ref{sec:text-classification}, with BoW a document is represented by the number of occurrences of the different words. 
 Representing text in this way therefore becomes high-dimensional, there is one dimension for each word in the vocabulary. 
@@ -564,7 +564,7 @@ A simple approach to $k$-means clustering could look as follows:
 
 \begin{enumerate}
     \item Select K seeds from the original dataset
-    \item \label{enum:k-means-step-2} Assign the rest of the documents to one of these seeds, based how how similar they are by the similarity function
+    \item \label{enum:k-means-step-2} Assign the rest of the documents to one of these seeds, based on how how similar they are by the similarity function
     \item \label{enum:k-means-step-3} Before each new iteration, select a new centroid for each cluster. This should be the point that is the best central point for the cluster.
     \item Repeat step \ref{enum:k-means-step-2} and \ref{enum:k-means-step-3} until convergence.
 \end{enumerate}
@@ -593,11 +593,11 @@ A frequently used method is $k$-means++, that has been shown to improve both the
 \subsection{Word Embeddings}
 
 Word embeddings can be done with several different techniques, and it is the process of representing a word as a real-valued vector instead of just an atomic unit.
-Viewing a word as a vector allows for doing interesting things with them, such as evaluating how similar to words are.
+Viewing a word as a vector allows for doing interesting things with them, such as evaluating how similar two words are.
 Evaluating the similarity of words that is hard to do when treating them as atomic units.
 
 This can be created by using a co-occurrence matrix to see how often certain words occur together, and then perform some dimensionality reduction on them~\cite{lebret2013word, levy2014neural}.
-Another approach that shown to be very successful in producing high quality word embeddings is \textit{word2vec}, which uses a neural network to accomplish this task~\cite{mikolov2013efficient}.
+Another approach that is shown to be very successful in producing high quality word embeddings is \textit{word2vec}, which uses a neural network to accomplish this task~\cite{mikolov2013efficient}.
 In addition to being able to compute similarities between words, using simple algebraic some interesting relationships can be discovered.
 The example that Mikolav et al\@.~\cite{mikolov2013efficient} showed was that using the vector for ``King'', subtracting the vector for ``Man'' and adding the vector for ``Woman'' resulted in a vector that was close to that representing ``Queen''.
 
