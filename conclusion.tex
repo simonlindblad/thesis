@@ -33,14 +33,8 @@
 \chapter{Conclusion}
 \label{cha:conclusion}
 
-This thesis can be seen to have been done in two parts: filtering out the invalid reports, and identifying active learning strategies that could be used to improve the labeling process.
-Identifying and filtering out invalid reports was treated in the first research question.
-It resulted in a rather good separation of the two categories.
-Accomplishing this using only unsupervised techniques is possible, even if using them together with a supervised technique gave a better result.
-But manually identifying relevant topics and classifying based on this information was clearly a working approach.
-It did not achieve 100 \% accuracy, so there is room for improvement, but the separation has to be seen as successful.
-
-When it comes to the alternatives to labeling reports at random, the second research question, there are a few alternatives.
+This thesis can be seen to have been done in two parts: identifying active learning strategies that could be used to improve the labeling process, and filtering out the invalid reports.
+When it comes to the evaluation of the active learning strategies, there were a few alternatives.
 The ones chosen for evaluation here were the ones that were adapted for the multi-label scenario.
 These were: 
 \begin{itemize}
@@ -48,7 +42,8 @@ These were:
     \item Maximum Loss Reduction with Maximum Confidence (MMC)
     \item Adaptive Active Learning (AAL)
 \end{itemize}
-Their performance can be summarized in that MMC performed worse in the early stages, while the adaptive approach worked the best.
+
+For the first research question, the performance of the strategies can be summarized in that MMC performed worse in the early stages, while the adaptive approach worked the best during the same time.
 BSVM performed approximately the same as random sampling in the beginning.
 In the end, BSVM and MMC both achieved a higher accuracy and $F_1$-score than AAL, at least after 2000 samples were added.
 All of the above mentioned strategies performed better than random sampling in the long run.
@@ -57,6 +52,12 @@ When it comes to the distribution of labels, the strategies all performed better
 After 2000 labels, BSVM and MMC had a more even distribution than AAL.
 While early on, MMC and the adaptive approach generated a lot more even label distribution than BSVM.
 So, in various degrees during the labeling process, the different strategies all made the dataset more uniform than labeling at random.
+
+Identifying and filtering out invalid reports was treated in the first research question.
+It resulted in a rather good separation of the two categories.
+Accomplishing this using only unsupervised techniques is possible, even if using them together with a supervised technique gave a better result.
+But manually identifying relevant topics and classifying based on this information was clearly a working approach.
+It did not achieve 100 \% accuracy, so there is room for improvement, but the separation has to be seen as successful.
 
 For future research, it would be interesting to look into how to further use the structure of the data in active learning strategies, besides only obtaining initial samples from clusters.
 An example of this would be to find a good way to adapt the approach described by Dasgupta et al\@.~\cite{dasgupta2008hierarchical} to the multi-label case.

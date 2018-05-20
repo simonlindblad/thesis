@@ -5,7 +5,7 @@ In this chapter the theory behind the techniques used in this thesis work will b
 The first section will treat supervised text classification, which will act like a foundation for the active learning that will come after.
 Active learning is the main focus of the chapter, and an overview of the field as well as some concrete techniques will be covered.
 The techniques covered will mainly be in regards to multi-labeled data.
-In addition to this, some unsupervised methods used in the exploration of the data will be covered.
+In addition to this, some unsupervised methods used in the data processing will be covered.
 This chapter will then end by going through the different evaluation metrics that will be use to assess the methods used.
 
 Most of this Chapter deals with text data.
@@ -130,6 +130,7 @@ This is followed by some theory of how the samples relate to the hypothesis spac
 The active learning theory then ends with a description of three multi-label active learning strategies.
 
 \subsection{Pool-Based Sampling}
+\label{sec:pool-based-sampling}
 
 The main focus in active learning is how to select the samples to be labeled.
 There are different sampling methods in use, and which one is more appropriate depends on how the data can be accessed.
@@ -142,6 +143,7 @@ For text applications, where a set of data is often readily available, pool-base
 Pool-based is therefore the sampling technique that is considered in this thesis.
 
 \subsection{The Version Space}
+\label{sec:the-version-space}
 
 In machine learning, a hypothesis is a specific configuration of a model, the purpose of which is to predict outputs on new instances of data by generalizing the training data.
 One hypothesis can, for example, be an SVM model with specific values for the parameters.

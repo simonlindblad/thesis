@@ -13,7 +13,7 @@ The goal is to make the set of labeled reports more useful in future systems by 
 By using a selection strategy, the need for a large set of labeled reports could be reduced.
 The work is done at Sectra Medical Imaging IT Solutions AB in connection with a research project they have with Region Skåne.
 Region Skåne is responsible for the healthcare in Skåne, the southern most county of Sweden.
-This research project project on investigating how to use machine learning and text mining techniques to improve the functionality of their products and aid the physicians in their work.
+This research project works on investigating how to use machine learning and text mining techniques to improve the functionality of their products and aid the physicians in their work.
 
 \section{Motivation}
 \label{sec:motivation}
@@ -42,11 +42,11 @@ Coming by data that is already categorized is on the other hand much harder.
 Obtaining high quality data is important for use in machine learning systems, both in healthcare and in other areas.
 
 Since the models require a sufficient amount of categorized reports, the task of categorizing them can be cumbersome.
-Improving the categorization is especially important in the case of clinical data, since doctors and other clinicians time is both valuable and expensive.
+Improving the categorization is especially important in the case of clinical data, since doctors and other clinicians time is both valuable and limited.
 By improving the process and the quality of data to be labeled, and thereby reducing the number of reports that need to be categorized, they can spend more time doing their job.
 
 Assigning categories to reports is often referred to as labeling.
-A field within machine learning that is focused on the task of improving the data labeling process is called active learning.
+A field within machine learning that is focused on the task of improving the data labeling process is called active learning~\cite{settles2012active}.
 It is a form of semi-supervised learning.
 The algorithm queries an oracle (in this case a doctor) for labels for the data points that it thinks will help the model improve the most.
 An overview of the components in an active learning system can be seen in Figure~\ref{fig:active-learning-model}.
@@ -59,7 +59,8 @@ The goal with this approach is to capture the distribution of the categories by 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/active-learning-model.eps}
-    \caption{An overview of an active learning system. The dotted lines represents the things that some samplings strategies base their calculations on.}
+    \caption{An overview of an active learning system. 
+    The dotted lines represents components that sampling strategies can base their calculations on.}
     \label{fig:active-learning-model}
 \end{figure}
 
@@ -82,8 +83,8 @@ Increasing the quality of the reports will also reduce the need for a large set 
 Resulting from this will be a complete, standalone, system for labeling reports.
 The reports are interactively queried so a user can label the ones that are deemed most useful by the system.
 Labeling data to use in machine learning will probably be necessary for a long time ahead, but the aim here is to create a system that makes it more efficient.
-The technique chosen will then be used together with an existing web interface that Sectra created for the purpose of labeling reports.
-The existing web interface can be seen in Figure~\ref{fig:web-interface}.
+The technique chosen will then be integrated with an existing web interface that Sectra created for the purpose of labeling reports.
+This interface can be seen in Figure~\ref{fig:web-interface}.
 
 \begin{figure}
       \centering
@@ -102,20 +103,19 @@ A skewed dataset causes the number of clinical reports that need to be labeled t
 For a statistical model to be able to achieve good results with the less frequently occurring categories, a large number of reports needs to be labeled in order to obtain a good amount of reports with these categories.
 Obtaining a more balanced dataset is desirable.
 
-In addition to this, the doctors had come up with a new set of labels that were to be used.
-So the query strategies have to work from a non-existent, or very small, initial set of labeled reports.
+In addition to this, the doctors came up with a new set of labels that were to be used.
+So the sampling strategies have to work from a non-existent, or very small, initial set of labeled reports.
 
 \section{Research questions}
 \label{sec:research-questions}
 
 The specific research questions that this thesis treat are presented here.
-They are the main focus of study.
+They are the primary focus of study.
 There are two main research questions, both of which relate to active learning.
-In addition to this, a question regarding how to remove reports that does not need to be labeled is treated as well.
+In addition to this, a question regarding how to remove reports that do not need to be labeled is treated as well.
 
-The clinical reports are of a multi-label nature.
-How we are choosing the documents to be sampled is important.
-Three different query strategies for active learning are evaluated for this purpose.
+The clinical reports are of a multi-label nature, and how we are choosing the documents to be sampled is important.
+Three different sampling strategies for active learning are evaluated for this purpose.
 These are: binary version space minimization, maximum loss reduction with maximum confidence and adaptive active learning.
 Their properties will be described in Chapter~\ref{cha:theory}, and a motivation behind the choice of strategies will be made in Chapter~\ref{cha:discussion}.
 The algorithms to be evaluated will be based on the models certainty, as well as taking advantage of the underlying structure of the data through clustering.
@@ -123,7 +123,7 @@ The first two questions treats the evaluation of the different strategies.
 
 \begin{enumerate}
       \item \label{intro:re-q1} 
-      \textit{How well does a machine learning model perform on the labeled data created based on the sampling strategies, given the constraints of the project?}
+      \textit{How well does a machine learning model perform on the labeled data set created based on the sampling strategies, given the constraints of the project?}
       \newline
       If the decision boundaries of the models can be used to pick documents that would be more informative for the model, the number of labeled documents could hopefully be reduced while still obtaining the same performance.
       When choosing the algorithm to use in the final system, there are several different constraints that will affect the final results, and therefore need to be taken into consideration.
@@ -134,26 +134,28 @@ The first two questions treats the evaluation of the different strategies.
 
       \item \label{intro:re-q2}
       \textit{How do the the strategies affect the balance of labels in the labeled dataset?}
+      \newline
       Another indication on the quality of the labeled reports is the balance between the classes.
-      Based on the initial sampling, the underlying distribution of labels in the clinical data is far from uniform.
+      Based on the initially categorized clinical data, the underlying distribution of categories is far from uniform.
       There are certain categories, like the one describing that everything is okay with the patient, that are a lot more common than other more rare illnesses.
 
       If the dataset that is being sampled is skewed, i.e. some categories are a more frequent than others, our labeled set will likely follow that distribution.
       This will result in models requiring a lot of labeled documents to gather a sufficient amount of reports that are of the less common categories.
-      Without these, the model with only perform well on the frequently occurring categories.
+      Without these, the model will only perform well on the frequently occurring categories.
       Even though the original data may be imbalanced, selecting samples that contain a better balance between the different categories could improve the performance of the models.
       When a training set is imbalanced, the standard learning algorithms' performance can be significantly reduced~\cite{he2009learning}.
       The goal here is to see which one of the different sampling techniques that will result in the best balance between the different categories in the resulting dataset.
 
 \end{enumerate}
 
-In addition to this, after exploring the data it became clear that a substantial amount of reports states that an examination did not occur.
-There was no standard format to these, but their subject matter was very similar the third research question treats whether or not these reports can be filtered out using unsupervised machine learning techniques.
+In addition to this, after exploring the data it became clear that a substantial amount of reports state that an examination did not occur.
+There was no standard format to these, but their subject matter was very similar.
+The third research question treats whether or not these reports can be filtered out using unsupervised machine learning techniques.
 
 \begin{enumerate}
       \setcounter{enumi}{2}
       \item \label{intro:re-q3}
-      \textit{To what degree is it possible to filter out invalid clinical reports by using an unsupervised techniques such as topic modeling?}
+      \textit{To what degree is it possible to filter out invalid clinical reports by using an unsupervised technique such as topic modeling?}
       \newline
       In the dataset from Sectra, there are reports describing patients not showing up for, or changing the time of their appointments, deceased patients or patients that have been ordered to go to another hospital.
       These reports do not contain any information of value from a medical point of view and should be discarded in the labeling process.
@@ -167,7 +169,7 @@ There was no standard format to these, but their subject matter was very similar
 \section{Delimitations}
 \label{sec:delimitations}
 
-The active learning techniques will be evaluated on the publicly available Reuters dataset.
+The active learning techniques will be evaluated on the publicly available Reuters-21578 \footnote{Reuters-21578, https://archive.ics.uci.edu/ml/datasets/reuters-21578+text+categorization+collection} dataset.
 Even though the sampling strategies are evaluated objectively on this, the applicability of the techniques on clinical data is only evaluated by one physician.
 That part of the study is therefore inherently subjective.
 Another limitation to this evaluation is that it is performed on the dataset provided by Sectra, which is not available for public use, so any conclusions drawn from it may not be applicable in other scenarios.
@@ -176,6 +178,6 @@ Another limitation to this evaluation is that it is performed on the dataset pro
 \label{sec:structure}
 
 Chapter~\ref{cha:theory} covers the theory behind the different active learning strategies used, as well as some techniques used for classification and processing of text.
-After this, the data and an analysis of it is described in chapter~\ref{cha:data}, which is followed by Chapter~\ref{cha:experiements}, which presents the different experiments as well as their results.
-The method and results are then discussed in Chapter~\ref{cha:discussion}.
+After this, the data and an analysis of it is described in chapter~\ref{cha:data}, which is followed by Chapter~\ref{cha:experiments}, where the different experiments as well as their results are presented.
+The method and results of the experiments are then discussed in Chapter~\ref{cha:discussion}.
 Finally, Chapter~\ref{cha:conclusion} presents the conclusions and answers the research questions.

@@ -7,6 +7,7 @@ These are the changes in the different chapters (disregarding misspellings, gram
 * Depth of numbering increased to chapter + 2 levels of sections
 * Table of content follows this. I based this decision on that if someone sees a reference to 3.2.1 he/she might use the TOC to see what it's about.
 * [h] are removed from figures, tables and algorithms.
+* Question: In the experiments and discussion -- Should I give them name, or is "experiment 1" sufficient?
 
 ## Introduction
 
@@ -19,13 +20,24 @@ These are the changes in the different chapters (disregarding misspellings, gram
 
 ## Theory
 
-I am not completely sure if this provide enough structure, especially for the unsupervised techniques.
-Any suggestions on how to further clarify this?
+I am not completely sure if this provide enough structure, especially for the unsupervised techniques. 
+Any suggestions on how to further clarify this? Maybe split it up into several sections?
 
 * Reorganized according to our discussion. The structure is now:
     1. Text Classification
     2. Active Learning
-    3. Other techniques
+    3. Other techniques ()
 * A paragraph on representing texts as bag of words was added before text classification. I thought it was logical to represent it in some way before talking about the models, but maybe it should be moved? Or does it need to be in the theory at all?
 * Added further explanation of the mathematical definition of the version space. Removed the mathematical definition of the hypothesis space, since it did not really provide additional information and isn't needed for subsequent discussion. It was used by one paper in order to restrict another discussion to case where ||w|| = 1, which is not needed here (and most papers does not include the definition).
 * Added an analogy to binary search to explain why the version space should (optimally) be cut in half each iteration. 
+
+## Data
+* Pulled together different parts from the method and results, and fixing the issues in that text.
+
+## Experiments
+* Pulled together different parts from the method and results, and fixing the issues in that text.
+* The framework/implementation parts were added to the end of this chapter. Some of the libraries there are mainly used in the data chapter, but it's a rather small section so I thought that it might be okay to leave it where it is.
+
+## Discussion
+* Organized according to experiments
+* Moved related work here, not sure how well it fits?

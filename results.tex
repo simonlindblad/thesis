@@ -35,14 +35,3 @@ Finally, the last section goes through the result of evaluating the different ac
 
 
 
-Based on the knowledge that there exists a pattern, the initial goal was to find some methods that could exploit this.
-Some active learning approaches using different forms of clustering, such as Dasgupta et al\@'s approach using hierarchical clustering~\cite{dasgupta2008hierarchical}, would be good contenders.
-However, the method described by Dasgupta et al\@. is made for the single-label case with no obvious way of extending the technique into multi-label.
-The same applies to the density based technique suggested by Attenberg et al\@.~\cite{attenberg2013class}.
-
-Most of the active learning research seems to be focused on binary, and maybe multi-class classification.
-Thus the methods described in Section~\ref{sec:active-learning} where the ones decided on.
-Methods that are fully reliant on a models certainty, such as Binary Version Space Minimization (BSVM)~\cite{brinker2006active} are used.
-Furthermore, methods incorporating some information about the data in the form of label cardinality is included as well.
-These techniques are Maximum Loss Reduction with Maximum Confidence (MMC) and Adaptive Active Learning (AAL)~\cite{yang2009effective, li2013active}.
-An attempt to take advantage of the structure of the data is done by selecting the initial samples from different clusters, as described in Section~\ref{sec:exp2-method}.
