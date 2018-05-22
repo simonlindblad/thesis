@@ -2,12 +2,12 @@
 \label{cha:introduction}
 
 The world's population is growing each year. 
-In order to raise to the challenges that arise with a growing population, it is of great importance that healthcare is made to be more efficient and robust.
+In order to rise to the challenges that arise with a growing population, it is of great importance that healthcare is made to be more efficient and robust.
 One way of increasing the efficiency as well as the quality of healthcare is to create automated systems that can aid doctors in their process.
-As the population grows, it is of utmost importance to ensure that the quality of diagnoses remain high, and that the risk of missing some critical piece of information is minimized.
+As the population grows, it is of utmost importance to ensure that the quality of diagnoses remains high and that the risk of missing some critical piece of information is minimized.
 Taking advantage of the available medical information is key to create such systems.
 
-Most of the approaches that exists today to create the aforementioned automated systems need a set of categorized data in order to identify and exploit certain patterns.
+Most of the approaches that exist today to create the aforementioned automated systems need a set of categorized data in order to identify and exploit certain patterns.
 The purpose of this thesis is to evaluate different techniques for labeling multi-label clinical reports.
 The goal is to make the set of labeled reports more useful in future systems by labeling them based on a strategy instead of selecting them at random.
 By using a selection strategy, the need for a large set of labeled reports could be reduced.
@@ -39,10 +39,10 @@ In order to fit a machine learning model to predict categories for clinical repo
 That is, categories need to be assigned to an existing set of clinical reports.
 It is often the case that text data is widely available.
 Coming by data that is already categorized is on the other hand much harder.
-Obtaining high quality data is important for use in machine learning systems, both in healthcare and in other areas.
+Obtaining high-quality data is important for use in machine learning systems, both in healthcare and in other areas.
 
 Since the models require a sufficient amount of categorized reports, the task of categorizing them can be cumbersome.
-Improving the categorization is especially important in the case of clinical data, since doctors and other clinicians time is both valuable and limited.
+Improving the categorization is especially important in the case of clinical data since doctors and other clinicians time is both valuable and limited.
 By improving the process and the quality of data to be labeled, and thereby reducing the number of reports that need to be categorized, they can spend more time doing their job.
 
 Assigning categories to reports is often referred to as labeling.
@@ -52,7 +52,7 @@ The algorithm queries an oracle (in this case a doctor) for labels for the data 
 An overview of the components in an active learning system can be seen in Figure~\ref{fig:active-learning-model}.
 This is used when there is plenty of readily available data, but assigning labels is expensive.
 Since the data points to be labeled are actively selected, the model can require fewer examples than if they were selected at random.
-The points can be selected by considering the certainty of the models, and request to label the documents that the model is less certain about.
+The points can be selected by considering the certainty of the models and request to label the documents that the model is less certain about.
 Another approach, which has not been given as much attention, is using the underlying structure of the data to select points.
 The goal with this approach is to capture the distribution of the categories by applying techniques such as clustering.
 
@@ -69,16 +69,16 @@ Problems where one of several classes is assigned to an instance are called a mu
 Multi-labeled classification is when one or more categories are assigned to each document.
 This thesis is mainly concerned with the multi-label case.
 Assigning several categories to a document is more time consuming than in the cases where only one option needs to be identified.
-In those cases the process can be stopped when the appropriate category has been found.
+In those cases, the process can be stopped when the appropriate category has been found.
 However, when a document can be assigned several categories, the entirety of the text needs to be considered.
 For example, a news article can be on several subjects, such as both economics and sport.
 Even when the category sport has already been identified, the rest of the document still has to be read in order to find any additional categories.
-Using active learning to enhance the labeling of documents is therefore even more useful in the multi-labeled case, since the cost of labeling the individual reports is higher.
+Using active learning to enhance the labeling of documents is therefore even more useful in the multi-labeled case since the cost of labeling the individual reports is higher.
 
 \section{Aim}
 \label{sec:aim}
 
-The purpose with this thesis project is to evaluate different active learning techniques that can be used to increase the quality of the labeled reports.
+The purpose of this thesis project is to evaluate different active learning techniques that can be used to increase the quality of the labeled reports.
 Increasing the quality of the reports will also reduce the need for a large set of labeled reports within the project.
 Resulting from this will be a complete, standalone, system for labeling reports.
 The reports are interactively queried so a user can label the ones that are deemed most useful by the system.
@@ -95,7 +95,7 @@ This interface can be seen in Figure~\ref{fig:web-interface}.
       \label{fig:web-interface}
 \end{figure}
 
-In the work that they have done so far in the research project a doctor has labeled an initial set of reports.
+In the work that they have done so far in the research project, a doctor has labeled an initial set of reports.
 This was done by simply selecting the reports in the order they were on file.
 The doctor that primarily worked with the labeling stated that the distribution over the labeled categories was very skewed.
 The vast majority of labeled documents were assigned to a small subset of the categories.
@@ -116,10 +116,10 @@ In addition to this, a question regarding how to remove reports that do not need
 
 The clinical reports are of a multi-label nature, and how we are choosing the documents to be sampled is important.
 Three different sampling strategies for active learning are evaluated for this purpose.
-These are: binary version space minimization, maximum loss reduction with maximum confidence and adaptive active learning.
+These are binary version space minimization, maximum loss reduction with maximum confidence and adaptive active learning.
 Their properties will be described in Chapter~\ref{cha:theory}, and a motivation behind the choice of strategies will be made in Chapter~\ref{cha:discussion}.
-The algorithms to be evaluated will be based on the models certainty, as well as taking advantage of the underlying structure of the data through clustering.
-The first two questions treats the evaluation of the different strategies.
+The algorithms to be evaluated will be based on the model's certainty, as well as taking advantage of the underlying structure of the data through clustering.
+The first two questions treat the evaluation of the different strategies.
 
 \begin{enumerate}
       \item \label{intro:re-q1} 
@@ -135,7 +135,7 @@ The first two questions treats the evaluation of the different strategies.
       \item \label{intro:re-q2}
       \textit{How do the the strategies affect the balance of labels in the labeled dataset?}
       \newline
-      Another indication on the quality of the labeled reports is the balance between the classes.
+      Another indication of the quality of the labeled reports is the balance between the classes.
       Based on the initially categorized clinical data, the underlying distribution of categories is far from uniform.
       There are certain categories, like the one describing that everything is okay with the patient, that are a lot more common than other more rare illnesses.
 
@@ -178,6 +178,6 @@ Another limitation to this evaluation is that it is performed on the dataset pro
 \label{sec:structure}
 
 Chapter~\ref{cha:theory} covers the theory behind the different active learning strategies used, as well as some techniques used for classification and processing of text.
-After this, the data and an analysis of it is described in chapter~\ref{cha:data}, which is followed by Chapter~\ref{cha:experiments}, where the different experiments as well as their results are presented.
+After this, the data and an analysis of it are described in chapter~\ref{cha:data}, which is followed by Chapter~\ref{cha:experiments}, where the different experiments, as well as their results, are presented.
 The method and results of the experiments are then discussed in Chapter~\ref{cha:discussion}.
 Finally, Chapter~\ref{cha:conclusion} presents the conclusions and answers the research questions.

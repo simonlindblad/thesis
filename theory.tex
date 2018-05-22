@@ -1,15 +1,15 @@
 \chapter{Theory}
 \label{cha:theory}
 
-In this chapter the theory behind the techniques used in this thesis work will be presented.
-The first section will treat supervised text classification, which will act like a foundation for the active learning that will come after.
+In this chapter, the theory behind the techniques used in this thesis work will be presented.
+The first section will treat supervised text classification, which will act as a foundation for the active learning that will come after.
 Active learning is the main focus of the chapter, and an overview of the field as well as some concrete techniques will be covered.
 The techniques will mainly be in regards to multi-labeled data.
 In addition to this, some unsupervised methods used in the data processing will be presented.
-This chapter will then end by going through the different evaluation metrics that will be use to assess the methods used.
+This chapter will then end by going through the different evaluation metrics that will be used to assess the methods used.
 
 Most of this Chapter deals with text data.
-Before using the techniques presented in this chapter, the text need to be represented in a way that is easy to work with.
+Before using the techniques presented in this chapter, the text needs to be represented in a way that is easy to work with.
 \textit{Bag-of-words} (BoW) is one of the more common representations when performing text analysis. 
 Using BoW the text is represented as a multi-set, a document is represented by the number of occurrences of the different words. 
 Like the name implies, the positions of the words are not taken into account, they are viewed as if they were taken from a bag. 
@@ -27,10 +27,10 @@ With the help of these labels, a classification model is fitted to the data.
 The goal of this is for the model to be able to correctly assign a class to a previously unseen text document.
 Some of these classification models can also produce a probability of a document being of a certain class.
 Other models are based on the concept of a margin that separates the classes, and the distance between a data point and a margin can be used to indicate how certain the model is of the assigned label~\cite{tong2001support}.
-Example of use cases for text classification is categorization of news articles, document retrieval and email filtering.
+Example of use cases for text classification is the categorization of news articles, document retrieval, and email filtering.
 There exist several different models for classifying text.
-Decision trees, neural networks and support vector machines (SVM) are some have been previously applied to the text domain with successful results~\cite{aggarwal2012survey}.
-In this thesis, SVM are the main focus, since they have been studied extensively in the context of active learning~\cite{tong2001support, settles2012active, brinker2006active, yang2009effective}.
+Decision trees, neural networks, and support vector machines (SVM) are some have been previously applied to the text domain with successful results~\cite{aggarwal2012survey}.
+In this thesis, SVMs are the main focus, since they have been studied extensively in the context of active learning~\cite{tong2001support, settles2012active, brinker2006active, yang2009effective}.
 Logistic regression is used for the binary classification task of identifying invalid reports in Section~\ref{sec:experiments-exp3}.
 
 \subsection{Support Vector Machines}
@@ -99,20 +99,20 @@ This is traditionally used with the Iterative Reweighted Least Squares method~\c
 \subsection{Multi-Label Classification}\label{subsec:multi-label-classification}
 
 Multi-label classification is the type of text classification where one instance can be associated with multiple labels.
-It is a generalized version of the multi-class classification problem, where there is more than 2 labels, but each document is only assigned one~\cite{tsoumakas2006multi}.
+It is a generalized version of the multi-class classification problem, where there are more than 2 labels, but each document is only assigned one~\cite{tsoumakas2006multi}.
 
 A common way of solving multi-label classification problems is the Binary Relevance method~\cite{read2011classifier, boutell2004learning, luaces2012binary}.
 It is a way of transforming the multi-label classification problem into several different binary ones.
-With Binary Relevance one classification model per label is fitted on the data.
-Each of these classifiers are then predicting whether or not the document is associated with the corresponding label or not.
+With Binary Relevance, one classification model per label is fitted on the data.
+Each of these classifiers is then predicting whether or not the document is associated with the corresponding label or not.
 
 \section{Active Learning}\label{sec:active-learning}
 
 Conventional machine learning systems use a set of available data to find a hypothesis that can explain the patterns within the data.
 The purpose of active learning is to allow a system to select the data that it wants to be labeled, and therefore the data it wants the model to be trained on~\cite{settles2012active}.
 An active learning system samples a document to be labeled from a pool of unlabeled data.
-With this sample an oracle, which is often a human annotator, is then queried to get the label for that document.
-By being able to decide what data to label and use, the goal is that the system can achieve better results, and that the training data will be of higher quality.
+With this sample, an oracle, which is often a human annotator, is then queried to get the label for that document.
+By being able to decide what data to label and use, the goal is that the system can achieve better results and that the training data will be of higher quality.
 To get a better understanding of how the process works, these are the steps that are commonly iterated over until enough samples have been labeled:
 \begin{enumerate}
     \item Evaluate the samples in the unlabeled pool based on a particular measure that is defined by the sampling strategy.
@@ -125,7 +125,7 @@ A model of the active learning system can be seen in Figure~\ref{fig:active-lear
 In several different domains, data is readily available and easy to obtain.
 But even if the data is abundant, labels for the data are often harder and more expensive to come by, especially when it comes to multi-label problems~\cite{settles2012active}.
 
-In Section~\ref{sec:pool-based-sampling} different ways to access the data in active learning are described
+In Section~\ref{sec:pool-based-sampling} different ways to access the data in active learning are described.
 This is followed by some theory of how the samples relate to the hypothesis space, in Section~\ref{sec:the-version-space}.
 The active learning theory then ends with a description of three multi-label active learning strategies.
 
@@ -135,10 +135,10 @@ The active learning theory then ends with a description of three multi-label act
 The main focus in active learning is how to select the samples to be labeled.
 There are different sampling methods in use, and which one is more appropriate depends on how the data can be accessed.
 Pool-based sampling is motivated by the assumption that there exist a large available pool of data, where only a small portion is labeled~\cite{lewis1994sequential, settles2012active}.
-The samples to be labeled are selected by evaluating the entire pool of unlabeled data, and choosing the most appropriate ones based on a defined utility measure.
+The samples to be labeled are selected by evaluating the entire pool of unlabeled data and choosing the most appropriate ones based on a defined utility measure.
 If the entire pool is too large, a subset could be used instead.
 For applied active learning, pool-based sampling seems to be the most popular choice~\cite{li2013active}, but there are some alternatives that have been used in theoretical settings such as stream-based selective sampling.
-The difference between stream-based selective sampling and pool-based sampling is that the draws one sample at a time from an input source and make the decision whether or not to query a label for it.
+The difference between stream-based selective sampling and pool-based sampling is that the former draws one sample at a time from an input source and make the decision whether or not to query a label for it.
 For text applications, where a set of data is often readily available, pool-based sampling is often the more appropriate option since the entire dataset can be considered.
 Pool-based is therefore the sampling technique that is considered in this thesis.
 
@@ -164,28 +164,28 @@ Optimally the selected sample should cut the version space in half in each itera
 By doing this it can be viewed as a sort of binary search, looking for the hypothesis that can fully separate the data.
 
 There exists a useful relationship between the feature space $\mathcal{F}$ and the hypothesis space $\mathcal{H}$ called the \textit{version space duality}~\cite{tong2001support, vapnik1998statistical}.
-It states that hyperplanes in the hypothesis space corresponds to points in the feature space, and the other way around.
-So by selecting points to be labeled, constraints can be enforced on the hypothesis that form the version space.
+It states that hyperplanes in the hypothesis space correspond to points in the feature space, and the other way around.
+So by selecting points to be labeled, constraints can be enforced on the hypotheses that form the version space.
 
 One approach to this that has shown to be successful is \textit{uncertainty sampling}~\cite{settles2012active}.
-This is commonly done with SVM, since the idea behind SVM is to find a hyperplane that separates two classes in a binary classification with the maximum margin.
+This is commonly done with SVM since the idea behind SVM is to find a hyperplane that separates two classes in a binary classification with the maximum margin.
 Out of the different hyperplanes in the hypothesis space, the version space contains those that can successfully separate the data.
 Uncertainty sampling aims to select the points in the feature space that will reduce the amount of the valid hypotheses the most.
-An SVM model tries to find the support vectors that maximizes the decision boundary in the feature space, separating the two classes.
+An SVM model tries to find the support vectors that maximize the decision boundary in the feature space separating the two classes.
 Considering this in $\mathcal{H}$, it will be analogous to the hypothesis in the center of the hypothesis space, which is encompassed by the constraints set by the labeled data.
 What uncertainty sampling predicts are the values for the unlabeled points, and then choosing the one that it is most uncertain about.
 The selected sample will therefore be the sample closest to the decision boundary of the SVM.
-Based on the version space duality, it is a good approximation for dividing the version space in two~\cite{settles2012active}.
+Based on the version space duality, it is a good approximation for dividing the version space in half~\cite{settles2012active}.
 
 \subsection{Binary Version Space Minimization}\label{subsec:binmin}
 
 Binary version space minimization (BSVM) is a generalization of uncertainty sampling, that is designed to make it work with multi-label data.
 The approach taken is to decompose the multi-label problem to several binary tasks with the binary relevance method, as is discussed in Section~\ref{subsec:multi-label-classification}.
 The unlabeled point that is chosen for labeling is then the one with the smallest SVM margin across all the binary classification tasks.
-By doing this, it does not incorporate the multiple labels into the decision process, but treats all classes individually and equally. 
+By doing this, it does not incorporate the multiple labels into the decision process but treats all classes individually and equally. 
 Selecting a new data $x_{new}$ to be labeled using BSVM can formally be defined as:
 \begin{equation}
-    x_{new} = \arg\min_{x \in D_U} \big( \min_{i \in \{1 \dots n\}} y_i(x) \big)
+    x_{new} = \argmin_{x \in D_U} \big( \min_{i \in \{1 \dots n\}} y_i(x) \big)
 \end{equation}
 where $n$ is the number of labels, $y_i(x)$ is the function from Equation~\ref{eq:svm-y} for the binary SVM classifier that is used to predict label $i$, and $D_U$ is the set of unlabeled data points.
 
@@ -220,10 +220,10 @@ After a set of data points $D_S$ has been labeled, the new dataset $D'_L=D_L + D
 Under the assumption that any $x \in D_U - D_S$ has an equal effect on a model trained on the datasets $D_L$ and $D'_L$, we get the following equation for the reduction of the expected loss~\cite{yang2009effective}:
 
 \begin{equation}
-    D^*_S = \arg\max_{D_S}(\widehat{\sigma_{D_L}} - \widehat{\sigma_{D'_L}}) = \arg\max_{D_S} \big ( \sum_{x \in D_S} \sum_{y \in Y} (L(f_{D_L}) - L(f_{D'_L})) P(y|x) \big )
+    D^*_S = \argmax_{D_S}(\widehat{\sigma_{D_L}} - \widehat{\sigma_{D'_L}}) = \argmax_{D_S} \big ( \sum_{x \in D_S} \sum_{y \in Y} (L(f_{D_L}) - L(f_{D'_L})) P(y|x) \big )
 \end{equation}
 
-In their paper, Yang et al\@.~\cite{yang2009effective} considers the process of finding the greatest reduction in two steps: finding a good estimate for the conditional probability $p(y|x)$, and finding a way to assess the loss reduction of a multi-label classifier.
+In their paper, Yang et al\@.~\cite{yang2009effective} consider the process of finding the greatest reduction in two steps: finding a good estimate for the conditional probability $p(y|x)$, and finding a way to assess the loss reduction of a multi-label classifier.
 
 It is unfeasible for a query strategy to provide an estimation for all possible label combinations.
 If there are $n$ different labels, there will be $2^n$ different label combinations.
@@ -238,7 +238,7 @@ Yang et al\@.~\cite{yang2009effective} describe the process of estimating the nu
 \begin{enumerate}
     \item Use the classification model to obtain the probabilities for each label for all the data samples.
     \item For each data sample, sort and normalize the probabilities for all the labels.
-    \item Using the labeled dataset, fit a logistic regression classifier with the sorted and normalized probabilities as features, and the number of labels as target.
+    \item Using the labeled dataset, fit a logistic regression classifier with the sorted and normalized probabilities as features, and the number of labels as the target.
     \item With the fitted logistic regression model, predict the number of labels for the samples in the unlabeled pool.
 \end{enumerate}
 
@@ -273,7 +273,7 @@ By incorporating the result from Equation~\ref{eq:reduction-rate}, the following
     \sum_{i=1}^k\big ( \frac{1 - y^if^i_{D_L}(x)}{2} \big )
 \end{equation}
 
-The only thing that remains is now to combine the estimation of $p(x|y)$ with the estimate for loss reduction.
+The only thing that remains is to combine the estimation of $p(x|y)$ with the estimate for loss reduction.
 The resulting equation, called maximum loss reduction with maximal confidence, is~\cite{yang2009effective}:
 
 \begin{equation}
@@ -317,7 +317,7 @@ These two techniques are then combined in a weighted fashion into what they call
 
 The idea behind \textit{Max-Margin Uncertainty Sampling} comes from the observation that multi-label classification prediction is mainly about separating the positive labels from the negative labels~\cite{li2013active}.
 That is, separating the labels are assigned to an instance and the ones that are not.
-In order to model the uncertainty of the prediction on a datapoint, Li et al\@. suggest the usage of a global separation margin to separate the negative labels from the positive.
+In order to model the uncertainty of the prediction on a data point, Li et al\@. suggest the usage of a global separation margin to separate the negative labels from the positive.
 
 The positive labels for a data point $x$ is defined as those where $sign(f'_{D_L}(x))$ is positive.
 The separation margin is defined as:
@@ -351,7 +351,7 @@ Since \textit{max-margin uncertainty sampling} and \textit{label cardinality inc
     q(x, \beta) = u(x)^\beta \cdot c(x)^{1-\beta}
 \end{equation}
 where $\beta$ is a parameter controlling the weight put on the two measures.
-This parameter is chosen by in each iteration evaluating a discrete set of values, for example $\{0, 0.1, 0.2, \dots, 1\}$.
+This parameter is chosen by in each iteration evaluating a discrete set of values, for example, $\{0, 0.1, 0.2, \dots, 1\}$.
 The selection of $\beta$ is then based on the most informative sample amongst them.
 Equation~\ref{eq:approx-generalization-error} shows the \textit{approximate generalization error}, which is used to select the sample.
 \begin{equation}\label{eq:calc-epsilon}
@@ -397,19 +397,19 @@ The complete algorithm for the integrated approach can be seen in Algorithm~\ref
 
 \section{Text Processing using Unsupervised Techniques}
 
-Techniques in machine learning that do not require a set of categorized data is called unsupervised learning.
+Techniques in machine learning that do not require a set of categorized data are called unsupervised learning.
 They use the structure of the data to obtain the information to use when processing it.
 These techniques may have different goals.
 Some are used to estimate a distribution, others are used to reduce the number of dimensions in the data by trying to find dimensions that capture as much as possible of the variance, and some are used for the purpose of identifying groups of similar points within the data~\cite{bishop2006pattern}.
-When it comes to text data, there are a few common methods and techniques that are unsupervised, and can be used for different purposes.
+When it comes to text data, there are a few common methods and techniques that are unsupervised and can be used for different purposes.
 Examples of such techniques are \textit{topic modeling} and \textit{clustering}~\cite{aggarwal2012survey, crain2012dimensionality}.
 Another interesting technique is word2vec, that is used to produce word embeddings~\cite{mikolov2013efficient}.
 
 As described in Section~\ref{sec:text-classification}, with BoW a document is represented by the number of occurrences of the different words. 
 Representing text in this way therefore becomes high-dimensional, there is one dimension for each word in the vocabulary. 
-In written language a word can be used to express several different thoughts, and one thought can be expressed using several different words.
+In written language, a word can be used to express several different thoughts, and one thought can be expressed using several different words.
 This is something that cannot be captured with BoW.
-However, it is easy to work with, and is commonly used when performing topic modeling among other things.
+However, it is easy to work with and is commonly used when performing topic modeling among other things.
 
 \subsection{Topic Modeling}\label{sec:topic-modeling}
 
@@ -539,14 +539,14 @@ The only variable to then be repeatedly sampled is the topic assignment, $z_{dn}
 
 Cluster analysis is commonly defined as finding groups in a given dataset.
 The members of these groups are determined to be similar by a similarity measure~\cite{kaufman2009finding, aggarwal2012survey}.
-Text data are sparse, but yet have a very high dimensionality.
+Text data are sparse but yet have a very high dimensionality.
 With one dimension per term in the dictionary, it is not uncommon with dimensions in the order of $10^5$.
 For this reason, some of the more naive clustering algorithms do not work well for text data~\cite{aggarwal2012survey}.
 
 In distance-based clustering, a similarity function is used to measure the closeness between two text documents.
 For the purpose of measuring the similarity between text objects, the cosine similarity function is commonly used, as well as Euclidean distance~\cite{aggarwal2012survey}.
 Given two $n$ dimensional points $a$ and $b$, the definitions for the two can be seen in Equation~\ref{eq:cosine} and Equation~\ref{eq:euclidean}.
-Two different approaches to distance-based clustering are distance-based partitioning, and agglomerative hierarchical clustering.
+Two different approaches to distance-based clustering are distance-based partitioning and agglomerative hierarchical clustering.
 For the distance-based approach, $k$-means and $k$-medoid are two frequently used algorithms.
 
 \begin{equation}\label{eq:cosine}
@@ -564,7 +564,7 @@ A simple approach to $k$-means clustering could look as follows:
 
 \begin{enumerate}
     \item Select K seeds from the original dataset
-    \item \label{enum:k-means-step-2} Assign the rest of the documents to one of these seeds, based on how how similar they are by the similarity function
+    \item \label{enum:k-means-step-2} Assign the rest of the documents to one of these seeds, based on how similar they are by the similarity function
     \item \label{enum:k-means-step-3} Before each new iteration, select a new centroid for each cluster. This should be the point that is the best central point for the cluster.
     \item Repeat step \ref{enum:k-means-step-2} and \ref{enum:k-means-step-3} until convergence.
 \end{enumerate}
@@ -597,7 +597,7 @@ Viewing a word as a vector allows for doing interesting things with them, such a
 Evaluating the similarity of words that is hard to do when treating them as atomic units.
 
 This can be created by using a co-occurrence matrix to see how often certain words occur together, and then perform some dimensionality reduction on them~\cite{lebret2013word, levy2014neural}.
-Another approach that is shown to be very successful in producing high quality word embeddings is \textit{word2vec}, which uses a neural network to accomplish this task~\cite{mikolov2013efficient}.
+Another approach that is shown to be very successful in producing high-quality word embeddings is \textit{word2vec}, which uses a neural network to accomplish this task~\cite{mikolov2013efficient}.
 In addition to being able to compute similarities between words, using simple algebraic some interesting relationships can be discovered.
 The example that Mikolav et al\@.~\cite{mikolov2013efficient} showed was that using the vector for ``King'', subtracting the vector for ``Man'' and adding the vector for ``Woman'' resulted in a vector that was close to that representing ``Queen''.
 
@@ -609,7 +609,7 @@ This is the reason for the name, continuous bag-of-words.
 The second approach that Mikolav et al\@. explored was a continuous skip-gram model~\cite{mikolov2013efficient}.
 Here a neural network with a continuous projection layer was used.
 With the current word as input, co-occurring words within a certain range are predicted.
-A bigger range is more computationally complex, but results in word vectors of higher quality.
+A bigger range is more computationally complex but results in word vectors of higher quality.
 
 Word2vec does not require labels to be provided with the data, but uses the data itself to generate targets.
 For this reason it is sometimes called a self-supervised technique.

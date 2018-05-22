@@ -46,14 +46,15 @@ These were:
 For the first research question, the performance of the strategies can be summarized in that MMC performed worse in the early stages, while the adaptive approach worked the best during the same time.
 BSVM performed approximately the same as random sampling in the beginning.
 In the end, BSVM and MMC both achieved a higher accuracy and $F_1$-score than AAL, at least after 2000 samples were added.
-All of the above mentioned strategies performed better than random sampling in the long run.
+All of the above-mentioned strategies performed better than random sampling in the long run.
 
-When it comes to the distribution of labels, the strategies all performed better than random sampling at all stages.
+To answer the second research question the distribution of labels for the labeled dataset was analyzed.
+The distribution of labels was more uniform for all the strategies, compared to that of random sampling.
 After 2000 labels, BSVM and MMC had a more even distribution than AAL.
 While early on, MMC and the adaptive approach generated a lot more even label distribution than BSVM.
 So, in various degrees during the labeling process, the different strategies all made the dataset more uniform than labeling at random.
 
-Identifying and filtering out invalid reports was treated in the first research question.
+Identifying and filtering out invalid reports was treated in the third research question.
 It resulted in a rather good separation of the two categories.
 Accomplishing this using only unsupervised techniques is possible, even if using them together with a supervised technique gave a better result.
 But manually identifying relevant topics and classifying based on this information was clearly a working approach.
@@ -66,8 +67,8 @@ However, if a data point can consist of any combination of labels it becomes a l
 Using the full approach, including the usage of clusters to classify the points without another model, might be hard for this reason.
 Researching whether or not the hierarchical clustering could aid the selection of data points, instead of both selection and classifying, might be more approachable.
 
-Another thing that would be of interest is to vary the text representation and classification models to see how they get effected by the different strategies.
-One example of this could be to use recurrent neural networks instead of SVM's, and see if the different active learning strategies affects the models differently.
+Another thing that would be of interest is to vary the text representation and classification models to see how they get affected by the different strategies.
+One example of this could be to use recurrent neural networks instead of SVM's, and see if the different active learning strategies affect the models differently.
 For the text representation, word2vec or latent topic vectors could be used instead of bag of words to highlight different features of the text.
 These methods described in this thesis should work well for other media such as images too, but if these were to be studied it would open up for some other techniques as well.
 Something that could be an interesting area for future research.
