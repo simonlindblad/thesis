@@ -60,6 +60,11 @@ Accomplishing this using only unsupervised techniques is possible, even if using
 But manually identifying relevant topics and classifying based on this information was clearly a working approach.
 It did not achieve 100 \% accuracy, so there is room for improvement, but the separation has to be seen as successful.
 
+The server that hosts the labeling system at Sectra does not have a lot of computing power.
+Therefore, AAL was considered to be too computationally heavy.
+Choosing between BSVM and MMC was not as straight forward given their different qualities.
+In the end, BSVM was chosen to be integrated into the system, based on it's long term performance and that it gave the SVM model better accuracy after fewer labels.
+
 For future research, it would be interesting to look into how to further use the structure of the data in active learning strategies, besides only obtaining initial samples from clusters.
 An example of this would be to find a good way to adapt the approach described by Dasgupta et al\@.~\cite{dasgupta2008hierarchical} to the multi-label case.
 With their approach to binary classification, it is rather easy to define a measure to see when a cluster overwhelmingly consisting of one class.

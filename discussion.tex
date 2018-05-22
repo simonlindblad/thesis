@@ -23,28 +23,29 @@ One reason behind this may be MMC's dependence on the label cardinality of the s
 MMC's dependence on label cardinality can be seen in Section~\ref{subsec:mmc}.
 If the information on label cardinality is not varied, the predictions that MMC base its calculations upon will not be as good.
 In the paper by Yang et al\@.~\cite{yang2009effective}, MMC performs significantly better than Binary Version Space Minimization (BSVM) at all stages.
-One obvious reason for this discrepancy could be the implementation used in this paper, as is discussed in Section~\ref{sec:discussion-results}.
+One obvious reason for this discrepancy could be the implementation used in this paper, as is discussed in Section~\ref{sec:discussion-method}.
 Another one can be the initial sample sizes used in their paper, even when they compare different initial sample sizes, they start at 100 samples and go up to 1000.
+These values are higher than the ones considered in this paper.
 
 Adaptive Active Learning (AAL) performs the best of the evaluated strategies in both accuracy and $F_1$-score, when only a few hundred samples have been labeled. 
-A probable reason for this is the extra computations the strategy does in order to find the best weight between the certainty based, and the cardinality based, strategies.
+A probable reason for this is the extra computations the strategy performs in order to find the best weight between the certainty based, and the cardinality based, strategies.
 If the cardinality predictions are not deemed to be very good in the beginning, it would simply put more weight on the certainty measure, and vice versa.
 
 BSVM, on the other hand, performs very similarly to random sampling for the first samples.
 The reason for this is rather simple.
 The strategy finds the class that is the closest to the decision boundary for each data point and selects the minimum distance of those.
-If there are several documents with the same minimum value they are selected at random from those.
-Until all classes have been sampled at least one, the minimum for all data points will be the same class, and it will be equal among all data points.
+If there are several documents with the same minimum value, the samples to be labeled are selected at random from those.
+Until all classes have been sampled at least once, the minimum for all data points will be the same class, and it will be equal among all data points.
 Therefore, it will be the same as selecting randomly among all the samples.
 However, when all classes have been sampled, and quickly outperforms the random sampling in terms of accuracy and $F_1$-score.
 
 In the end, the different strategies all perform better than random sampling.
-The ones that are based on MMC and BSVM tend to perform a bit better than AAL when more than 1200-1300 samples are added.
-This may very well be related to the fact that the distributions for MMC and BSVM is considerably more uniform when a lot of labels have been requested.
+The ones that are based on MMC and BSVM tend to perform a bit better than AAL when more than 1200-1300 labeled samples are added.
+This may very well be related to the fact that the distributions for MMC and BSVM are considerably more uniform when a lot of labels have been requested.
 BSVM is the only technique that reached 89 \% accuracy within the first 2500 labels to be labeled.
 It is possible that other techniques would have reached it given more labels, but it is clear that BSVM reaches a peak accuracy earlier.
 The technique always tries to sample from the most uncertain category.
-The lack of reports in this category can be the thing that prohibits the other strategies from achieving a higher accuracy.
+The lack of reports in the least common category can be the thing that prohibits the other strategies from achieving a higher accuracy.
 
 The initial clustering of reports did not seem to make as much of a difference as the strategy used.
 This makes sense, the initial sample size only makes up for a little bit of the overall set of labeled reports.
@@ -57,7 +58,7 @@ This would then greatly reduce the results of the evaluation.
 
 All clusters will not have the same number of members.
 If most of the documents with a high label cardinality got assigned the same populous cluster, they might get neglected from the initial sample since an equal number of reports was taken from each cluster.
-This could be a reason for the clustering approach to initial sampling only obtained samples with label cardinality 1, and therefore excluding MMC from the process.
+This could be a reason for that the clustering approach to initial sampling only obtained samples with label cardinality 1, and therefore excluding MMC from the process.
 
 \subsection{Experiment 2}
 
