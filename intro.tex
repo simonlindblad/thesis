@@ -2,12 +2,12 @@
 \label{cha:introduction}
 
 The world's population is growing each year. 
-In order to rise to the challenges that arise with a growing population, it is of great importance that healthcare is made to be more efficient and robust.
+In order to deal with the challenges that arise with a growing population, it is of great importance that healthcare is made to be more efficient and robust.
 One way of increasing the efficiency as well as the quality of healthcare is to create automated systems that can aid doctors in their process.
 As the population grows, it is of utmost importance to ensure that the quality of diagnoses remains high and that the risk of missing some critical piece of information is minimized.
 Taking advantage of the available medical information is key to create such systems.
 
-Most of the approaches that exist today to create the aforementioned automated systems need a set of categorized data in order to identify and exploit certain patterns.
+Most of the approaches that exist today to create the aforementioned automated systems need a set of categorized data in order to identify and utilize certain patterns.
 The purpose of this thesis is to evaluate different techniques for labeling multi-label clinical reports.
 The goal is to make the set of labeled reports more useful in future systems by labeling them based on a strategy instead of selecting them at random.
 By using a selection strategy, the need for a large set of labeled reports could be reduced.
@@ -21,9 +21,9 @@ This research project works on investigating how to use machine learning and tex
 Information pertaining to a patient's diagnosis is often in the form of written clinical reports.
 This is a good example of data that can be utilized in automated systems.
 By extracting information from old reports, the process of writing new ones can be simplified.
-A system could show cases with similar features as the one currently being written, the doctor could then compare the findings and check if they have obtained an abnormal result.
+A system could show cases with similar features as the one currently being written and the doctor could then compare the findings and check if they have obtained an abnormal result.
 Being able to perform such a comparison will result in extra quality assurance in the diagnostic flow.
-It could also provide doctors with more confidence in that their diagnosis is correct.
+It could also provide doctors with more confidence that their diagnosis is correct.
 
 The problem systems like this would face is to categorize medical reports in order to make further suggestions.
 One approach that is commonly used for such problems is machine learning, which is a field where a set of inputs is used to create a mapping to some output values~\cite{bishop2006pattern}.
@@ -31,19 +31,18 @@ This is done by using data to build a, usually statistical, model.
 
 The task of predicting a category, or class, for a given text document is called text classification.
 Text classification is usually solved using supervised learning~\cite{aggarwal2012surveyclass}. 
-In supervised classification, there exists a set of inputs, in this case text data, that already have a category assigned to them.
+In supervised classification, there is a set of inputs, in this case text data, that already have a category assigned to them.
 This data is then used to fit the model so that it later can make predictions for inputs that it has not yet been exposed to.
-Some models that have been shown to be successful in text classification are Neural Networks, Bayesian Classifiers, Decision Trees and Support Vector Machines (SVM)~\cite{aggarwal2012surveyclass,joachims1998text, aggarwal2012surveyclass, tong2001support}.
+Some models that have been shown to be successful in text classification are Neural Networks, Bayesian Classifiers, Decision Trees and Support Vector Machines (SVM)~\cite{aggarwal2012surveyclass,joachims1998text, tong2001support}.
 
 In order to fit a machine learning model to predict categories for clinical reports, we need a set of already categorized data.
 That is, categories need to be assigned to an existing set of clinical reports.
-It is often the case that text data is widely available.
-Coming by data that is already categorized is on the other hand much harder.
+Although text data is widely available, coming by data that is already categorized on the other hand is much harder.
 Obtaining high-quality data is important for use in machine learning systems, both in healthcare and in other areas.
 
-Since the models require a sufficient amount of categorized reports, the task of categorizing them can be cumbersome.
+Since the models require a large amount of categorized reports, the task of categorizing them can be cumbersome.
 Improving the categorization is especially important in the case of clinical data since doctors and other clinicians time is both valuable and limited.
-By improving the process and the quality of data to be labeled, and thereby reducing the number of reports that need to be categorized, they can spend more time doing their job.
+By improving the process and the quality of the data to be labeled, and thereby reducing the number of reports that need to be categorized, they can spend more time doing their job.
 
 Assigning categories to reports is often referred to as labeling.
 A field within machine learning that is focused on the task of improving the data labeling process is called active learning~\cite{settles2012active}.
@@ -101,34 +100,33 @@ The doctor that primarily worked with the labeling stated that the distribution 
 The vast majority of labeled documents were assigned to a small subset of the categories.
 A skewed dataset causes the number of clinical reports that need to be labeled to increase a lot.
 For a statistical model to be able to achieve good results with the less frequently occurring categories, a large number of reports needs to be labeled in order to obtain a good amount of reports with these categories.
-Obtaining a more balanced dataset is desirable.
+Obtaining a more balanced dataset is therefore desirable.
 
 In addition to this, the doctors came up with a new set of labels that were to be used.
 So the sampling strategies have to work from a non-existent, or very small, initial set of labeled reports.
-
-\section{Research Questions}
-\label{sec:research-questions}
-
-The specific research questions that this thesis treat are presented here.
-They are the primary focus of study.
-There are two main research questions, both of which relate to active learning.
-In addition to this, a question regarding how to remove reports that do not need to be labeled is treated as well.
 
 The clinical reports are of a multi-label nature, and how we are choosing the documents to be sampled is important.
 Three different sampling strategies for active learning are evaluated for this purpose.
 These are binary version space minimization, maximum loss reduction with maximum confidence and adaptive active learning.
 Their properties will be described in Chapter~\ref{cha:theory}, and a motivation behind the choice of strategies will be made in Chapter~\ref{cha:discussion}.
 The algorithms to be evaluated will be based on the model's certainty, as well as taking advantage of the underlying structure of the data through clustering.
-The first two questions treat the evaluation of the different strategies.
+
+\section{Research Questions}
+\label{sec:research-questions}
+
+The specific research questions that this thesis will investigate are presented here.
+They are the primary focus of study.
+There are two main research questions, both of which relate to active learning.
+In addition to this, a question regarding how to remove reports that do not need to be labeled is treated as well.
 
 \begin{enumerate}
       \item \label{intro:re-q1} 
       \textit{How well does a machine learning model perform on the labeled data set created based on the sampling strategies, given the constraints of the project?}
       \newline
-      If the decision boundaries of the models can be used to pick documents that would be more informative for the model, the number of labeled documents could hopefully be reduced while still obtaining the same performance.
+      If the decision boundaries of the models can be used to pick documents that would be more informative for the model, the number of labeled documents needed could hopefully be reduced while still obtaining the same performance.
       When choosing the algorithm to use in the final system, there are several different constraints that will affect the final results, and therefore need to be taken into consideration.
-      The number of initial reports needed for the strategies need to perform well, and the how many labeled samples need to be acquired to achieve good results will therefore be taken into account.
-      In this regard, the strategies will be evaluated based on how well an SVM model perform on the data provided by them.
+      The number of initial reports needed, and how many labeled samples need to be acquired to achieve good results will therefore be taken into account.
+      In this regard, the strategies will be evaluated based on how well an SVM model performs on the data provided by them.
       This evaluation will be based on the accuracy, precision, recall and $F_1$-score of the model.
       The labeling application is running on limited hardware, so the time it takes to run the strategies will also be evaluated.
 
@@ -161,7 +159,7 @@ The third research question treats whether or not these reports can be filtered 
       These reports do not contain any information of value from a medical point of view and should be discarded in the labeling process.
 
       Unsupervised machine learning models such as topic modeling do by definition not require any labeled documents to train on.
-      If it is possible to, without any such data, to capture the necessary variance and group these invalid reports together and they can be removed from the labeling process before a doctor is presented with them.
+      If it is possible, without any such data, to capture the necessary variance and group these invalid reports together, they can be removed from the labeling process before a doctor is presented with them.
       That would result in an additional hurdle being removed from the process.
       The filtering of reports will be evaluated using  accuracy, precision, recall and $F_1$-score.
 \end{enumerate}
@@ -171,7 +169,7 @@ The third research question treats whether or not these reports can be filtered 
 
 The decisions made regarding the active learning techniques are based on the features of the clinical dataset provided by Sectra.
 However, how well they work is evaluated objectively on the publicly available Reuters-21578 \footnote{Reuters-21578, https://archive.ics.uci.edu/ml/datasets/reuters-21578+text+categorization+collection} set.
-Given the time constraints of the project, a physician was not able to test how the system worked in practice on the clinical dataset.
+Due to the time constraints of the project, a physician was not able to test how the system worked in practice on the clinical dataset.
 Another limitation to this thesis is that the dataset provided by Sectra is not available for public use, so any conclusions drawn from it may not be applicable in other scenarios.
 
 \section{Structure of the Report}
