@@ -33,7 +33,7 @@
 \chapter{Conclusion}
 \label{cha:conclusion}
 
-This thesis can be seen to have been done in two parts: identifying active learning strategies that could be used to improve the labeling process, and filtering out the invalid reports.
+This thesis was done in two parts: identifying active learning strategies that could be used to improve the labeling process, and filtering out the invalid reports.
 When it comes to the evaluation of the active learning strategies, there were a few alternatives.
 The ones chosen for evaluation here were the ones that were adapted for the multi-label scenario.
 These were: 
@@ -63,7 +63,7 @@ It did not achieve 100 \% accuracy, so there is room for improvement, but the se
 The server that hosts the labeling system at Sectra does not have a lot of computing power.
 Therefore, AAL was considered to be too computationally heavy.
 Choosing between BSVM and MMC was not as straight forward given their different qualities.
-In the end, BSVM was chosen to be integrated into the system, based on it's long term performance and that it gave the SVM model better accuracy after fewer labels.
+In the end, BSVM was chosen to be integrated into the system, based on its long term performance and that it gave the SVM model better accuracy after fewer labels.
 
 For future research, it would be interesting to look into how to further use the structure of the data in active learning strategies, besides only obtaining initial samples from clusters.
 An example of this would be to find a good way to adapt the approach described by Dasgupta et al\@.~\cite{dasgupta2008hierarchical} to the multi-label case.
@@ -75,5 +75,5 @@ Researching whether or not the hierarchical clustering could aid the selection o
 Another thing that would be of interest is to vary the text representation and classification models to see how they get affected by the different strategies.
 One example of this could be to use recurrent neural networks instead of SVM's, and see if the different active learning strategies affect the models differently.
 For the text representation, word2vec or latent topic vectors could be used instead of bag of words to highlight different features of the text.
-These methods described in this thesis should work well for other media such as images too, but if these were to be studied it would open up for some other techniques as well.
-Something that could be an interesting area for future research.
+These methods described in this thesis should work well for other media such as images too. 
+However, if other types of media were to be studied it would open up for some other techniques as well, something that could be an interesting area for future research.

@@ -17,7 +17,7 @@ The results of this experiment are used to answer the first research question.
 
 The active learning strategies that were evaluated are:
 \begin{itemize}
-    \item \textit{Binary Version Space Minimization (BSVM)}: Described in Section~\ref{subsec:binmin}
+    \item \textit{Binary Version Space Minimization (BVSM)}: Described in Section~\ref{subsec:binmin}
     \item \textit{Maximum Loss Reduction with Maximum Confidence (MMC)}: Described in Section~\ref{subsec:mmc}
     \item \textit{Adaptive Active Learning (AAL)}: Described in Section~\ref{subsec:adaptive-active-learning}
 \end{itemize}
@@ -44,11 +44,11 @@ Since the different models may depend on the initial samples in different ways, 
 This is also done by Yang et al\@.~\cite{yang2009effective}.
 In their paper, they tried quite large initial sample sizes.
 Here, the sizes evaluated are 25, 50, 100.
-The reason for this is that an large initial sample size would make it hard for the human annotator to see a difference in the class balance early on.
-In each iteration, 25 labels were queried.
+The reason for this is that a large initial sample size would make it hard for the human annotator to see a difference in the class balance early on.
+In each iteration, 25 documents were queried.
 The ones selected in every iteration were the 25 best one according to the strategy's measure.
 100 iterations were run per strategy.
-Making it 2500 labels that are labeled, in addition to the initial sample.
+Making it 2500 documents that are labeled, in addition to the initial sample.
 The different active learning configurations that were tried is displayed in Table~\ref{fig:active-learning-configurations}
 In total there were 18 configurations, based upon the three different methods.
 Every configuration was evaluated 5 times, and it is the average of those runs that are considered to be the final results.
@@ -60,12 +60,12 @@ The reasoning behind this is to reduce the effect of a single random selection.
         \hline
         \textbf{ID} & \textbf{Active Learning Strategy} & \textbf{Initial Sampling} & \textbf{Initial Sample Size}\\
         \hline
-        1 & BSVM & Random & 25\\
-        2 & BSVM & Random & 50\\
-        3 & BSVM & Random & 100\\
-        4 & BSVM & Sampled from clusters & 25\\
-        5 & BSVM & Sampled from clusters & 50\\
-        6 & BSVM & Sampled from clusters & 100\\
+        1 & BVSM & Random & 25\\
+        2 & BVSM & Random & 50\\
+        3 & BVSM & Random & 100\\
+        4 & BVSM & Sampled from clusters & 25\\
+        5 & BVSM & Sampled from clusters & 50\\
+        6 & BVSM & Sampled from clusters & 100\\
         7 & MMC & Random & 25\\
         8 & MMC & Random & 50\\
         9 & MMC & Random & 100\\
@@ -110,7 +110,7 @@ Its evaluation when trained on data provided by the active learning strategies w
 Note that when retrieving the initial sample from the clusters, only samples with label cardinality 1 was retrieved after 10 tries.
 MMC requires at least two different label cardinalities in the initial sample in order for the logistic regression model to work.
 For that reason, MMC with cluster initialization was not evaluated.
-In Table~\ref{tab:active-learning-accuracy-25}, Table~\ref{tab:active-learning-accuracy-50}, and Table~\ref{tab:active-learning-accuracy-100} it can be seen how many labels were required to reach a certain accuracy for the different initial sample sizes.
+In Table~\ref{tab:active-learning-accuracy-25}, Table~\ref{tab:active-learning-accuracy-50}, and Table~\ref{tab:active-learning-accuracy-100} it can be seen how many documents were required to reach a certain accuracy for the different initial sample sizes.
 
 \includeaccuracyplot{25}
 \includeaccuracyplot{50}
@@ -122,8 +122,8 @@ In Table~\ref{tab:active-learning-accuracy-25}, Table~\ref{tab:active-learning-a
         \hline
         \textbf{Strategy} & \textbf{Initial Sample} & \textbf{75 \%} & \textbf{80 \%} & \textbf{85 \%} & \textbf{87 \%} & \textbf{88 \%} & \textbf{89 \%}\\
         \hline
-        BSVM & Random & 475 & 650 & 1100 & 1450 & 1675 & 2425\\
-        BSVM & Cluster & 425 & 650 & 1100 & 1575 & 1700 & 2425\\
+        BVSM & Random & 475 & 650 & 1100 & 1450 & 1675 & 2425\\
+        BVSM & Cluster & 425 & 650 & 1100 & 1575 & 1700 & 2425\\
         MMC & Random & 600 & 775 & 1050 & 1250 & 1575 & N/A\\
         MMC & Cluster & N/A & N/A & N/A & N/A & N/A & N/A\\
         AAL & Random & 400 & 575 & 975 & 2425 & N/A & N/A\\
@@ -141,8 +141,8 @@ In Table~\ref{tab:active-learning-accuracy-25}, Table~\ref{tab:active-learning-a
         \hline
         \textbf{Strategy} & \textbf{Initial Sample} & \textbf{75 \%} & \textbf{80 \%} & \textbf{85 \%} & \textbf{87 \%} & \textbf{88 \%} & \textbf{89 \%}\\
         \hline
-        BSVM & Random & 450 & 625 & 1075 & 1550 & 1750 & N/A\\
-        BSVM & Cluster & 450 & 675 & 1125 & 1600 & 1725 & 2450\\
+        BVSM & Random & 450 & 625 & 1075 & 1550 & 1750 & N/A\\
+        BVSM & Cluster & 450 & 675 & 1125 & 1600 & 1725 & 2450\\
         MMC & Random & 625 & 775 & 1100 & 1325 & 1675 & N/A\\
         MMC & Cluster & N/A & N/A & N/A & N/A & N/A & N/A\\
         AAL & Random & 375 & 575 & 925 & N/A & N/A & N/A\\
@@ -160,8 +160,8 @@ In Table~\ref{tab:active-learning-accuracy-25}, Table~\ref{tab:active-learning-a
         \hline
         \textbf{Strategy} & \textbf{Initial Sample} & \textbf{75 \%} & \textbf{80 \%} & \textbf{85 \%} & \textbf{87 \%} & \textbf{88 \%} & \textbf{89 \%}\\
         \hline
-        BSVM & Random & 400 & 600 & 1125 & 1525 & 1775 & N/A\\
-        BSVM & Cluster & 450 & 675 & 1125 & 1600 & 1725 & 2450\\
+        BVSM & Random & 400 & 600 & 1125 & 1525 & 1775 & N/A\\
+        BVSM & Cluster & 450 & 675 & 1125 & 1600 & 1725 & 2450\\
         MMC & Random & 600 & 750 & 1100 & 1325 & 1675 & N/A\\
         MMC & Cluster & N/A & N/A & N/A & N/A & N/A & N/A\\
         AAL & Random & 350 & 525 & 925 & 2450 & N/A & N/A\\
@@ -192,8 +192,8 @@ A comparison of how long time it took for the different strategies can be seen i
 \section{Experiment 2}
 
 The goal of the second experiment was to evaluate how the labels in the produced labeled dataset are distributed.
-A set where the labels are more evenly, or uniform, distributed would be preferable.
-From a perspective of the person labeling, it could feel more productive not assigning the same labels most of the time.
+A set where the labels are more evenly, or uniformly, distributed would be preferable.
+From the perspective of the person labeling, it could feel more productive not assigning the same labels most of the time.
 The more prosperous outcome from a balanced dataset would be that the models using the data in later stages could also benefit from this, and obtain better results.
 This experiment is used to answer the second research question.
 
@@ -201,7 +201,7 @@ This experiment is used to answer the second research question.
 
 The configurations used here are the same as in Table~\ref{fig:active-learning-configurations}.
 Every iteration, the distribution of labels assigned are stored and analyzed.
-He et al\@.~\cite{he2009learning} discusses the usage of ROC curves and measures such as g-means to compare multi-class imbalanced data~\cite{he2009learning}.
+He et al\@.~\cite{he2009learning} discuss the usage of ROC curves and measures such as g-means to compare multi-class imbalanced data~\cite{he2009learning}.
 However, the doctor involved at Sectra specifically requested that labels should be more uniformly distributed. 
 The evaluation will therefore focus on measuring that instead of the model's performance, which is done in ~\ref{sec:experiments-exp1}.
 An evaluation of how the distribution progresses was done by comparing how the class imbalance is affected by the number of new samples obtained from the different methods.
@@ -220,63 +220,63 @@ The validity of the experiment is discussed in Chapter~\ref{cha:discussion}.
 The results of how the different strategies affected the balance of the labeled dataset is now presented.
 For the Reuters dataset, how the overall distribution of the labels is can be seen in Figure~\ref{fig:class-distribution-reuters}.
 After random sampling, the distribution can be seen in Figure~\ref{fig:class-distribution-reuters-random}.
-For comparison with the techniques it shows the labels both after 500 labels are added, and 2000.
+For comparison with the strategies it shows the labels both after 500 documents are added, and 2000.
 In order to be able to compare it with the other techniques easily, the plot contains the distribution after both 500 and 2000 labels are acquired.
-The distribution after sampling with the original BSVM can be seen in Figure~\ref{fig:class-distribution-reuters-binmin}, and with the initial samples taken from clusters in Figure~\ref{fig:class-distribution-reuters-binmin-clusters}.
+The distribution after sampling with the original BVSM can be seen in Figure~\ref{fig:class-distribution-reuters-binmin}, and with the initial samples taken from clusters in Figure~\ref{fig:class-distribution-reuters-binmin-clusters}.
 For MMC the distribution can be seen in Figure~\ref{fig:class-distribution-reuters-mmc}.
 The corresponding plots for Adaptive Active Learning can be seen in Figure~\ref{fig:class-distribution-reuters-adaptive} and Figure~\ref{fig:class-distribution-reuters-adaptive-clusters}.
 
 \begin{figure}
     \centering
-    \thirdsubfigimg{distribution-RandomSampling-25-500}{The class distribution from random sampling after 500 labels}
-    \thirdsubfigimg{distribution-RandomSampling-25-2000}{The class distribution from random sampling after 2000 labels}
+    \thirdsubfigimg{distribution-RandomSampling-25-500}{The class distribution from random sampling after 500 documents}
+    \thirdsubfigimg{distribution-RandomSampling-25-2000}{The class distribution from random sampling after 2000 documents}
     \caption{The distribution of labels after random sampling}
     \label{fig:class-distribution-reuters-random}
 \end{figure}
 
 \begin{figure}
     \centering
-    \thirdsubfigimg{distribution-BinaryMinimization-25-500}{The class distribution from BSVM after 500 labels}
-    \thirdsubfigimg{distribution-BinaryMinimization-25-2000}{The class distribution from BSVM after 2000 labels}
-    \caption{The distribution of labels after BSVM}
+    \thirdsubfigimg{distribution-BinaryMinimization-25-500}{The class distribution from BVSM after 500 documents}
+    \thirdsubfigimg{distribution-BinaryMinimization-25-2000}{The class distribution from BVSM after 2000 documents}
+    \caption{The distribution of labels after BVSM}
     \label{fig:class-distribution-reuters-binmin}
 \end{figure}
 
 
 \begin{figure}
     \centering
-    \thirdsubfigimg{distribution-ClusterBinaryMinimization-25-500}{The class distribution from BSVM, with the initial sample from clusters, after 500 labels}
-    \thirdsubfigimg{distribution-ClusterBinaryMinimization-25-2000}{The class distribution from BSVM, with the initial sample from clusters, after 2000 labels}
-    \caption{The distribution of labels after BSVM with clustering}
+    \thirdsubfigimg{distribution-ClusterBinaryMinimization-25-500}{The class distribution from BVSM, with the initial sample from clusters, after 500 documents}
+    \thirdsubfigimg{distribution-ClusterBinaryMinimization-25-2000}{The class distribution from BVSM, with the initial sample from clusters, after 2000 documents}
+    \caption{The distribution of labels after BVSM with clustering}
     \label{fig:class-distribution-reuters-binmin-clusters}
 \end{figure}
 
 \begin{figure}
     \centering
-    \thirdsubfigimg{distribution-MMC-25-500}{The class distribution from MMC after 500 labels}
-    \thirdsubfigimg{distribution-MMC-25-2000}{The class distribution from MMC after 2000 labels}
+    \thirdsubfigimg{distribution-MMC-25-500}{The class distribution from MMC after 500 documents}
+    \thirdsubfigimg{distribution-MMC-25-2000}{The class distribution from MMC after 2000 documents}
     \caption{The distribution of labels after MMC}
     \label{fig:class-distribution-reuters-mmc}
 \end{figure}
 
 \begin{figure}
     \centering
-    \thirdsubfigimg{distribution-AdaptiveLearner-25-500}{The class distribution from Adaptive Active Learning after 500 labels}
-    \thirdsubfigimg{distribution-AdaptiveLearner-25-2000}{The class distribution from Adaptive Active Learning after 2000 labels}
+    \thirdsubfigimg{distribution-AdaptiveLearner-25-500}{The class distribution from Adaptive Active Learning after 500 documents}
+    \thirdsubfigimg{distribution-AdaptiveLearner-25-2000}{The class distribution from Adaptive Active Learning after 2000 documents}
     \caption{The distribution of labels after Adaptive Active Learning}
     \label{fig:class-distribution-reuters-adaptive}
 \end{figure}
 
 \begin{figure}
     \centering
-    \thirdsubfigimg{distribution-ClusterAdaptiveLearner-25-500}{The class distribution from Adaptive Active Learning, with the initial sample from clusters, after 500 labels}
-    \thirdsubfigimg{distribution-ClusterAdaptiveLearner-25-2000}{The class distribution from Adaptive Active Learning, with the initial sample from clusters, after 2000 labels}
+    \thirdsubfigimg{distribution-ClusterAdaptiveLearner-25-500}{The class distribution from Adaptive Active Learning, with the initial sample from clusters, after 500 documents}
+    \thirdsubfigimg{distribution-ClusterAdaptiveLearner-25-2000}{The class distribution from Adaptive Active Learning, with the initial sample from clusters, after 2000 documents}
     \caption{The distribution of labels after Adaptive Active Learning with clustering}
     \label{fig:class-distribution-reuters-adaptive-clusters}
 \end{figure}
 
-In Table~\ref{tab:distribution-result-500} the results of the evaluation after 500 new labels can be seen.
-The corresponding table for the evaluation after 2000 new labels can be seen in Table~\ref{tab:distribution-result-2000}.
+In Table~\ref{tab:distribution-result-500} the results of the evaluation after 500 new documents can be seen.
+The corresponding table for the evaluation after 2000 new documents can be seen in Table~\ref{tab:distribution-result-2000}.
 
 \begin{table}
     \centering
@@ -285,14 +285,14 @@ The corresponding table for the evaluation after 2000 new labels can be seen in 
         \textbf{Strategy} & \textbf{Initial Sample} & \textbf{Top Class} & \textbf{Top 3 Classes} & \textbf{Small/Big Ratio}\\
         \hline
         Random & Random &  34.9 \% & 65.5 \% & 32.0 \\
-        BSVM & Random &  22.0 \% & 49.8 \% & 45.0 \\
-        BSVM & Clusters & 19.8 \% & 49.0 \% & 80.0 \\
+        BVSM & Random &  22.0 \% & 49.8 \% & 45.0 \\
+        BVSM & Clusters & 19.8 \% & 49.0 \% & 80.0 \\
         Adaptive & Random & 14.8 \% & 38.5 \% & 5.4 \\
         Adaptive & Clusters & 14.5 \% & 38.2 \% & 6.65 \\
         MMC & Random & 13.1 \% & 35.2 \% & 8.2 \\
         \hline
     \end{tabular}
-    \caption{The results after analyzing the label distribution after 500 new labels has been added.}
+    \caption{The results after analyzing the label distribution after 500 new documents has been added.}
     \label{tab:distribution-result-500}
 \end{table}
 
@@ -303,14 +303,14 @@ The corresponding table for the evaluation after 2000 new labels can be seen in 
         \textbf{Strategy} & \textbf{Initial Sample} & \textbf{Top Class} & \textbf{Top 3 Classes} & \textbf{Small/Big Ratio}\\
         \hline
         Random & Random & 36.65 \% & 64.6 \% & 29.4 \\
-        BSVM & Random & 16.0 \% & 42.4 \% & 7.5 \\
-        BSVM & Clusters & 15.7 \% & 41.5 \% & 7.3 \\
+        BVSM & Random & 16.0 \% & 42.4 \% & 7.5 \\
+        BVSM & Clusters & 15.7 \% & 41.5 \% & 7.3 \\
         Adaptive & Random & 36.4 \% & 56.2 \% & 43.4 \\
         Adaptive & Clusters & 34.5 \% & 54.8 \% & 41.0 \\
         MMC & Random & 16.7 \% & 41.2 \% & 9.3 \\
         \hline
     \end{tabular}
-    \caption{The results after analyzing the label distribution after 2000 labels has been added.}
+    \caption{The results after analyzing the label distribution after 2000 documents has been added.}
     \label{tab:distribution-result-2000}
 \end{table}
 
@@ -319,7 +319,7 @@ The corresponding table for the evaluation after 2000 new labels can be seen in 
 This experiment is concerned with the identification of invalid reports.
 The task here was to evaluate how well unsupervised techniques could be used to filter out these invalid reports.
 Invalid reports are considered to be reports that describe a situation where an examination never took place.
-This can be because of a deceased patient, a patient being moved to another hospital, a patient did not show up or for some reason did not want to go through with the examination.
+This can be because of a deceased patient, a patient being moved to another hospital, a patient who did not show up or for some reason did not want to go through with the examination.
 The results of this are the base for answering the third research question.
 
 \subsection{Method}
@@ -330,8 +330,7 @@ This was done by creating a script that presented a report to the user and reque
 5358 reports were labeled by the author, out of which 623 were marked as invalid. 
 Only 1000 of the valid reports were used in the analysis, to make it more comparable to the invalid case.
 In order to make the models able to separate the invalid reports from the valid reports, they had to be manually analyzed.
-They are both unsupervised methods and were therefore not fitted with a specific target.
-Approaching this in a way that would not result in the approach being overfitted to the analyzed data could potentially be hard since they are manually analyzed. 
+Using topic models to filter out the invalid reports in a way that would not result in the approach being overfitted to the analyzed data could potentially be hard since they are manually analyzed. 
 To reduce the bias in the evaluation, the labeled reports were split into a training set and validation set, containing 80\% and 20\% of the reports respectively.
 
 The training set was further used to verify the topics that were identified as important, whereas the validation set was used to evaluate how well the approach performed.

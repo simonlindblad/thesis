@@ -5,7 +5,7 @@ The discussion chapter is separated into three parts.
 First, it goes through and analyzes the results of the experiments in Chapter~\ref{cha:experiments}.
 This is followed by an analysis of the methods used to conduct those experiments.
 Work that is related to this thesis is then discussed.
-At last, the work is discussed in a wider context, based on the ethical and societal impact techniques like these may have.
+Finally, the work is discussed in a wider context, based on the ethical and societal impact techniques like these may have.
 
 \section{Results}
 \label{sec:discussion-results}
@@ -16,7 +16,7 @@ They are discussed based on their relation to the research questions.
 \subsection{Experiment 1}
 
 The first experiment was conducted to be able to answer the first research question, which was regarding how well the SVM model performs on the data labeled by the active learning process.
-Looking at how the different strategies perform in terms of both accuracy and $F_1$-score, it is clear that for the first 600-700 labels, Maximum Loss Reduction with Maximum Confidence (MMC) performs considerably worse than the rest.
+Looking at how the different strategies perform in terms of both accuracy and $F_1$-score, it is clear that for the first 600-700 documents, Maximum Loss Reduction with Maximum Confidence (MMC) performs considerably worse than the rest.
 That is including random sampling.
 It is equally clear that it performs better when the initial sample is bigger.
 One reason behind this may be MMC's dependence on the label cardinality of the samples.
@@ -42,14 +42,14 @@ However, when all classes have been sampled, and quickly outperforms the random 
 In the end, the different strategies all perform better than random sampling.
 The ones that are based on MMC and BSVM tend to perform a bit better than AAL when more than 1200-1300 labeled samples are added.
 This may very well be related to the fact that the distributions for MMC and BSVM are considerably more uniform when a lot of labels have been requested.
-BSVM is the only technique that reached 89 \% accuracy within the first 2500 labels to be labeled.
-It is possible that other techniques would have reached it given more labels, but it is clear that BSVM reaches a peak accuracy earlier.
+BSVM is the only technique that reached 89 \% accuracy within the first 2500 documents to be labeled.
+It is possible that other techniques would have reached it given more documents, but it is clear that BSVM reaches a peak accuracy earlier.
 The technique always tries to sample from the most uncertain category.
 The lack of reports in the least common category can be the thing that prohibits the other strategies from achieving a higher accuracy.
 
 The initial clustering of reports did not seem to make as much of a difference as the strategy used.
-This makes sense, the initial sample size only makes up for a little bit of the overall set of labeled reports.
-Worth noting is that the SVM model performs worse for the first couple of iterations with initial clustering.
+This makes sense since the initial sample size only makes up for a little bit of the overall set of labeled reports.
+Worth noting is that the SVM model perform worse for the first couple of iterations when the strategies were used with initial clustering.
 It quickly recovers after this and seems to perform as well, or slightly better, compared to the randomly initialized counterpart.
 The reason for the low initial performance might be due to a skewed dataset.
 If we assume that the clusters capture a bit of the label information, then the labels should be more evenly distributed in the initial sample.
@@ -58,14 +58,14 @@ This would then greatly reduce the results of the evaluation.
 
 All clusters will not have the same number of members.
 If most of the documents with a high label cardinality got assigned the same populous cluster, they might get neglected from the initial sample since an equal number of reports was taken from each cluster.
-This could be a reason for that the clustering approach to initial sampling only obtained samples with label cardinality 1, and therefore excluding MMC from the process.
+This could be a reason why the clustering approach to initial sampling only obtained samples with label cardinality 1, and therefore excluding MMC from the process.
 
 \subsection{Experiment 2}
 
 In order to satisfy the request of a more labeled dataset, which is of concern in the second research question, the distribution of labels was analyzed.
 Looking at this distribution it is instantly clear that the three strategies outperform random sampling significantly.
-MMC and AAL are by far the most balanced ones after only 500 labels are labeled.
-When 2000 data points are labeled, BSVM is the most balanced one, albeit slightly compared to MMC.
+MMC and AAL are by far the most balanced ones after only 500 documents are labeled.
+When 2000 data points are labeled, BSVM is the most balanced one, albeit only slightly more than MMC.
 It can probably be attributed to it selecting the most uncertain class in every iteration.
 The most uncertain class is probably the one with the fewest samples, causing the distribution to be more uniform over time.
 
@@ -75,11 +75,11 @@ This averaging trait may be beneficial for the distribution early on.
 The model is most likely rather uncertain about most categories, so instead of focusing on the one with the absolutely lowest value, they select the data point that will give the overall most information.
 As with the evaluation of model performance, BSVM seems to perform better in the long run.
 One could include MMC in this too, the difference between the two could probably be neglected in most applications.
-However, if only a few hundred labels are supposed to be labeled, AAL is unrivaled when all metrics are considered.
+However, if only a few hundred documents are supposed to be labeled, AAL is unrivaled when all metrics are considered.
 
 \subsection{Experiment 3}
 
-The last experiment is conducted in order to answer the third research question, related to how well the unsupervised techniques can be used to filter out invalid reports.
+The last experiment was conducted in order to answer the third research question, related to how well the unsupervised techniques can be used to filter out invalid reports.
 Obtaining 97.9 \% and 99.1 \% accuracy for classifying invalid reports must be considered a good result.
 The reports describing the cases where an examination did not happen uses a fairly different vocabulary.
 For these cases, there is a lack of medical terms, while expressions such as ``canceled'', or ``new time'' are a lot more common.
@@ -152,7 +152,7 @@ This is harder to do in multi-label classification.
 Another common approach is to measure how well a model performs, with $F_1$-score for example.
 This was already done in research question 2, and does not measure the uniformity of the distribution explicitly, but rather implicitly by assuming that it will make the models perform better.
 The evaluations that this report uses are instead fairly non-standard but focuses on being intuitive in measuring how uniform the set is.
-So the validity of the results here can rightly be criticized.
+The validity of the results here can rightly be criticized.
 By using non-standard metrics, an argument can be made that it does not accurately achieve what it aims to do.
 On the other hand, they are clearly defined and make intuitive sense.
 If the most common categories make up most of the labels assigned, the dataset is probably not very well balanced.
@@ -179,7 +179,7 @@ The number of reports labeled seems to be sufficient for the task, but it may ha
 A rather ironic part of the labeling of invalid reports is that it did not use an active learning system.
 The analysis of the invalid reports was completed before the work with active learning started.
 While the active learning system dealt with in this report focused on multi-label data, it could have been beneficial to use.
-Evaluating the categorization of invalid reports by accuracy, precision, recall, and $F_1$-score are fairly standard.
+Evaluating the categorization of invalid reports by accuracy, precision, recall, and $F_1$-score is fairly standard.
 The metrics have been used in a lot of text classification and information retrieval research~\cite{aggarwal2012surveyclass, bishop2006pattern}, and should enable comparisons of the results with other sources.
 
 \subsection{Sources}
@@ -197,41 +197,38 @@ Besides that, sources used to provide an overview of the field, such as Settles~
 Active learning has been researched in text classification with different approaches.
 They can be seen as two categories: searching through the hypothesis space by using the uncertainty of a model, or by exploiting the structure of the data through clustering~\cite{dasgupta2008hierarchical}.
 
-One of the common baselines for active learning is uncertainty sampling~\cite{lewis1994sequential}, that simply queries the label for the data point the model is most uncertain about.
-In~\cite{dasgupta2008hierarchical} hierarchical clustering is used in an active learning system.
+One of the common baselines for active learning is uncertainty sampling, that simply queries the label for the data point the model is most uncertain about~\cite{lewis1994sequential}.
+In the paper by Dasgupta et al\@.~\cite{dasgupta2008hierarchical}, hierarchical clustering is used in an active learning system.
 The labels are queried from clusters where there is a lot of uncertainty when it comes to the majority label.
 By pruning the tree of clusters while querying for labels the goal is to obtain a pruning where each node mostly contains one label.
 
-In \cite{nguyen2004active} they also take advantage of a clustering to select the samples to be labeled in a two-class environment.
+In the paper by Nguyen et al\@.\cite{nguyen2004active} they also take advantage of a clustering to select the samples to be labeled in a two-class environment.
 They use that the data points closest to the centroids are the most important ones, and that most data points in one cluster have the same label.
 What this approach has in common with a lot of the current research is that it is treating single-label or binary classification problems, which cannot be directly applied to a multi-label scenario.
 
-Research in~\cite{brinker2006active} is dealing with the multi-label problem.
-That is the paper that developed the \textit{binary version space minimization} strategy that is described in section~\ref{subsec:binmin}.
-It simply takes the instance with the smallest margin among the binary classifiers, using the binary relevance scheme.
-The MMC strategy~\cite{yang2009effective} that is described in section~\ref{subsec:mmc}, and the adaptive active learning strategy~\cite{li2013active} in section~\ref{subsec:adaptive-active-learning} are also techniques for managing the multi-label problem.
-MMC tries to find the greatest reduction for the estimated loss.
-While adaptive active learning combines an uncertainty measure with a measure of how the label cardinality differs.
-Singh et al\@.~\cite{singh2009active} is another multi-label active learning approach that simply takes the minimum average of the margin among the classifiers for a data point.
-For image classification, there have been some methods developed, for example ~\cite{li2004multilabel, qi2008two}.
-In~\cite{li2004multilabel} the goal is to, after making predictions, selecting the sample with the biggest mean loss.
+This thesis has presented three different techniques that are suitable for multi-label active learning, but there are some more.
+Singh et al\@.~\cite{singh2009active} is another approach that simply takes the minimum average of the margin among the classifiers for a data point.
+For image classification, there have been some methods developed, for example by Li et al\@. and Qi et al\@.~\cite{li2004multilabel, qi2008two}.
+In the paper by Li et al\@.~\cite{li2004multilabel}, the goal is to, after making predictions, selecting the sample with the biggest mean loss.
 However, experiments have shown that this is not as suitable for text classification~\cite{yang2009effective}.
-In~\cite{qi2008two}, the approach is to use pairs of labels and samples to present to the annotator, and the aim is to minimize the Bayesian classification error.
+Qi et al\@.~\cite{qi2008two} approached this by using pairs of labels and samples to present to the annotator, and the aim is to minimize the classification error.
 Due to the fact that labeling for text classification is more time consuming than image classification since you have to read an entire text, this approach is not suitable for text classification~\cite{yang2009effective}.
 
-Active learning has been used to deal with the problem of imbalanced datasets before.
+Active learning has been used to deal with the problem of imbalanced datasets before too.
 In a binary classification setting, Ertekin et al\@.~\cite{ertekin2007learning} used uncertainty sampling with SVMs to get a more balanced dataset.
 In~\cite{attenberg2013class}, Attenberg et al\@. use density based active learning to improve the class balance.
 However, it does not attempt to apply this in a multi-label setting.
 
 Using topic modeling for various clinical applications has also been done before.
 Topic modeling has been a popular approach for this purpose since clinical data often is in the form of free text.
-The resulting topics can also be interpreted by humans, which allow doctors to get more insight into the system.
+The resulting topics can also be interpreted by humans, which allows doctors to get more insight into the system.
 Sarioglu et al\@.~\cite{sarioglu2013topic} to represent clinical reports with topic vectors in order to classify them.
 Chan et al\@.~\cite{chan2013empirical} used topic models to analyze patient records and clinical reports from cancer patients.
 In their paper, they found relationships between the content of the notes on the patients, with the data that was available on the patients' genetic mutations.
 The interpretability of topics generated from an LDA model was studied on clinical reports by Arnold et al~\cite{arnold2016evaluating}.
 They evaluated how interpretable topics were based on how many topics the model used.
+The difference between this and what has been done in this thesis can be seen as this focused on separating the medical reports from more administrative ones.
+However, the analysis of the relations between topics and categories is a more direct medical application.
 
 
 \section{The Work in a Wider Context}
