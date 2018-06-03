@@ -598,24 +598,23 @@ A frequently used method is $k$-means++, that has been shown to improve both the
 
 Word embeddings is the process of representing a word as a real-valued vector instead of just an atomic unit.
 Viewing a word as a vector allows for doing interesting things with them, such as evaluating how similar two words are.
-Evaluating the similarity of words that is hard to do when treating them as atomic units.
+Evaluating the similarity of words is hard to do when treating them as atomic units.
 
-This can be created by using a co-occurrence matrix to see how often certain words occur together, and then perform some dimensionality reduction on them~\cite{lebret2013word, levy2014neural}.
-Another approach that is shown to be very successful in producing high-quality word embeddings is \textit{word2vec}, which uses a neural network to accomplish this task~\cite{mikolov2013efficient}.
-In addition to being able to compute similarities between words, using simple algebraic some interesting relationships can be discovered.
+Word embeddings can be created by using a co-occurrence matrix to see how often certain words occur together, and then perform some dimensionality reduction on them~\cite{lebret2013word, levy2014neural}.
+Another approach that has been shown to be very successful in producing high-quality word embeddings is \textit{word2vec}, which uses a neural network to accomplish this task~\cite{mikolov2013efficient}.
+In addition to being able to compute similarities between words, using simple algebra some interesting relationships can be discovered.
 The example that Mikolav et al\@.~\cite{mikolov2013efficient} showed was that using the vector for ``King'', subtracting the vector for ``Man'' and adding the vector for ``Woman'' resulted in a vector that was close to that representing ``Queen''.
 
-One approach to this is using a continuous bag-of-words model~\cite{mikolov2013efficient}.
-A neural network is used to predict the middle word using both words occurring before and after it.
-The four words occurring before and after the middle word is used as inputs, but their internal order is not used.
-This is the reason for the name, continuous bag-of-words.
+One approach to using neural networks for word embeddings is the continuous bag-of-words model~\cite{mikolov2013efficient}.
+The network is used to predict a word using both words occurring both before and after it.
+The words occurring before and after are used without regard to their order, which is the reason for the bag-of-words name.
 
 The second approach that Mikolav et al\@. explored was a continuous skip-gram model~\cite{mikolov2013efficient}.
-Here a neural network with a continuous projection layer was used.
-With the current word as input, co-occurring words within a certain range are predicted.
+With this approach, a neural network uses the word as input. 
+Based on this the network tries to predict words that co-occur with it, within a certain range.
 A bigger range is more computationally complex but results in word vectors of higher quality.
 
-Word2vec does not require labels to be provided with the data, but uses the data itself to generate targets.
+Word2vec does not require labels to be provided with the data but rather uses the data itself to generate targets.
 For this reason it is sometimes called a self-supervised technique.
 
 \section{Evaluation Metrics}\label{sec:evaluation-metrics}
@@ -634,7 +633,7 @@ Data points that are correctly classified are then either \textit{true positives
             Predicted N & False Negative & True Negative \\
         \end{tabular}
     \end{center}
-    \caption{Confusion matrix for explaining true positives, false positives, true negatives and false negatives}\label{tab:conf-matr}
+    \caption{Confusion matrix for showing true positives, false positives, true negatives and false negatives}\label{tab:conf-matr}
 \end{table}
 
 Precision is the percentage of the results found by the system that are correct~\cite{tjong2003introduction}.
@@ -666,23 +665,25 @@ These metrics are designed to work when there are two labels.
 Given several labels, there are different average methods used to get a score for the system.
 Two of these are \textit{micro} and \textit{macro} averaging.
 
-The number of true positives, false positives, true negatives and false negatives for an instance $\lambda$ are here denoted as $tp_\lambda$, $fp_\lambda$, $tn_\lambda$ and $fn_\lambda$.
-A binary evaluation measure on these is denoted as $B(tp_\lambda, fp_\lambda, tn_\lambda, fn_\lambda)$.
-Micro-average work by summing the individual true positives, false positives, true negatives and false negatives~\cite{tsoumakas2009mining}.
+The number of true positives, false positives, true negatives and false negatives for the $\i$th binary classifier are here denoted as $tp_i$, $fp_i$, $tn_i$ and $fn_i$.
+A binary evaluation measure on these is denoted as $B(tp_i, fp_i, tn_i, fn_i)$, e.g. $B$ could be the recall measure.
+Micro-averaging works by summing the individual true positives, false positives, true negatives and false negatives~\cite{tsoumakas2009mining}.
 Then you use the sums to obtain the final score.
 Using the notation established above, the micro average is defined as~\cite{tsoumakas2009mining}:
 \begin{equation}
-    B_{micro} = B(\sum_{\lambda = 1}^ktp_\lambda, \sum_{\lambda = 1}^kfp_\lambda, \sum_{\lambda = 1}^ktn_\lambda, \sum_{\lambda = 1}^kfn_\lambda)
+    B_{micro} = B(\sum_{i = 1}^ktp_i, \sum_{i = 1}^kfp_i, \sum_{i = 1}^ktn_i, \sum_{i = 1}^kfn_i)
 \end{equation}
 
 Macro-average on the other hand works by first calculating the binary measure, and then taking the average of all of them~\cite{tsoumakas2009mining}.
 It is defined as:
 \begin{equation}
-    B_{macro} = \frac{1}{k}\sum_{\lambda = 1}^kB(tp_\lambda, fp_\lambda, tn_\lambda, fn_\lambda)
+    B_{macro} = \frac{1}{k}\sum_{i = 1}^kB(tp_i, fp_i, tn_i, fn_i)
 \end{equation}
 
 It is worth noting that for some measures, such as Accuracy, the result of the two averaging approaches is the same.
-However, it differs for \textit{recall} and \textit{precision}, and therefor also the \textit{F1-score}~\cite{tsoumakas2009mining}.
+However, it differs for \textit{recall} and \textit{precision}, and therefore also the \textit{$F_1$-score}~\cite{tsoumakas2009mining}.
+The macro-average does not show skewness in the class labels since all different binary classifiers are treated equally.
+If one class has a lot more cases, this is taken into account when using micro-averaging.
 
 Perplexity can be used in order to compare different probabilistic models. 
 It is a measurement that determines how good a models predictions are, where a lower score means that the model is better at predicting.

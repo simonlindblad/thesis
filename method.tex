@@ -52,6 +52,7 @@ The fields include:
     \item \textbf{Urgent}: If the examination is urgent or not.
     \item \textbf{Pharma}: List of administrated pharmaceuticals.
 \end{enumerate}
+
 \begin{figure}
 \begin{verbatim}
     {
@@ -96,7 +97,7 @@ The fields include:
 \end{figure}
 
 The work was mainly concerned with the ReportText field, since it contains the response to the result of the examination.
-But the for the complete Active Learning system the Anamnesis was used as well.
+But for the complete Active Learning system the Anamnesis was used as well.
 The labels that were initially assigned to these reports were:
 ``Blödning'', ``Infektion'', ``Metabol'', ``Tumör'', ``Cysta'', ``Missbildning'', ``Syndrom'', ``Demens'', ``Hydrocefalus'', ``Infarkt'', ``Kärlsjukdom'', ``Trauma'', ``Systemsjukdom'', ``Inklämmning'' and ``Normal''.
 The distribution of categories among these initially labeled reports can be seen in Figure~\ref{fig:class-distribution}
@@ -125,7 +126,7 @@ After filtering out the documents not labeled with any of the top 15 categories,
 
 \section{Pre-Processing and Text Representation}\label{sec:pre-processing}
 
-Before the data was used in the conducted experiments, several pre-processing steps were applied in order to clean the dataset and make it easier to work with.
+Before the data was used in the experiments, several pre-processing steps were applied in order to clean the dataset and make it easier to work with.
 The steps were:
 \begin{enumerate}
     \item The first step was to extract the fields of interest.
@@ -139,6 +140,7 @@ The steps were:
           The idea behind this is that these words would not contribute to differentiating different classes of documents.
           Removing of both frequent and infrequent words is commonly done when working with text and has been done in the context of classification, active learning or topic modeling before~\cite{tong2001support, blei2003latent, brinker2006active, sarioglu2013topic}.
     \item A list of identified common stopwords were removed as well.
+          Stopwords are words that are not deemed to be of significance.
           This list of words was based on the Swedish nltk stopwords list.
           After iterating over the dataset words that occurred frequently but were not considered to be very informative for the models were identified.
           The list of stopwords was then extended to incorporate these words as dataset-specific information.
@@ -146,6 +148,7 @@ The steps were:
           By removing names of doctors the idea is to make the system more applicable to new reports, written by other doctors.
     \item Accents from the words were removed.
     \item The text was tokenized and then stemmed using the Swedish Porter2 stemmer \footnote{Swedish Porter Stemmer, http://snowball.tartarus.org/algorithms/swedish/stemmer.html}.
+          Stemming is the task of making words of different plurality and tense into a common base form.
 \end{enumerate}
 Most of these steps have been performed in previous research  dealing with text analysis in the form of classification or active learning~\cite{tong2001support, blei2003latent, brinker2006active, sarioglu2013topic}.
 

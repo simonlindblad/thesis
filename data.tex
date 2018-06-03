@@ -80,7 +80,7 @@ The fields include:
 \end{figure}
 
 The work was mainly concerned with the ReportText field, since it contains the response to the result of the examination.
-But the for the complete active learning system the Anamnesis field was used as well, since it provides important patient information.
+But for the complete active learning system the Anamnesis field was used as well, since it provides important patient information.
 The labels that were initially assigned to these reports were:
 ``Blödning'', ``Infektion'', ``Metabol'', ``Tumör'', ``Cysta'', ``Missbildning'', ``Syndrom'', ``Demens'', ``Hydrocefalus'', ``Infarkt'', ``Kärlsjukdom'', ``Trauma'', ``Systemsjukdom'', ``Inklämmning'' and ``Normal''.
 The distribution of categories among these initially labeled reports can be seen in Figure~\ref{fig:class-distribution}.
@@ -127,6 +127,7 @@ They were:
           The idea behind this is that these words would not contribute to differentiating different classes of documents.
           Removing of both frequent and infrequent words is commonly done when working with text and has been done in the context of classification, active learning or topic modeling before~\cite{tong2001support, blei2003latent, brinker2006active, sarioglu2013topic}.
     \item A list of identified common stopwords was removed as well.
+          Stopwords are words that are not deemed to be of significance.
           This list of words was based on the Swedish nltk stopwords list.
           After iterating over the dataset, words that occurred frequently but were not considered to be very informative for the models were identified.
           The list of stopwords was then extended to incorporate these words as dataset-specific information.
@@ -134,6 +135,7 @@ They were:
           By removing names of doctors the idea is to make the system more applicable to new reports, written by other doctors.
     \item Accents from the words were removed.
     \item The text was tokenized and then stemmed using the Swedish Porter2 stemmer \footnote{Swedish Porter Stemmer, http://snowball.tartarus.org/algorithms/swedish/stemmer.html}.
+          Stemming is the task of making words of different plurality and tense into a common base form.
 \end{enumerate}
 Most of these steps have been performed in previous research  dealing with text analysis in the form of classification or active learning~\cite{tong2001support, blei2003latent, brinker2006active, sarioglu2013topic}.
 
@@ -162,7 +164,7 @@ The original value was replaced with the new one during the preprocessing stage.
         pat & patient & short \\
         pt & patient & short \\
         pateint & patient & misspelling \\
-        akuten & akutmottagningen & misspelling \\
+        akuten & akutmottagningen & synonym \\
         us & undersökning & short \\
         \hline
     \end{tabular}
@@ -275,7 +277,7 @@ This provided a good way to explore the important words in each topic.
 \section{The Relationship Between Topics and Categories}
 \label{sec:topic-categories}
 
-With the initial set of labeled reports, it was natural to explore and try to find a relationship between the initial set of categories and the inherit structure of the data.
+With the initial set of labeled reports, it was natural to explore and try to find a relationship between the initial set of categories and the inherent structure of the data.
 This was done by visualizing the LDA model again.
 In order to find any existing relationship between the topics and the labeled samples, the points were colored based on their assigned labels.
 The color of a point in the plot was based on the first label of a sorted list of the point's labels.
@@ -379,7 +381,7 @@ In order to verify and gain further insight into how invalid reports were relate
 \end{figure}
 
 The distribution of the topics with the highest likelihood for the invalid reports in the training set can be seen in Figure~\ref{fig:most-likely-topics} (a).
-A couple of topics, 1 and 17 clearly stands out as the ones that most invalid reports gets assigned.
+A couple of topics, 1 and 17, clearly stand out as the ones that most invalid reports gets assigned.
 Specifically, topic 1 had a count of 131 reports from the invalid reports in the training set, and topic 17 had 358.
 Some invalid reports have topics 0, 3, 9, 16, 47, 53, 58, 61, 62 as the most likely topic.
 53 is the third most common, with a count of 3.
