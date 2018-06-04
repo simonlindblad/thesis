@@ -38,20 +38,20 @@ When it comes to the evaluation of the active learning strategies, there were a 
 The ones chosen for evaluation here were the ones that were adapted for the multi-label scenario.
 These were: 
 \begin{itemize}
-    \item Binary Version Space Minimization (BSVM)
+    \item Binary Version Space Minimization (BVSM)
     \item Maximum Loss Reduction with Maximum Confidence (MMC)
     \item Adaptive Active Learning (AAL)
 \end{itemize}
 
 For the first research question, the performance of the strategies can be summarized in that MMC performed worse in the early stages, while the adaptive approach worked the best during the same time.
-BSVM performed approximately the same as random sampling in the beginning.
-In the end, BSVM and MMC both achieved a higher accuracy and $F_1$-score than AAL, at least after 2000 samples were added.
+BVSM performed approximately the same as random sampling in the beginning.
+In the end, BVSM and MMC both achieved a higher accuracy and $F_1$-score than AAL, at least after 2000 samples were added.
 All of the above-mentioned strategies performed better than random sampling in the long run.
 
 To answer the second research question the distribution of labels for the labeled dataset was analyzed.
 The distribution of labels was more uniform for all the strategies, compared to that of random sampling.
-After 2000 labels, BSVM and MMC had a more even distribution than AAL.
-While early on, MMC and the adaptive approach generated a lot more even label distribution than BSVM.
+After 2000 documents, BVSM and MMC had a more even distribution than AAL.
+While early on, MMC and the adaptive approach generated a lot more even label distribution than BVSM.
 So, in various degrees during the labeling process, the different strategies all made the dataset more uniform than labeling at random.
 
 Identifying and filtering out invalid reports was treated in the third research question.
@@ -62,8 +62,8 @@ It did not achieve 100 \% accuracy, so there is room for improvement, but the se
 
 The server that hosts the labeling system at Sectra does not have a lot of computing power.
 Therefore, AAL was considered to be too computationally heavy.
-Choosing between BSVM and MMC was not as straight forward given their different qualities.
-In the end, BSVM was chosen to be integrated into the system, based on its long term performance and that it gave the SVM model better accuracy after fewer labels.
+Choosing between BVSM and MMC was not as straight forward given their different qualities.
+In the end, BVSM was chosen to be integrated into the system, based on its long term performance and that it gave the SVM model better accuracy after fewer documents.
 
 For future research, it would be interesting to look into how to further use the structure of the data in active learning strategies, besides only obtaining initial samples from clusters.
 An example of this would be to find a good way to adapt the approach described by Dasgupta et al\@.~\cite{dasgupta2008hierarchical} to the multi-label case.

@@ -16,13 +16,20 @@ They are discussed based on their relation to the research questions.
 \subsection{Experiment 1}
 
 The first experiment was conducted to be able to answer the first research question, which was regarding how well the SVM model performs on the data labeled by the active learning process.
-Looking at how the different strategies perform in terms of both accuracy and $F_1$-score, it is clear that for the first 600-700 documents, Maximum Loss Reduction with Maximum Confidence (MMC) performs considerably worse than the rest.
+Looking at how the different strategies perform in terms of both accuracy and micro $F_1$-score, it is clear that for the first 600-700 documents, Maximum Loss Reduction with Maximum Confidence (MMC) performs considerably worse than the rest.
 That is including random sampling.
 It is equally clear that it performs better when the initial sample is bigger.
 One reason behind this may be MMC's dependence on the label cardinality of the samples.
 MMC's dependence on label cardinality can be seen in Section~\ref{subsec:mmc}.
 If the information on label cardinality is not varied, the predictions that MMC base its calculations upon will not be as good.
-In the paper by Yang et al\@.~\cite{yang2009effective}, MMC performs significantly better than Binary Version Space Minimization (BSVM) at all stages.
+
+The MMC has an initially rather uniform distribution.
+This would make it likely that MMC has not seen as many samples of the bigger categories, and is therefore more uncertain when it comes to those.
+The accuracy and micro $F_1$-score would then show a bad performance.
+However, the macro $F_1$-score shows that MMC performs better than both Binary Version Space Minimization (BVSM) and random sampling.
+The macro-average treats all classes individually, so the majority category gets the same weight as the least common one.
+
+In the paper by Yang et al\@.~\cite{yang2009effective}, MMC performs significantly better than BVSM at all stages.
 One obvious reason for this discrepancy could be the implementation used in this paper, as is discussed in Section~\ref{sec:discussion-method}.
 Another one can be the initial sample sizes used in their paper, even when they compare different initial sample sizes, they start at 100 samples and go up to 1000.
 These values are higher than the ones considered in this paper.
@@ -31,7 +38,7 @@ Adaptive Active Learning (AAL) performs the best of the evaluated strategies in 
 A probable reason for this is the extra computations the strategy performs in order to find the best weight between the certainty based, and the cardinality based, strategies.
 If the cardinality predictions are not deemed to be very good in the beginning, it would simply put more weight on the certainty measure, and vice versa.
 
-BSVM, on the other hand, performs very similarly to random sampling for the first samples.
+BVSM, on the other hand, performs very similarly to random sampling for the first samples.
 The reason for this is rather simple.
 The strategy finds the class that is the closest to the decision boundary for each data point and selects the minimum distance of those.
 If there are several documents with the same minimum value, the samples to be labeled are selected at random from those.
@@ -40,10 +47,10 @@ Therefore, it will be the same as selecting randomly among all the samples.
 However, when all classes have been sampled, and quickly outperforms the random sampling in terms of accuracy and $F_1$-score.
 
 In the end, the different strategies all perform better than random sampling.
-The ones that are based on MMC and BSVM tend to perform a bit better than AAL when more than 1200-1300 labeled samples are added.
-This may very well be related to the fact that the distributions for MMC and BSVM are considerably more uniform when a lot of labels have been requested.
-BSVM is the only technique that reached 89 \% accuracy within the first 2500 documents to be labeled.
-It is possible that other techniques would have reached it given more documents, but it is clear that BSVM reaches a peak accuracy earlier.
+The ones that are based on MMC and BVSM tend to perform a bit better than AAL when more than 1200-1300 labeled samples are added.
+This may very well be related to the fact that the distributions for MMC and BVSM are considerably more uniform when a lot of labels have been requested.
+BVSM is the only technique that reached 89 \% accuracy within the first 2500 documents to be labeled.
+It is possible that other techniques would have reached it given more documents, but it is clear that BVSM reaches a peak accuracy earlier.
 The technique always tries to sample from the most uncertain category.
 The lack of reports in the least common category can be the thing that prohibits the other strategies from achieving a higher accuracy.
 
@@ -65,15 +72,15 @@ This could be a reason why the clustering approach to initial sampling only obta
 In order to satisfy the request of a more labeled dataset, which is of concern in the second research question, the distribution of labels was analyzed.
 Looking at this distribution it is instantly clear that the three strategies outperform random sampling significantly.
 MMC and AAL are by far the most balanced ones after only 500 documents are labeled.
-When 2000 data points are labeled, BSVM is the most balanced one, albeit only slightly more than MMC.
+When 2000 data points are labeled, BVSM is the most balanced one, albeit only slightly more than MMC.
 It can probably be attributed to it selecting the most uncertain class in every iteration.
 The most uncertain class is probably the one with the fewest samples, causing the distribution to be more uniform over time.
 
-While BSVM always selects the sample that is the most uncertain in one single class, one can view MMC and AAL as more of an average of the uncertainty over the categories for a data point.
+While BVSM always selects the sample that is the most uncertain in one single class, one can view MMC and AAL as more of an average of the uncertainty over the categories for a data point.
 They also incorporate the label cardinality information.
 This averaging trait may be beneficial for the distribution early on.
 The model is most likely rather uncertain about most categories, so instead of focusing on the one with the absolutely lowest value, they select the data point that will give the overall most information.
-As with the evaluation of model performance, BSVM seems to perform better in the long run.
+As with the evaluation of model performance, BVSM seems to perform better in the long run.
 One could include MMC in this too, the difference between the two could probably be neglected in most applications.
 However, if only a few hundred documents are supposed to be labeled, AAL is unrivaled when all metrics are considered.
 
@@ -129,7 +136,7 @@ The same applies to the density based technique suggested by Attenberg et al\@.~
 
 Most of the active learning research seems to be focused on binary, and maybe multi-class classification.
 Thus the methods described in Section~\ref{sec:active-learning} where the ones decided on.
-Methods that are fully reliant on a models certainty, such as Binary Version Space Minimization (BSVM)~\cite{brinker2006active} are used.
+Methods that are fully reliant on a models certainty, such as Binary Version Space Minimization (BVSM)~\cite{brinker2006active} are used.
 Furthermore, methods incorporating some information about the data in the form of label cardinality is included as well.
 These techniques are Maximum Loss Reduction with Maximum Confidence (MMC) and Adaptive Active Learning (AAL)~\cite{yang2009effective, li2013active}.
 An attempt to take advantage of the structure of the data is done by selecting the initial samples from different clusters, as described in Section~\ref{sec:experiments-exp1-method}.
@@ -205,8 +212,9 @@ By pruning the tree of clusters while querying for labels the goal is to obtain 
 In the paper by Nguyen et al\@.\cite{nguyen2004active} they also take advantage of a clustering to select the samples to be labeled in a two-class environment.
 They use that the data points closest to the centroids are the most important ones, and that most data points in one cluster have the same label.
 What this approach has in common with a lot of the current research is that it is treating single-label or binary classification problems, which cannot be directly applied to a multi-label scenario.
+However, investigating further if these clustering techniques could be extended to the multi-label scenario would be interesting.
 
-This thesis has presented three different techniques that are suitable for multi-label active learning, but there are some more.
+This thesis has presented three different techniques that are suitable for multi-label active learning, but there are some other ones that could be of interest.
 Singh et al\@.~\cite{singh2009active} is another approach that simply takes the minimum average of the margin among the classifiers for a data point.
 For image classification, there have been some methods developed, for example by Li et al\@. and Qi et al\@.~\cite{li2004multilabel, qi2008two}.
 In the paper by Li et al\@.~\cite{li2004multilabel}, the goal is to, after making predictions, selecting the sample with the biggest mean loss.

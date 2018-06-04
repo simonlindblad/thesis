@@ -90,7 +90,7 @@ From Equation~\ref{eq:logistic-regression} it is clear that the number of parame
 Maximum likelihood is used in order to determine the values of these parameters.
 For a dataset with the features $x_n$ for $n=1,...,N$ and targets $t_n \in \{0,1\}$, the likelihood function can be written as:
 \begin{equation}
-    p(\boldsymbol{t}|w) = \prod_{n=1}^N p(C_1|\phi)^{t_n}(1-p(C_1|\phi))^{1-t_n}
+    p(\boldsymbol{t}|w) = \prod_{n=1}^N p(C_1|\phi)^{t_n}p(C_1|\phi)^{1-t_n}
 \end{equation}
 where $\boldsymbol{t} = (t_1, ..., t_N)^T$.
 
@@ -138,7 +138,7 @@ Pool-based sampling is motivated by the assumption that there exist a large avai
 The samples to be labeled are selected by evaluating the entire pool of unlabeled data and choosing the most appropriate ones based on a defined utility measure.
 If the entire pool is too large, a subset could be used instead.
 For applied active learning, pool-based sampling seems to be the most popular choice, but there are some alternatives that have been used in theoretical settings such as stream-based selective sampling~\cite{li2013active}.
-The difference between stream-based selective sampling and pool-based sampling is that the former draws one sample at a time from an input source and make the decision whether or not to query a label for it.
+The difference between the two is that stream-based selective sampling draws one sample at a time from an input source and make the decision whether or not to query labels for it.
 For text applications where a set of data is often readily available, pool-based sampling is often the more appropriate option since the entire dataset can be considered.
 Pool-based is therefore the sampling technique that is considered in this thesis.
 
@@ -156,7 +156,7 @@ The subset of the hypothesis space that in the feature space separates the data 
 \end{equation}
 When the assigned label $y_i$, and the predicted label $f(x_i)$ has the same sign, $y_i f(x_i)$ will be positive, and therefore included in $\mathcal{V}$.
 
-The version space therefore represents the different hypotheses that make correct predictions on the training data.
+The version space therefore represents the different hypotheses that make correct predictions on the training data~\cite{settles2012active}.
 Under the assumption that one of the hypothesis can fully separate the data, the version space shrinks as more labeled data is acquired.
 So for new labeled instances the hypotheses in the version space will give better predictions for the training data.
 Based on this, an active learning algorithm should aim to reduce the size of the version space with each new sample. 
@@ -209,7 +209,6 @@ The expected model loss that MMC is trying to reduce can be defined as follows~\
 \begin{equation}
     \widehat{\sigma_{D_L}} = \int_x \bigg ( \sum_{x \in Y} L(f_{D_L})P(y|x) \bigg ) P(x)dx
 \end{equation}
-
 It is hard to estimate $P(x)$, so it is instead measured over all the samples in $D_U$.
 This results in the estimate:
 \begin{equation}
@@ -217,19 +216,19 @@ This results in the estimate:
 \end{equation}
 
 After a set of data points $D_S$ has been labeled, the new dataset $D'_L=D_L + D_S$ is obtained.
-Under the assumption that any $x \in D_U - D_S$ has an equal effect on a model trained on the datasets $D_L$ and $D'_L$, we get the following equation for the reduction of the expected loss~\cite{yang2009effective}:
+Under the assumption that any $x \in D_U - D_S$ has the same effect on a model trained on the datasets $D_L$ and $D'_L$, we get the following equation for the reduction of the expected loss~\cite{yang2009effective}:
 
 \begin{equation}
     D^*_S = \argmax_{D_S}(\widehat{\sigma_{D_L}} - \widehat{\sigma_{D'_L}}) = \argmax_{D_S} \big ( \sum_{x \in D_S} \sum_{y \in Y} (L(f_{D_L}) - L(f_{D'_L})) P(y|x) \big )
 \end{equation}
 
 In their paper, Yang et al\@.~\cite{yang2009effective} consider the process of finding the greatest reduction in two steps. 
-The first is to find a good estimate for $p(y|x)$ and using this conditional probability to get the most confident vector of labels $\hat{y}$. 
+The first is to find a good estimate for $p(y|x)$ and using this conditional probability to get the vector of labels $\hat{y}$. 
 The second is to find a way to assess the loss reduction of a multi-label classifier.
 
 It is unfeasible for a query strategy to provide an estimation for all possible label combinations.
-If there are $n$ different labels, there will be $2^n$ different label combinations.
-In order to estimate the conditional probability $p(y|x)$, MMC uses an approach that first estimates the number of labels for a given data point, and then uses that estimate to select the most probable labels.
+There will be $2^n$ different label combinations, where $n$ is the number of different labels.
+In order to estimate the conditional probability $p(y|x)$, MMC uses an approach that first estimates the number of labels for a given data point, and then uses that estimate to select the most probable labels~\cite{yang2009effective}.
 Consider the case where a data point has $m$ labels.
 By obtaining the probability from our classification model for each label we can sort them in descending order.
 If the sample has $m$ labels, then those should be the first $m$ ones in the sorted list.
@@ -275,7 +274,7 @@ By incorporating the result from Equation~\ref{eq:reduction-rate}, the following
     \sum_{i=1}^k\big ( \frac{1 - y^if^i_{D_L}(x)}{2} \big )
 \end{equation}
 
-The only thing that remains is to combine the estimation of $p(y|x)$ with the estimate for loss reduction.
+The only thing that remains is to combine the estimation of our label vector $\hat{y}$ with the estimate for loss reduction.
 The resulting equation, called maximum loss reduction with maximal confidence, is~\cite{yang2009effective}:
 
 \begin{equation}
@@ -321,11 +320,11 @@ The idea behind \textit{Max-Margin Uncertainty Sampling} comes from the observat
 That is, separating the labels that are assigned to an instance and the ones that are not.
 In order to model the uncertainty of the prediction on a data point, Li et al\@. suggest the usage of a global separation margin to separate the negative labels from the positive.
 
-The positive labels for a data point $x$ is defined as those where $sign(f'_{D_L}(x))$ is positive.
+The positive labels for a data point $x$ is defined as those where $sign(f^i_{D_L}(x))$ is positive.
 The separation margin is defined as:
 \begin{equation}
     \begin{split}
-        sep\_margin(x) = \min_{i \in \hat{y}^+}|f'_{D_L}(x)| + \min_{i \in \hat{y}^-}|f'_{D_L}(x)|
+        sep\_margin(x) = \min_{i \in \hat{y}^+}|f^i_{D_L}(x)| + \min_{i \in \hat{y}^-}|f^i_{D_L}(x)|
     \end{split}
 \end{equation}
 where $\hat{y}^+$ denotes the set of predicted labels that are positive on the instance, and the $\hat{y}^-$ denotes the negative ones.
@@ -349,19 +348,20 @@ where $N_L$ is the number of labeled samples, $Y_L$ are the labels for those sam
 
 \subsubsection{Integration - Adaptive Active Learning}
 
-Since \textit{max-margin uncertainty sampling} and \textit{label cardinality inconsistency} complement each other, an integration method is used:
+\textit{Max-margin uncertainty sampling} and \textit{label cardinality inconsistency} can complement each other since they are measuring different aspects of the data. 
+For this reason, an integration method is used~\cite{li2013active}:
 \begin{equation}\label{eq:approx-generalization-error}
     q(x, \beta) = u(x)^\beta \cdot c(x)^{1-\beta}
 \end{equation}
 where $\beta$ is a parameter controlling the weight put on the two measures.
 This parameter is chosen in each iteration by evaluating a discrete set of values, e.g. $\{0, 0.1, 0.2, \dots, 1\}$.
-The best sample for each $\Beta$ value is then used as a candidate for further evaluation.
+The best sample for each $\beta$ value is then used as a candidate for further evaluation.
 The selection of $\beta$ is then based on the most informative sample amongst them.
 Equation~\ref{eq:calc-epsilon} shows the \textit{approximate generalization error}, which is used to select the sample.
 \begin{equation}\label{eq:calc-epsilon}
     \epsilon(x) = \sum_{x \in D_U} \max_{i \in f(x)^+}(1-f^i(x)) + \max_{i \in f(x)^-}(1+f^i(x))
 \end{equation}
-,where $f(x)^+$ and $f(x)^-$ are the predicted positive labels, and negative labels, respectively.
+where $f(x)^+$ and $f(x)^-$ are the predicted positive labels, and negative labels, respectively.
 So, the sample is then selected by:
 \begin{equation}\label{eq:x-star}
     x^* = \arg \min_{x \in D_U} \epsilon(x)
